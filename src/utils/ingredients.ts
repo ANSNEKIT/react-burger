@@ -1,4 +1,11 @@
-import type { TIngredient } from '@utils/types.ts';
+import type { TIngredient, TIngredientType } from '@utils/types.ts';
+
+export const getIngredientsByType = (
+  ingredients: TIngredient[],
+  type: TIngredientType
+): TIngredient[] => {
+  return ingredients.filter((el) => el.type === type);
+};
 
 export const ingredients: TIngredient[] = [
   {

@@ -1,3 +1,17 @@
+export enum EIngredientType {
+  bun = 'bun',
+  main = 'main',
+  sauce = 'sauce',
+}
+
+export type TIngredientType = `${EIngredientType}`;
+
+export enum EIngredientTypeTitles {
+  bun = 'Булки',
+  main = 'Начинки',
+  sauce = 'Соусы',
+}
+
 export type TIngredient = {
   _id: string;
   name: string;

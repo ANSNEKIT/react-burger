@@ -1,6 +1,13 @@
-import { Tab } from '@krgaa/react-developer-burger-ui-components';
+import { BurgerTabs } from '@/components/burger-tabs/burger-tabs';
+import { getIngredientsByType } from '@/utils/ingredients';
+import { EIngredientType, EIngredientTypeTitles } from '@/utils/types';
+import { useState } from 'react';
 
-import type { TIngredient } from '@utils/types';
+import { Ingredient } from '../ingredient/ingredient';
+
+import type { TIngredientCategoryType } from './types';
+import type { TIngredientType, TIngredient } from '@/utils/types';
+import type { ReactElement } from 'react';
 
 import styles from './burger-ingredients.module.css';
 
@@ -10,42 +17,43 @@ type TBurgerIngredientsProps = {
 
 export const BurgerIngredients = ({
   ingredients,
-}: TBurgerIngredientsProps): React.JSX.Element => {
+}: TBurgerIngredientsProps): ReactElement => {
   console.log(ingredients);
+
+  const [activeTab, setActiveTab] = useState<TIngredientType>('main');
+  const toggleTab = (tab: TIngredientType): void => {
+    setActiveTab(tab);
+  };
+
+  const ingredientTypes: TIngredientCategoryType[] = [
+    EIngredientType.bun,
+    EIngredientType.main,
+    EIngredientType.sauce,
+  ].map((type) => ({
+    type,
+    items: getIngredientsByType(ingredients, type),
+  }));
 
   return (
     <section className={styles.burger_ingredients}>
-      <nav>
-        <ul className={styles.menu}>
-          <Tab
-            value="bun"
-            active={true}
-            onClick={() => {
-              /* TODO */
-            }}
-          >
-            Булки
-          </Tab>
-          <Tab
-            value="main"
-            active={false}
-            onClick={() => {
-              /* TODO */
-            }}
-          >
-            Начинки
-          </Tab>
-          <Tab
-            value="sauce"
-            active={false}
-            onClick={() => {
-              /* TODO */
-            }}
-          >
-            Соусы
-          </Tab>
-        </ul>
+      <nav className={'mb-10'}>
+        <BurgerTabs activeTab={activeTab} onClickTab={toggleTab} />
       </nav>
+
+      <div className={styles.ingredientsType}>
+        {ingredientTypes.map(({ type, items }, idx) => (
+          <div key={`${type}-${idx}`} className="mb-10">
+            <h2 className={'mb-6 text text_type_main-medium'}>
+              {EIngredientTypeTitles[type]}
+            </h2>
+            <div className={styles.ingredients}>
+              {items.map((ing) => (
+                <Ingredient key={ing._id} ingredient={ing} />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
     </section>
   );
 };

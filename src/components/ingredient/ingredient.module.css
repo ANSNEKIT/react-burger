@@ -1,0 +1,20 @@
+.ingredient {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 272px;
+}
+
+.ingredientImage {
+  max-width: 240px;
+  height: auto;
+}
+
+.ingredientPrice {
+  text-align: center;
+}
+
+.ingredientName {
+  text-align: center;
+}
