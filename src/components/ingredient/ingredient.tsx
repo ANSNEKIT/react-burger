@@ -7,11 +7,15 @@ import styles from './ingredient.module.css';
 
 type TIngredientProps = {
   ingredient: TIngredient;
+  onClickCb: () => void;
 };
 
-export const Ingredient = ({ ingredient }: TIngredientProps): ReactElement => {
+export const Ingredient = ({
+  ingredient,
+  onClickCb,
+}: TIngredientProps): ReactElement => {
   return (
-    <div className={styles.ingredient}>
+    <div className={styles.ingredient} onClick={onClickCb}>
       <picture>
         <source
           media="(max-width: 600px)"

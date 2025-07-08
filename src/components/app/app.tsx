@@ -8,13 +8,17 @@ import { ingredients } from '@utils/ingredients';
 import styles from './app.module.css';
 
 export const App = (): React.JSX.Element => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [state, setState] = useState({
+    isLoading: false,
+    hasError: null,
+    ingredients: [],
+  });
 
   useEffect(() => {
-    setIsLoading(true);
+    setState((prevState) => ({ ...prevState, isLoading: true }));
 
     setTimeout(() => {
-      setIsLoading(false);
+      setState((prevState) => ({ ...prevState, isLoading: false }));
     }, 3000);
   }, []);
 
@@ -25,8 +29,8 @@ export const App = (): React.JSX.Element => {
         Соберите бургер
       </h1>
       <main className={`${styles.main} pl-5 pr-5`}>
-        {isLoading && <div>Загрузка</div>}
-        {!isLoading && (
+        {state.isLoading && <div>Загрузка</div>}
+        {!state.isLoading && (
           <>
             <BurgerIngredients ingredients={ingredients} />
             <BurgerConstructor ingredients={ingredients} />
