@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { BacketInfo } from '../backet-info/backet-info';
 import { BacketItem } from '../backet-item/backet-item';
+import { OrderModal } from '../order-modal/order-modal';
 
-import type { TIngredient } from '@utils/types';
+import type { TOrder, TIngredient } from '@utils/types';
 import type { ReactElement } from 'react';
 
 import styles from './burger-constructor.module.css';
@@ -12,12 +13,22 @@ type TBurgerConstructorProps = {
   ingredients: TIngredient[];
 };
 
+type TBurgerConstructorState = {
+  isShowBacketInfo: boolean;
+  isShowModalOrder: boolean;
+  order: TOrder | null;
+};
+
 export const BurgerConstructor = ({
   ingredients,
 }: TBurgerConstructorProps): ReactElement => {
   console.log(ingredients);
 
-  const [isShowBacketInfo, setIsShowBacketInfo] = useState(false);
+  const [state, setState] = useState<TBurgerConstructorState>({
+    isShowBacketInfo: false,
+    isShowModalOrder: false,
+    order: null,
+  });
 
   const totalPrice = useMemo(() => {
     if (!ingredients.length) {
@@ -28,11 +39,28 @@ export const BurgerConstructor = ({
   }, [ingredients]);
 
   useEffect(() => {
-    setIsShowBacketInfo(ingredients.length > 0 && totalPrice >= 0);
+    setState((prevState) => ({
+      ...prevState,
+      isShowBacketInfo: ingredients.length > 0 && totalPrice >= 0,
+    }));
   }, [totalPrice, ingredients]);
 
   const onBacketClick = (): void => {
     console.log('onBacketClick');
+
+    setState((prevState) => ({
+      ...prevState,
+      order: { id: 34536 },
+      isShowModalOrder: true,
+    }));
+  };
+
+  const onCloseOrderModal = (): void => {
+    console.log('close order modal');
+    setState((prevState) => ({
+      ...prevState,
+      isShowModalOrder: false,
+    }));
   };
 
   return (
@@ -60,8 +88,12 @@ export const BurgerConstructor = ({
         })}
       </div>
 
-      {isShowBacketInfo && (
+      {state.isShowBacketInfo && (
         <BacketInfo totalPrice={totalPrice} onBacketClick={onBacketClick} />
+      )}
+
+      {state.isShowModalOrder && state.order && (
+        <OrderModal order={state.order} onClose={onCloseOrderModal} />
       )}
     </section>
   );

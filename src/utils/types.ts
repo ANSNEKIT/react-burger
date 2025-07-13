@@ -26,3 +26,7 @@ export type TIngredient = {
   image_mobile: string;
   __v: number;
 };
+
+export type TOrder = {
+  id: number;
+};
