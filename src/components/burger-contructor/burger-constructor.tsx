@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { BacketInfo } from '../backet-info/backet-info';
 import { BacketItem } from '../backet-item/backet-item';
-import { OrderModal } from '../order-modal/order-modal';
+import { OrderDetails } from '../order-details/order-datails';
 
 import type { TOrder, TIngredient } from '@utils/types';
 import type { ReactElement } from 'react';
@@ -93,7 +93,7 @@ export const BurgerConstructor = ({
       )}
 
       {state.isShowModalOrder && state.order && (
-        <OrderModal order={state.order} onClose={onCloseOrderModal} />
+        <OrderDetails order={state.order} onClose={onCloseOrderModal} />
       )}
     </section>
   );

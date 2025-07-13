@@ -1,9 +1,9 @@
 import { BurgerTabs } from '@/components/burger-tabs/burger-tabs';
+import { IngredientDetails } from '@/components/ingredient-details/ingredient-details';
 import { getIngredientsByType } from '@/utils/ingredients';
 import { EIngredientType, EIngredientTypeTitles } from '@/utils/types';
 import { useState } from 'react';
 
-import { IngredientDetailModal } from '@components/ingredient-detail-modal/ingredient-detail-modal';
 import { Ingredient } from '@components/ingredient/ingredient';
 
 import type { TIngredientCategoryType } from './types';
@@ -72,10 +72,7 @@ export const BurgerIngredients = ({
       </section>
 
       {currentIngredient && (
-        <IngredientDetailModal
-          detail={currentIngredient}
-          onClose={onCloseIngredientModal}
-        />
+        <IngredientDetails detail={currentIngredient} onClose={onCloseIngredientModal} />
       )}
     </>
   );

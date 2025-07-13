@@ -1,8 +1,9 @@
+import { ModalOverlay } from '@/components/modal-overlay/modal-overlay';
 import { CloseIcon } from '@krgaa/react-developer-burger-ui-components';
+import { useEffect, type JSX, type MouseEventHandler } from 'react';
+import ReactDOM from 'react-dom';
 
-import type { JSX, MouseEventHandler } from 'react';
-
-import styles from './modal.module.css';
+import styles from './base-modal.module.css';
 
 type TBaseModalProps = {
   title?: string;
@@ -11,6 +12,28 @@ type TBaseModalProps = {
 };
 
 const Modal = ({ title, children, onClose }: TBaseModalProps): JSX.Element => {
+  const modalRoot: Element | null = document.getElementById('modal-root');
+
+  if (!modalRoot) {
+    const el = document.createElement('div');
+    el.id = 'modal-root';
+    document.body.appendChild(el);
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (evt: KeyboardEvent): void => {
+      if (evt.code === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return (): void => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
+
   const onCloseLocal: MouseEventHandler<HTMLElement> = (evt) => {
     const target = evt.target as HTMLElement;
 
@@ -24,9 +47,9 @@ const Modal = ({ title, children, onClose }: TBaseModalProps): JSX.Element => {
     onClose();
   };
 
-  return (
+  return ReactDOM.createPortal(
     <div className={styles.modal} onClick={onCloseLocal}>
-      <div className={styles.shadow}></div>
+      <ModalOverlay />
 
       <div id="modalContent" className={styles.content}>
         <div className={styles.modalHeader}>
@@ -45,7 +68,8 @@ const Modal = ({ title, children, onClose }: TBaseModalProps): JSX.Element => {
 
         <div className={styles.modalBody}>{children}</div>
       </div>
-    </div>
+    </div>,
+    modalRoot!
   );
 };
 

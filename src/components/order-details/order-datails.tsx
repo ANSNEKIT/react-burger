@@ -1,18 +1,17 @@
+import Modal from '@/components/base-modal/base-modal';
 import doneStatusImg from '@/images/done.png';
-
-import Modal from '@components/base/modal/modal';
 
 import type { TOrder } from '@/utils/types';
 import type { ReactElement } from 'react';
 
-import styles from './order-modal.module.css';
+import styles from './order-details.module.css';
 
 export type TOrderModalProps = {
   order: TOrder;
   onClose: () => void;
 };
 
-export const OrderModal = ({ order, onClose }: TOrderModalProps): ReactElement => {
+export const OrderDetails = ({ order, onClose }: TOrderModalProps): ReactElement => {
   return (
     <Modal onClose={onClose}>
       <div className={styles.innerWrap}>
