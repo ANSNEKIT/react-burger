@@ -1,12 +1,12 @@
 import { Counter, CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
 
-import type { TIngredient } from '@/utils/types';
+import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { ReactElement } from 'react';
 
 import styles from './ingredient.module.css';
 
 type TIngredientProps = {
-  ingredient: TIngredient;
+  ingredient: TIngredientDTO;
   onClickCb: () => void;
 };
 

@@ -3,13 +3,13 @@ import {
   DragIcon,
 } from '@krgaa/react-developer-burger-ui-components';
 
-import type { TIngredient } from '@/utils/types';
+import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { ReactElement } from 'react';
 
 import styles from './backet-item.module.css';
 
 export type IBacketItemProps = {
-  item: TIngredient;
+  item: TIngredientDTO;
   isDraggable: boolean;
   isLocked: boolean;
   type?: 'top' | 'bottom';

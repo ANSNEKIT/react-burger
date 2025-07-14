@@ -7,13 +7,14 @@ import { useState } from 'react';
 import { Ingredient } from '@components/ingredient/ingredient';
 
 import type { TIngredientCategoryType } from './types';
-import type { TIngredientType, TIngredient } from '@/utils/types';
+import type { TIngredientDTO } from '@/contracts/ingredientDTO';
+import type { TIngredientType } from '@/utils/types';
 import type { ReactElement } from 'react';
 
 import styles from './burger-ingredients.module.css';
 
 type TBurgerIngredientsProps = {
-  ingredients: TIngredient[];
+  ingredients: TIngredientDTO[];
 };
 
 export const BurgerIngredients = ({
@@ -22,7 +23,9 @@ export const BurgerIngredients = ({
   console.log(ingredients);
 
   const [activeTab, setActiveTab] = useState<TIngredientType>('main');
-  const [currentIngredient, setCurrentIngredient] = useState<TIngredient | null>(null);
+  const [currentIngredient, setCurrentIngredient] = useState<TIngredientDTO | null>(
+    null
+  );
   const toggleTab = (tab: TIngredientType): void => {
     setActiveTab(tab);
   };
@@ -40,7 +43,7 @@ export const BurgerIngredients = ({
     setCurrentIngredient(null);
   };
 
-  const onSelectIngredient = (ingredient: TIngredient): void => {
+  const onSelectIngredient = (ingredient: TIngredientDTO): void => {
     setCurrentIngredient(ingredient);
   };
 

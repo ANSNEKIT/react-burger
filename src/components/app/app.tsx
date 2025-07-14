@@ -1,25 +1,37 @@
+import { getIngredients } from '@/api/ingredients.api';
 import { BurgerConstructor } from '@/components/burger-contructor/burger-constructor';
 import { useEffect, useState } from 'react';
 
 import { AppHeader } from '@components/app-header/app-header';
 import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients';
-import { ingredients } from '@utils/ingredients';
+
+import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 
 import styles from './app.module.css';
 
+type TAppState = {
+  isLoading: boolean;
+  hasError: string | null;
+  ingredients: TIngredientDTO[];
+};
+
 export const App = (): React.JSX.Element => {
-  const [state, setState] = useState({
+  const [state, setState] = useState<TAppState>({
     isLoading: false,
     hasError: null,
     ingredients: [],
   });
 
-  useEffect(() => {
+  const fetchIngredients = async (): Promise<void> => {
     setState((prevState) => ({ ...prevState, isLoading: true }));
 
-    setTimeout(() => {
-      setState((prevState) => ({ ...prevState, isLoading: false }));
-    }, 3000);
+    const ingredients = await getIngredients();
+
+    setState((prevState) => ({ ...prevState, isLoading: false, ingredients }));
+  };
+
+  useEffect(() => {
+    void fetchIngredients();
   }, []);
 
   return (
@@ -32,8 +44,8 @@ export const App = (): React.JSX.Element => {
         {state.isLoading && <div>Загрузка</div>}
         {!state.isLoading && (
           <>
-            <BurgerIngredients ingredients={ingredients} />
-            <BurgerConstructor ingredients={ingredients} />
+            <BurgerIngredients ingredients={state.ingredients} />
+            <BurgerConstructor ingredients={state.ingredients} />
           </>
         )}
       </main>

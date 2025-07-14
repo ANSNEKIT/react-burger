@@ -4,13 +4,14 @@ import { BacketInfo } from '../backet-info/backet-info';
 import { BacketItem } from '../backet-item/backet-item';
 import { OrderDetails } from '../order-details/order-datails';
 
-import type { TOrder, TIngredient } from '@utils/types';
+import type { TIngredientDTO } from '@/contracts/ingredientDTO';
+import type { TOrder } from '@utils/types';
 import type { ReactElement } from 'react';
 
 import styles from './burger-constructor.module.css';
 
 type TBurgerConstructorProps = {
-  ingredients: TIngredient[];
+  ingredients: TIngredientDTO[];
 };
 
 type TBurgerConstructorState = {

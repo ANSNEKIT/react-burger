@@ -1,6 +1,6 @@
 import Modal from '@/components/base-modal/base-modal';
 
-import type { TIngredient } from '@/utils/types';
+import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { ReactElement } from 'react';
 
 import styles from './ingredient-details.module.css';
@@ -11,7 +11,7 @@ export type TComposition = {
 };
 
 export type TIngredientDetailModalProps = {
-  detail: TIngredient;
+  detail: TIngredientDTO;
   onClose: () => void;
 };
 
