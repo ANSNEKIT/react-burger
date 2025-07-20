@@ -1,3 +1,5 @@
+import type { TIngredientDTO } from '@/contracts/ingredientDTO';
+
 export enum EIngredientType {
   bun = 'bun',
   main = 'main',
@@ -18,4 +20,9 @@ export type TOrder = {
 
 export type TFetchResponse<T> = {
   data: T;
+};
+
+export type TIngredientCategoryType = {
+  type: TIngredientType;
+  items: TIngredientDTO[];
 };

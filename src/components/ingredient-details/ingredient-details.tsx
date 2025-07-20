@@ -1,4 +1,4 @@
-import Modal from '@/components/base-modal/base-modal';
+import { Modal } from '@/components/base-modal/base-modal';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { ReactElement } from 'react';

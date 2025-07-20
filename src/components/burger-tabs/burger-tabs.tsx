@@ -17,27 +17,33 @@ export const BurgerTabs = ({
 }: TBurgerTabsProps): ReactElement => {
   return (
     <ul className={styles.menu}>
-      <Tab
-        value="bun"
-        active={activeTab === EIngredientType.bun}
-        onClick={() => onClickTab('bun')}
-      >
-        {EIngredientTypeTitles.bun}
-      </Tab>
-      <Tab
-        value="main"
-        active={activeTab === EIngredientType.main}
-        onClick={() => onClickTab('main')}
-      >
-        {EIngredientTypeTitles.main}
-      </Tab>
-      <Tab
-        value="sauce"
-        active={activeTab === EIngredientType.sauce}
-        onClick={() => onClickTab('sauce')}
-      >
-        {EIngredientTypeTitles.sauce}
-      </Tab>
+      <li className={styles.menuItem}>
+        <Tab
+          value="bun"
+          active={activeTab === EIngredientType.bun}
+          onClick={() => onClickTab('bun')}
+        >
+          {EIngredientTypeTitles.bun}
+        </Tab>
+      </li>
+      <li className={styles.menuItem}>
+        <Tab
+          value="main"
+          active={activeTab === EIngredientType.main}
+          onClick={() => onClickTab('main')}
+        >
+          {EIngredientTypeTitles.main}
+        </Tab>
+      </li>
+      <li className={styles.menuItem}>
+        <Tab
+          value="sauce"
+          active={activeTab === EIngredientType.sauce}
+          onClick={() => onClickTab('sauce')}
+        >
+          {EIngredientTypeTitles.sauce}
+        </Tab>
+      </li>
     </ul>
   );
 };

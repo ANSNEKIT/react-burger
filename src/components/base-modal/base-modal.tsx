@@ -11,7 +11,7 @@ type TBaseModalProps = {
   onClose: () => void;
 };
 
-const Modal = ({ title, children, onClose }: TBaseModalProps): JSX.Element => {
+export const Modal = ({ title, children, onClose }: TBaseModalProps): JSX.Element => {
   const modalRoot: Element | null = document.getElementById('modal-root');
 
   if (!modalRoot) {
@@ -72,5 +72,3 @@ const Modal = ({ title, children, onClose }: TBaseModalProps): JSX.Element => {
     modalRoot!
   );
 };
-
-export default Modal;

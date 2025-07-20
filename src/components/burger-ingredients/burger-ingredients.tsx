@@ -1,12 +1,11 @@
 import { BurgerTabs } from '@/components/burger-tabs/burger-tabs';
 import { IngredientDetails } from '@/components/ingredient-details/ingredient-details';
-import { getIngredientsByType } from '@/utils/ingredients';
-import { EIngredientType, EIngredientTypeTitles } from '@/utils/types';
+import { getBurgerIngredients } from '@/utils/ingredients';
+import { EIngredientTypeTitles } from '@/utils/types';
 import { useState } from 'react';
 
 import { Ingredient } from '@components/ingredient/ingredient';
 
-import type { TIngredientCategoryType } from './types';
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { TIngredientType } from '@/utils/types';
 import type { ReactElement } from 'react';
@@ -20,8 +19,6 @@ type TBurgerIngredientsProps = {
 export const BurgerIngredients = ({
   ingredients,
 }: TBurgerIngredientsProps): ReactElement => {
-  console.log(ingredients);
-
   const [activeTab, setActiveTab] = useState<TIngredientType>('main');
   const [currentIngredient, setCurrentIngredient] = useState<TIngredientDTO | null>(
     null
@@ -30,14 +27,7 @@ export const BurgerIngredients = ({
     setActiveTab(tab);
   };
 
-  const ingredientTypes: TIngredientCategoryType[] = [
-    EIngredientType.bun,
-    EIngredientType.main,
-    EIngredientType.sauce,
-  ].map((type) => ({
-    type,
-    items: getIngredientsByType(ingredients, type),
-  }));
+  const ingredientsByType = getBurgerIngredients(ingredients);
 
   const onCloseIngredientModal = (): void => {
     setCurrentIngredient(null);
@@ -55,7 +45,7 @@ export const BurgerIngredients = ({
         </nav>
 
         <div className={styles.ingredientsType}>
-          {ingredientTypes.map(({ type, items }, idx) => (
+          {ingredientsByType.map(({ type, items }, idx) => (
             <div key={`${type}-${idx}`} className="mb-10">
               <h2 className={'mb-6 text text_type_main-medium'}>
                 {EIngredientTypeTitles[type]}
