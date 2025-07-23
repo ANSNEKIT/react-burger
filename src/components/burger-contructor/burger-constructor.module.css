@@ -5,3 +5,11 @@
   padding-bottom: 20px;
   color: var(--text-primary-color);
 }
+
+.backetItems {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
+}

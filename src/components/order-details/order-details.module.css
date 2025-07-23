@@ -1,0 +1,11 @@
+.innerWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.statusImage {
+  max-width: 480px;
+  height: auto;
+}

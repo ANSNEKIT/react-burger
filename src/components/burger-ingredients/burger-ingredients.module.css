@@ -6,10 +6,14 @@
   font-family: 'Jet Brains Mono', serif;
 }
 
-.menu {
-  display: flex;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  list-style-type: none;
+.ingredientsType {
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
+}
+
+.ingredients {
+  display: grid;
+  grid-template-columns: min-content min-content;
+  gap: 24px;
+  max-width: 600px;
 }

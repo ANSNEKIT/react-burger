@@ -1,0 +1,29 @@
+.innerWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.ingredientImage {
+  max-width: 480px;
+  height: auto;
+}
+
+.ingredientName {
+  color: #f2f2f2;
+}
+
+.compositions {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.composition {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: max-content;
+  color: #8585ad;
+}
