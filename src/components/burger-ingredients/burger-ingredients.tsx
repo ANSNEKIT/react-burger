@@ -1,47 +1,48 @@
-import { BurgerTabs } from '@/components/burger-tabs/burger-tabs';
-import { IngredientDetails } from '@/components/ingredient-details/ingredient-details';
-import { getBurgerIngredients } from '@/utils/ingredients';
-import { EIngredientTypeTitles } from '@/utils/types';
-import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/services/hooks';
+import { setActiveCatigory, setCurrentIngredient } from '@/services/ingredients/reducer';
+import {
+  getActiveCategory,
+  getBurgerIngredients,
+  getCurrentIngredient,
+} from '@/services/ingredients/selectors';
+import { EIngredientTypeTitles, type TIngredientType } from '@/utils/types';
 
-import { Ingredient } from '@components/ingredient/ingredient';
+import { BurgerTabs } from '../burger-tabs/burger-tabs';
+import { IngredientDetails } from '../ingredient-details/ingredient-details';
+import { Ingredient } from '../ingredient/ingredient';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
-import type { TIngredientType } from '@/utils/types';
 import type { ReactElement } from 'react';
 
 import styles from './burger-ingredients.module.css';
 
-type TBurgerIngredientsProps = {
-  ingredients: TIngredientDTO[];
-};
+export const BurgerIngredients = (): ReactElement => {
+  const dispatch = useAppDispatch();
+  const ingredientsByType = useAppSelector(getBurgerIngredients);
+  const activeCategory = useAppSelector(getActiveCategory);
+  const currentIngredient = useAppSelector(getCurrentIngredient);
 
-export const BurgerIngredients = ({
-  ingredients,
-}: TBurgerIngredientsProps): ReactElement => {
-  const [activeTab, setActiveTab] = useState<TIngredientType>('main');
-  const [currentIngredient, setCurrentIngredient] = useState<TIngredientDTO | null>(
-    null
-  );
-  const toggleTab = (tab: TIngredientType): void => {
-    setActiveTab(tab);
-  };
-
-  const ingredientsByType = getBurgerIngredients(ingredients);
+  console.log('activeCategory', activeCategory);
+  console.log('ingredientsByType', ingredientsByType);
 
   const onCloseIngredientModal = (): void => {
-    setCurrentIngredient(null);
+    dispatch(setCurrentIngredient(null));
   };
 
   const onSelectIngredient = (ingredient: TIngredientDTO): void => {
-    setCurrentIngredient(ingredient);
+    dispatch(setCurrentIngredient(ingredient));
+  };
+
+  const onToggleCategory = (payload: TIngredientType): void => {
+    console.log('onToggleCategory', payload);
+    dispatch(setActiveCatigory(payload));
   };
 
   return (
     <>
       <section className={styles.burger_ingredients}>
         <nav className={'mb-10'}>
-          <BurgerTabs activeTab={activeTab} onClickTab={toggleTab} />
+          <BurgerTabs activeTab={activeCategory} onClickTab={onToggleCategory} />
         </nav>
 
         <div className={styles.ingredientsType}>

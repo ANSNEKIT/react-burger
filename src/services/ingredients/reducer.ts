@@ -3,43 +3,53 @@ import { createSlice } from '@reduxjs/toolkit';
 import { loadIngredients } from './actions';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
+import type { TIngredientType } from '@/utils/types';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
-type TIngredientState = {
+export type TIngredientState = {
   ingredients: TIngredientDTO[];
-  loading: boolean;
+  activeCategory: TIngredientType;
+  currentIngredient: TIngredientDTO | null;
+  isLoading: boolean;
   error: string | null;
 };
 
 const initialState: TIngredientState = {
   ingredients: [],
-  loading: false,
+  currentIngredient: null,
+  activeCategory: 'main',
+  isLoading: false,
   error: null,
 };
 
 export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
-  reducers: {},
-  selectors: {
-    getIngredients: (state) => state.ingredients,
+  reducers: {
+    setActiveCatigory(state, action: PayloadAction<TIngredientType>) {
+      state.activeCategory = action.payload;
+    },
+    setCurrentIngredient(state, action: PayloadAction<TIngredientDTO | null>) {
+      state.currentIngredient = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(loadIngredients.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(loadIngredients.rejected, (state, action) => {
         state.error = action?.error?.message ?? 'Unknown error';
-        state.loading = false;
+        state.isLoading = false;
       })
       .addCase(loadIngredients.fulfilled, (state, action) => {
-        state.loading = false;
-        state.ingredients = action.payload;
+        state.isLoading = false;
+        state.ingredients = action.payload.data;
       });
   },
 });
 
-export const { getIngredients } = ingredientsSlice.selectors;
+export const { setActiveCatigory, setCurrentIngredient } = ingredientsSlice.actions;
 
 export default ingredientsSlice.reducer;
