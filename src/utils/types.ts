@@ -14,8 +14,12 @@ export enum EIngredientTypeTitles {
   sauce = 'Соусы',
 }
 
+export type TBasket = {
+  basketIngredientIds: string[];
+};
+
 export type TOrder = {
-  id: number;
+  number: number;
 };
 
 export type TFetchResponse<T> = {

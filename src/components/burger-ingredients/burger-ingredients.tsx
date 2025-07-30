@@ -22,9 +22,6 @@ export const BurgerIngredients = (): ReactElement => {
   const activeCategory = useAppSelector(getActiveCategory);
   const currentIngredient = useAppSelector(getCurrentIngredient);
 
-  console.log('activeCategory', activeCategory);
-  console.log('ingredientsByType', ingredientsByType);
-
   const onCloseIngredientModal = (): void => {
     dispatch(setCurrentIngredient(null));
   };
@@ -34,7 +31,6 @@ export const BurgerIngredients = (): ReactElement => {
   };
 
   const onToggleCategory = (payload: TIngredientType): void => {
-    console.log('onToggleCategory', payload);
     dispatch(setActiveCatigory(payload));
   };
 

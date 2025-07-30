@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { AppHeader } from '../app-header/app-header';
-// import { BurgerConstructor } from '../burger-contructor/burger-constructor';
+import { BurgerConstructor } from '../burger-contructor/burger-constructor';
 import { BurgerIngredients } from '../burger-ingredients/burger-ingredients';
 
 import styles from './app.module.css';
@@ -35,7 +35,7 @@ export const App = (): React.JSX.Element => {
       </h1>
       <main className={`${styles.main} pl-5 pr-5`}>
         <BurgerIngredients />
-        {/* <BurgerConstructor ingredients={ingredients} /> */}
+        <BurgerConstructor />
       </main>
     </div>
   );

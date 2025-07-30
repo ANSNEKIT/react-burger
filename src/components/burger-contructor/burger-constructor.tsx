@@ -1,51 +1,43 @@
 import doneStatusImg from '@/images/done.png';
-import { useEffect, useMemo, useState } from 'react';
+import {
+  getOrder,
+  getBasketIngredients,
+  getOrderTotalPrice,
+} from '@/services/basket/selectors';
+import { useAppSelector } from '@/services/hooks';
+import { useEffect, useState } from 'react';
 
 import { BacketInfo } from '../backet-info/backet-info';
 import { BacketItem } from '../backet-item/backet-item';
 import { Modal } from '../base-modal/base-modal';
 import { OrderDetails } from '../order-details/order-datails';
 
-import type { TIngredientDTO } from '@/contracts/ingredientDTO';
-import type { TOrder } from '@utils/types';
 import type { ReactElement } from 'react';
 
 import orderDetailsStyles from '../order-details/order-details.module.css';
 import styles from './burger-constructor.module.css';
 
-type TBurgerConstructorProps = {
-  ingredients: TIngredientDTO[];
-};
-
 type TBurgerConstructorState = {
   isShowBacketInfo: boolean;
   isShowModalOrder: boolean;
-  order: TOrder | null;
 };
 
-export const BurgerConstructor = ({
-  ingredients,
-}: TBurgerConstructorProps): ReactElement => {
+export const BurgerConstructor = (): ReactElement => {
   const [orderState, setOrderState] = useState<TBurgerConstructorState>({
     isShowBacketInfo: false,
     isShowModalOrder: false,
-    order: null,
   });
 
-  const totalPrice = useMemo(() => {
-    if (!ingredients.length) {
-      return 0;
-    }
-
-    return ingredients.reduce((acc, el) => (acc += el.price), 0);
-  }, [ingredients]);
+  const order = useAppSelector(getOrder);
+  const basketIngredients = useAppSelector(getBasketIngredients);
+  const totalPrice = useAppSelector(getOrderTotalPrice);
 
   useEffect(() => {
     setOrderState((prevState) => ({
       ...prevState,
-      isShowBacketInfo: ingredients.length > 0 && totalPrice >= 0,
+      isShowBacketInfo: !!order && totalPrice >= 0,
     }));
-  }, [totalPrice, ingredients]);
+  }, [totalPrice, order]);
 
   const onBacketClick = (): void => {
     setOrderState((prevState) => ({
@@ -67,10 +59,10 @@ export const BurgerConstructor = ({
       <h2 className="visuallyHidden">Order</h2>
 
       <div className={`mb-10 ${styles.backetItems}`}>
-        {ingredients.map((el, idx) => {
+        {basketIngredients.map((el, idx) => {
           let type: 'top' | 'bottom' | undefined;
           const isTop = idx === 0;
-          const isBottom = idx === ingredients.length - 1;
+          const isBottom = idx === basketIngredients.length - 1;
           if (isTop) {
             type = 'top';
           } else if (isBottom) {
@@ -93,11 +85,11 @@ export const BurgerConstructor = ({
         <BacketInfo totalPrice={totalPrice} onBacketClick={onBacketClick} />
       )}
 
-      {orderState.isShowModalOrder && orderState.order && (
+      {orderState.isShowModalOrder && !!order && (
         <OrderDetails>
           <Modal onClose={onCloseOrderModal}>
             <div className={orderDetailsStyles.innerWrap}>
-              <h2 className="mb-8 text text_type_digits-large">{orderState.order.id}</h2>
+              <h2 className="mb-8 text text_type_digits-large">{order.number}</h2>
               <p className="mb-15 text text_type_main-medium">Идентификатор заказа</p>
               <img
                 src={doneStatusImg}

@@ -18,29 +18,21 @@ export const getIngredientsState = (store: RootState): TIngredientState =>
 export const getActiveCategory = (store: RootState): TIngredientType =>
   store.ingredientsSlice.activeCategory;
 
-export const getIngredientsByType = createSelector(
-  [
-    (store: RootState): TIngredientDTO[] => getIngredients(store),
-    (store: RootState): TIngredientType => getActiveCategory(store),
-  ],
-  (ingredients, category) => {
-    if (!Array.isArray(ingredients)) {
-      return [];
-    }
-    return ingredients.filter((el) => el.type === category);
-  }
-);
+const getIngredientsByType = (
+  type: TIngredientType,
+  ingredients: TIngredientDTO[]
+): TIngredientDTO[] => ingredients.filter((el) => el.type === type);
 
 export const getBurgerIngredients = createSelector(
-  (store: RootState) => getIngredientsByType(store),
-  (ingredientByCategoryList: TIngredientDTO[]): TIngredientCategoryType[] => {
+  (store: RootState): TIngredientDTO[] => getIngredients(store),
+  (allIngredients: TIngredientDTO[]): TIngredientCategoryType[] => {
     const ingredintsByCategory = [
       EIngredientType.bun,
       EIngredientType.main,
       EIngredientType.sauce,
     ].map((type) => ({
       type,
-      items: ingredientByCategoryList,
+      items: getIngredientsByType(type, allIngredients),
     }));
 
     return ingredintsByCategory;
