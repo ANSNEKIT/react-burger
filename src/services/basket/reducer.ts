@@ -4,7 +4,7 @@ import type { TOrder } from './types';
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 
 export type TBasketState = {
-  bun: string | null;
+  bun: TIngredientDTO | null;
   ingredients: TIngredientDTO[];
   order: TOrder | null;
 };

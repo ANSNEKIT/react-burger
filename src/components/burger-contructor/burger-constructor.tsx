@@ -1,7 +1,11 @@
 import doneStatusImg from '@/images/done.png';
-import { getOrder, getBasket, getOrderTotalPrice } from '@/services/basket/selectors';
+import {
+  getOrder,
+  getBasketBun,
+  getBasketIngredients,
+} from '@/services/basket/selectors';
 import { useAppSelector } from '@/services/hooks';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { BacketInfo } from '../backet-info/backet-info';
 import { BacketItem } from '../backet-item/backet-item';
@@ -25,8 +29,11 @@ export const BurgerConstructor = (): ReactElement => {
   });
 
   const order = useAppSelector(getOrder);
-  const basketIngredients = useAppSelector(getBasket);
-  const totalPrice = useAppSelector(getOrderTotalPrice);
+  const basketIngredients = useAppSelector(getBasketIngredients);
+  const basketBun = useAppSelector(getBasketBun);
+  const totalPrice = useMemo(() => {
+    return basketIngredients.reduce((acc, el) => (acc += el.price), 0);
+  }, [basketIngredients]);
 
   useEffect(() => {
     setOrderState((prevState) => ({
@@ -55,26 +62,24 @@ export const BurgerConstructor = (): ReactElement => {
       <h2 className="visuallyHidden">Order</h2>
 
       <div className={`mb-10 ${styles.backetItems}`}>
-        {basketIngredients.map((el, idx) => {
-          let type: 'top' | 'bottom' | undefined;
-          const isTop = idx === 0;
-          const isBottom = idx === basketIngredients.length - 1;
-          if (isTop) {
-            type = 'top';
-          } else if (isBottom) {
-            type = 'bottom';
-          }
+        {basketBun && (
+          <BacketItem item={basketBun} type="top" isLocked={true} isDraggable={false} />
+        )}
 
+        {basketIngredients.map((el) => {
           return (
-            <BacketItem
-              key={el._id}
-              item={el}
-              type={type}
-              isLocked={isTop || isBottom}
-              isDraggable={!isTop && !isBottom}
-            />
+            <BacketItem key={el._id} item={el} isLocked={false} isDraggable={true} />
           );
         })}
+
+        {basketBun && (
+          <BacketItem
+            item={basketBun}
+            type="bottom"
+            isLocked={true}
+            isDraggable={false}
+          />
+        )}
       </div>
 
       {orderState.isShowBacketInfo && (
