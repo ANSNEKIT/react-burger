@@ -1,9 +1,5 @@
 import doneStatusImg from '@/images/done.png';
-import {
-  getOrder,
-  getBasketIngredients,
-  getOrderTotalPrice,
-} from '@/services/basket/selectors';
+import { getOrder, getBasket, getOrderTotalPrice } from '@/services/basket/selectors';
 import { useAppSelector } from '@/services/hooks';
 import { useEffect, useState } from 'react';
 
@@ -29,7 +25,7 @@ export const BurgerConstructor = (): ReactElement => {
   });
 
   const order = useAppSelector(getOrder);
-  const basketIngredients = useAppSelector(getBasketIngredients);
+  const basketIngredients = useAppSelector(getBasket);
   const totalPrice = useAppSelector(getOrderTotalPrice);
 
   useEffect(() => {

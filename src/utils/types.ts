@@ -14,13 +14,13 @@ export enum EIngredientTypeTitles {
   sauce = 'Соусы',
 }
 
-export type TBasket = {
-  basketIngredientIds: string[];
-};
+// export type TBasket = {
+//   basketIngredientIds: string[];
+// };
 
-export type TOrder = {
-  number: number;
-};
+// export type TOrder = {
+//   number: number;
+// };
 
 export type TFetchResponse<T> = {
   data: T;
