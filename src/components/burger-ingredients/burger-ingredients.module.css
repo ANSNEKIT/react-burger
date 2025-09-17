@@ -10,10 +10,3 @@
   max-height: calc(100vh - 300px);
   overflow-y: auto;
 }
-
-.ingredients {
-  display: grid;
-  grid-template-columns: min-content min-content;
-  gap: 24px;
-  max-width: 600px;
-}
