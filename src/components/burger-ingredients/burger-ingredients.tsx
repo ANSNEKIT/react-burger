@@ -56,6 +56,7 @@ export const BurgerIngredients = (): ReactElement => {
     const defaultThreshold = 50;
     let minDistance = Infinity;
     const categoriesTop = categoriesRef.current.getBoundingClientRect().top;
+    let activeCategory: TIngredientType = 'bun';
 
     Object.entries(categoryRefs).forEach(([categoryName, ref]) => {
       if (!ref.current) {
@@ -69,7 +70,7 @@ export const BurgerIngredients = (): ReactElement => {
       // Если заголовок категории в видимой области и близко к верху
       if (categoryTop <= categoriesTop + defaultThreshold && diffFromTop < minDistance) {
         minDistance = diffFromTop;
-        dispatch(setActiveCatigory(categoryName as TIngredientType));
+        activeCategory = categoryName as TIngredientType;
       }
     });
 
@@ -83,9 +84,11 @@ export const BurgerIngredients = (): ReactElement => {
         const categoryTop = categoryRect.top;
         const diffFromTop = Math.abs(categoriesTop - categoryTop);
         minDistance = diffFromTop;
-        dispatch(setActiveCatigory(categoryName as TIngredientType));
+        activeCategory = categoryName as TIngredientType;
       });
     }
+
+    dispatch(setActiveCatigory(activeCategory));
   }, [categoryRefs, dispatch]);
 
   useEffect(() => {
