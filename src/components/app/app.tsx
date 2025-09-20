@@ -2,6 +2,8 @@ import { useAppDispatch } from '@/services/hooks';
 import { loadIngredients } from '@/services/ingredients/actions';
 import { getIngredientsState } from '@/services/ingredients/selectors';
 import { useEffect } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useSelector } from 'react-redux';
 
 import { AppHeader } from '../app-header/app-header';
@@ -34,8 +36,10 @@ export const App = (): React.JSX.Element => {
         Соберите бургер
       </h1>
       <main className={`${styles.main} pl-5 pr-5`}>
-        <BurgerIngredients />
-        <BurgerConstructor />
+        <DndProvider backend={HTML5Backend}>
+          <BurgerIngredients />
+          <BurgerConstructor />
+        </DndProvider>
       </main>
     </div>
   );
