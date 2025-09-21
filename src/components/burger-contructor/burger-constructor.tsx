@@ -7,7 +7,7 @@ import {
 } from '@/services/basket/selectors';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { EIngredientType } from '@/utils/types';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
 
 import { BacketInfo } from '../backet-info/backet-info';
@@ -22,13 +22,11 @@ import orderDetailsStyles from '../order-details/order-details.module.css';
 import styles from './burger-constructor.module.css';
 
 type TBurgerConstructorState = {
-  isShowBacketInfo: boolean;
   isShowModalOrder: boolean;
 };
 
 export const BurgerConstructor = (): ReactElement => {
   const [orderState, setOrderState] = useState<TBurgerConstructorState>({
-    isShowBacketInfo: false,
     isShowModalOrder: false,
   });
   const order = useAppSelector(getOrder);
@@ -38,15 +36,23 @@ export const BurgerConstructor = (): ReactElement => {
   const dispatch = useAppDispatch();
 
   const totalPrice = useMemo(() => {
-    return basketIngredients.reduce((acc, el) => (acc += el.price), 0);
-  }, [basketIngredients]);
+    const totalBunPrice = (basketBun?.price ?? 0) * 2;
+    const totalIngredientsPrice = basketIngredients.reduce(
+      (acc, el) => (acc += el.price),
+      0
+    );
+    return totalBunPrice + totalIngredientsPrice;
+  }, [basketBun, basketIngredients]);
 
-  useEffect(() => {
-    setOrderState((prevState) => ({
-      ...prevState,
-      isShowBacketInfo: !!order && totalPrice >= 0,
-    }));
-  }, [totalPrice, order]);
+  const isShowTotal = useMemo(
+    () => basketIngredients.length > 0 || !!basketBun,
+    [basketBun, basketIngredients]
+  );
+
+  const isDisabledSubmit = useMemo(
+    () => basketIngredients.length === 0 || !basketBun,
+    [basketBun, basketIngredients]
+  );
 
   const onBacketClick = (): void => {
     setOrderState((prevState) => ({
@@ -120,8 +126,12 @@ export const BurgerConstructor = (): ReactElement => {
         )}
       </div>
 
-      {orderState.isShowBacketInfo && (
-        <BacketInfo totalPrice={totalPrice} onBacketClick={onBacketClick} />
+      {isShowTotal && (
+        <BacketInfo
+          totalPrice={totalPrice}
+          isDisabledSubmit={isDisabledSubmit}
+          onBacketClick={onBacketClick}
+        />
       )}
 
       {orderState.isShowModalOrder && !!order && (
