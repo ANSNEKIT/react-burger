@@ -21,7 +21,7 @@ export const Ingredient = ({
 }: TIngredientProps): ReactElement => {
   const [{ isDragging }, drag] = useDrag<TDragItem, void, { isDragging: boolean }>({
     type: 'ingredient',
-    item: { id: ingredient._id },
+    item: { id: ingredient._id, ...ingredient },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -52,7 +52,9 @@ export const Ingredient = ({
       <div className={`text text_type_main-default ${styles.ingredientName}`}>
         {ingredient.name}
       </div>
-      <Counter count={1} size="default" extraClass="m-1" />
+      {ingredient?.count && ingredient.count > 0 && (
+        <Counter count={ingredient.count} size="default" extraClass="m-1" />
+      )}
     </div>
   );
 };

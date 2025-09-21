@@ -1,17 +1,21 @@
 import doneStatusImg from '@/images/done.png';
+import { addIngredient, removeIngredient, setBun } from '@/services/basket/reducer';
 import {
   getOrder,
   getBasketBun,
   getBasketIngredients,
 } from '@/services/basket/selectors';
-import { useAppSelector } from '@/services/hooks';
-import { useEffect, useMemo, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/services/hooks';
+import { EIngredientType } from '@/utils/types';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useDrop } from 'react-dnd';
 
 import { BacketInfo } from '../backet-info/backet-info';
 import { BacketItem } from '../backet-item/backet-item';
 import { Modal } from '../base-modal/base-modal';
 import { OrderDetails } from '../order-details/order-datails';
 
+import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { ReactElement } from 'react';
 
 import orderDetailsStyles from '../order-details/order-details.module.css';
@@ -27,10 +31,12 @@ export const BurgerConstructor = (): ReactElement => {
     isShowBacketInfo: false,
     isShowModalOrder: false,
   });
-
   const order = useAppSelector(getOrder);
   const basketIngredients = useAppSelector(getBasketIngredients);
   const basketBun = useAppSelector(getBasketBun);
+  const dropTargetRef = useRef(null);
+  const dispatch = useAppDispatch();
+
   const totalPrice = useMemo(() => {
     return basketIngredients.reduce((acc, el) => (acc += el.price), 0);
   }, [basketIngredients]);
@@ -57,8 +63,34 @@ export const BurgerConstructor = (): ReactElement => {
     }));
   };
 
+  const onDeleteBasketItem = (id: string): void => {
+    dispatch(removeIngredient(id));
+  };
+
+  const onIngredientDrop = (item: TIngredientDTO): void => {
+    if (item.type === EIngredientType.bun) {
+      if (basketBun?._id === item._id) {
+        return;
+      }
+      dispatch(setBun({ ...item, id: crypto.randomUUID() }));
+    } else {
+      dispatch(addIngredient({ ...item, id: crypto.randomUUID() }));
+    }
+  };
+
+  const [{ isOver }, drop] = useDrop({
+    accept: 'ingredient',
+    drop: onIngredientDrop,
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  });
+  drop(dropTargetRef);
+
+  const burgerConstructorClasses = `${styles.burger_constructor} ${isOver ? styles.dropTarget : ''}`;
+
   return (
-    <section className={styles.burger_constructor}>
+    <section ref={dropTargetRef} className={burgerConstructorClasses}>
       <h2 className="visuallyHidden">Order</h2>
 
       <div className={`mb-10 ${styles.backetItems}`}>
@@ -68,7 +100,13 @@ export const BurgerConstructor = (): ReactElement => {
 
         {basketIngredients.map((el) => {
           return (
-            <BacketItem key={el._id} item={el} isLocked={false} isDraggable={true} />
+            <BacketItem
+              key={el.id}
+              item={el}
+              isLocked={false}
+              isDraggable={true}
+              onDelete={onDeleteBasketItem}
+            />
           );
         })}
 

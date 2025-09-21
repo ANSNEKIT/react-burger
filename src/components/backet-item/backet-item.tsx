@@ -13,6 +13,7 @@ export type IBacketItemProps = {
   isDraggable: boolean;
   isLocked: boolean;
   type?: 'top' | 'bottom';
+  onDelete?: (id: string) => void;
 };
 
 export const BacketItem = ({
@@ -20,6 +21,7 @@ export const BacketItem = ({
   type,
   isDraggable,
   isLocked,
+  onDelete,
 }: IBacketItemProps): ReactElement => {
   return (
     <div className={styles.backetItem}>
@@ -32,6 +34,7 @@ export const BacketItem = ({
         text={item.name}
         price={item.price}
         thumbnail={item.image_mobile}
+        handleClose={() => (!isLocked && onDelete ? onDelete(item._id) : undefined)}
       />
     </div>
   );

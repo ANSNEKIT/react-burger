@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { loadIngredients } from './actions';
+import { addIngredient, removeIngredient, setBun } from '../basket/reducer';
+import { clearBunCount, incrementCount, loadIngredients } from './actions';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { TIngredientType } from '@/utils/types';
@@ -46,6 +47,25 @@ export const ingredientsSlice = createSlice({
       .addCase(loadIngredients.fulfilled, (state, action) => {
         state.isLoading = false;
         state.ingredients = action.payload.data;
+      })
+      .addCase(addIngredient, (state, action) => {
+        incrementCount(state, action.payload._id);
+      })
+      .addCase(setBun, (state, action) => {
+        const stepCount = 2;
+        clearBunCount(state, action.payload._id);
+        incrementCount(state, action.payload._id, stepCount);
+      })
+      .addCase(removeIngredient, (state, action) => {
+        const index = state.ingredients.findIndex((el) => el._id === action.payload);
+        if (index !== -1) {
+          const updatedData = state.ingredients[index];
+          updatedData.count =
+            updatedData?.count && updatedData.count !== 0
+              ? updatedData.count - 1
+              : undefined;
+          state.ingredients.splice(index, 1, updatedData);
+        }
       });
   },
 });
