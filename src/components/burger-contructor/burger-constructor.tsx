@@ -1,5 +1,11 @@
 import doneStatusImg from '@/images/done.png';
-import { addIngredient, removeIngredient, setBun } from '@/services/basket/reducer';
+import { createOrder } from '@/services/basket/actions';
+import {
+  addIngredient,
+  clearBasket,
+  removeIngredient,
+  setBun,
+} from '@/services/basket/reducer';
 import {
   getOrder,
   getBasketBun,
@@ -7,7 +13,7 @@ import {
 } from '@/services/basket/selectors';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { EIngredientType } from '@/utils/types';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import { useDrop } from 'react-dnd';
 
 import { BacketInfo } from '../backet-info/backet-info';
@@ -21,14 +27,7 @@ import type { ReactElement } from 'react';
 import orderDetailsStyles from '../order-details/order-details.module.css';
 import styles from './burger-constructor.module.css';
 
-type TBurgerConstructorState = {
-  isShowModalOrder: boolean;
-};
-
 export const BurgerConstructor = (): ReactElement => {
-  const [orderState, setOrderState] = useState<TBurgerConstructorState>({
-    isShowModalOrder: false,
-  });
   const order = useAppSelector(getOrder);
   const basketIngredients = useAppSelector(getBasketIngredients);
   const basketBun = useAppSelector(getBasketBun);
@@ -54,19 +53,21 @@ export const BurgerConstructor = (): ReactElement => {
     [basketBun, basketIngredients]
   );
 
+  const isShowModalOrder = useMemo(() => order?.number, [order]);
+
   const onBacketClick = (): void => {
-    setOrderState((prevState) => ({
-      ...prevState,
-      order: { id: 34536 },
-      isShowModalOrder: true,
-    }));
+    if (!basketBun) {
+      return;
+    }
+    const orderPayload = {
+      ingredients: [basketBun._id, ...basketIngredients.map((el) => el._id)],
+    };
+
+    void dispatch(createOrder(orderPayload));
   };
 
   const onCloseOrderModal = (): void => {
-    setOrderState((prevState) => ({
-      ...prevState,
-      isShowModalOrder: false,
-    }));
+    dispatch(clearBasket());
   };
 
   const onDeleteBasketItem = (id: string): void => {
@@ -134,7 +135,7 @@ export const BurgerConstructor = (): ReactElement => {
         />
       )}
 
-      {orderState.isShowModalOrder && !!order && (
+      {isShowModalOrder && order?.number && (
         <OrderDetails>
           <Modal onClose={onCloseOrderModal}>
             <div className={orderDetailsStyles.innerWrap}>

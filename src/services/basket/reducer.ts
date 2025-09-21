@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { createOrder } from './actions';
+
 import type { TOrder } from './types';
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { PayloadAction } from '@reduxjs/toolkit';
@@ -32,9 +34,24 @@ export const basketSlice = createSlice({
         state.ingredients.splice(index, 1);
       }
     },
+    clearBasket(state) {
+      state.ingredients = [];
+      state.bun = null;
+      state.order = null;
+    },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(createOrder.fulfilled, (state, action) => {
+        state.order = action.payload.order;
+      })
+      .addCase(createOrder.rejected, (state) => {
+        state.order = null;
+      });
   },
 });
 
-export const { setBun, addIngredient, removeIngredient } = basketSlice.actions;
+export const { setBun, addIngredient, removeIngredient, clearBasket } =
+  basketSlice.actions;
 
 export default basketSlice.reducer;
