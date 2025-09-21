@@ -28,10 +28,10 @@ import orderDetailsStyles from '../order-details/order-details.module.css';
 import styles from './burger-constructor.module.css';
 
 export const BurgerConstructor = (): ReactElement => {
+  const dropTargetRef = useRef(null);
   const order = useAppSelector(getOrder);
   const basketIngredients = useAppSelector(getBasketIngredients);
   const basketBun = useAppSelector(getBasketBun);
-  const dropTargetRef = useRef(null);
   const dispatch = useAppDispatch();
 
   const totalPrice = useMemo(() => {
@@ -105,11 +105,12 @@ export const BurgerConstructor = (): ReactElement => {
           <BacketItem item={basketBun} type="top" isLocked={true} isDraggable={false} />
         )}
 
-        {basketIngredients.map((el) => {
+        {basketIngredients.map((el, index) => {
           return (
             <BacketItem
               key={el.id}
               item={el}
+              index={index}
               isLocked={false}
               isDraggable={true}
               onDelete={onDeleteBasketItem}

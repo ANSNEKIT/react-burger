@@ -34,6 +34,19 @@ export const basketSlice = createSlice({
         state.ingredients.splice(index, 1);
       }
     },
+    moveIngredient(
+      state,
+      action: PayloadAction<{ dragIndex: number; hoverIndex: number }>
+    ) {
+      const { dragIndex, hoverIndex } = action.payload;
+      if (dragIndex === -1 || hoverIndex === -1) {
+        return;
+      }
+      const ingredients = [...state.ingredients];
+      const newItem = ingredients.splice(dragIndex, 1)[0];
+      ingredients.splice(hoverIndex, 0, newItem);
+      state.ingredients = ingredients;
+    },
     clearBasket(state) {
       state.ingredients = [];
       state.bun = null;
@@ -51,7 +64,7 @@ export const basketSlice = createSlice({
   },
 });
 
-export const { setBun, addIngredient, removeIngredient, clearBasket } =
+export const { setBun, addIngredient, removeIngredient, moveIngredient, clearBasket } =
   basketSlice.actions;
 
 export default basketSlice.reducer;
