@@ -8,6 +8,7 @@ import {
 import { EIngredientTypeTitles, type TIngredientType } from '@/utils/types';
 import { useEffect, useCallback, useMemo, useRef, type ReactElement } from 'react';
 
+import { Modal } from '../base-modal/base-modal';
 import { BurgerCategory } from '../burger-category/burger-category';
 import { BurgerTabs } from '../burger-tabs/burger-tabs';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
@@ -122,7 +123,9 @@ export const BurgerIngredients = (): ReactElement => {
       </section>
 
       {currentIngredient && (
-        <IngredientDetails detail={currentIngredient} onClose={onCloseIngredientModal} />
+        <Modal title="Детали ингредиента" onClose={onCloseIngredientModal}>
+          <IngredientDetails detail={currentIngredient} />
+        </Modal>
       )}
     </>
   );

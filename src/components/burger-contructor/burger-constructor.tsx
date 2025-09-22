@@ -1,4 +1,3 @@
-import doneStatusImg from '@/images/done.png';
 import { createOrder } from '@/services/basket/actions';
 import {
   addIngredient,
@@ -24,7 +23,6 @@ import { OrderDetails } from '../order-details/order-datails';
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { ReactElement } from 'react';
 
-import orderDetailsStyles from '../order-details/order-details.module.css';
 import styles from './burger-constructor.module.css';
 
 export const BurgerConstructor = (): ReactElement => {
@@ -137,25 +135,9 @@ export const BurgerConstructor = (): ReactElement => {
       )}
 
       {isShowModalOrder && order?.number && (
-        <OrderDetails>
-          <Modal onClose={onCloseOrderModal}>
-            <div className={orderDetailsStyles.innerWrap}>
-              <h2 className="mb-8 text text_type_digits-large">{order.number}</h2>
-              <p className="mb-15 text text_type_main-medium">Идентификатор заказа</p>
-              <img
-                src={doneStatusImg}
-                className={`mb-15 ${orderDetailsStyles.statusImage}`}
-                alt="order status image"
-              />
-              <p className="mb-2 text text_type_main-default">
-                Ваш заказ начали готовить
-              </p>
-              <p className="text text_type_main-default text_color_inactive">
-                Дождитесь готовности на орбитальной станции
-              </p>
-            </div>
-          </Modal>
-        </OrderDetails>
+        <Modal onClose={onCloseOrderModal}>
+          <OrderDetails orderNumber={order.number} />
+        </Modal>
       )}
     </section>
   );

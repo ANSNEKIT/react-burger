@@ -32,9 +32,14 @@ export const clearBunCount = (
     });
 };
 
+export const clearCounts = (state: WritableDraft<TIngredientState>): void => {
+  state.ingredients.map((el) => {
+    el.count = undefined;
+    return el;
+  });
+};
+
 export const loadIngredients = createAsyncThunk<TFetchResponse<TIngredientDTO[]>, void>(
   'ingredients/loadIngredients',
-  async () => {
-    return getIngredients();
-  }
+  getIngredients
 );

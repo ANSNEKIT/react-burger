@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { addIngredient, removeIngredient, setBun } from '../basket/reducer';
-import { clearBunCount, incrementCount, loadIngredients } from './actions';
+import { addIngredient, clearBasket, removeIngredient, setBun } from '../basket/reducer';
+import { clearBunCount, clearCounts, incrementCount, loadIngredients } from './actions';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { TIngredientType } from '@/utils/types';
@@ -66,6 +66,9 @@ export const ingredientsSlice = createSlice({
               : undefined;
           state.ingredients.splice(index, 1, updatedData);
         }
+      })
+      .addCase(clearBasket, (state) => {
+        clearCounts(state);
       });
   },
 });
