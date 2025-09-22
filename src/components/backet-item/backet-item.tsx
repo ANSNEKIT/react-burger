@@ -4,7 +4,7 @@ import {
   ConstructorElement,
   DragIcon,
 } from '@krgaa/react-developer-burger-ui-components';
-import { useRef, type ReactElement } from 'react';
+import { useMemo, useRef, type ReactElement } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
@@ -30,6 +30,13 @@ export const BacketItem = ({
 }: IBacketItemProps): ReactElement => {
   const basketItemRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useAppDispatch();
+
+  const bunText = useMemo(() => {
+    if (!type) {
+      return '';
+    }
+    return type === 'top' ? '(верх)' : '(низ)';
+  }, [type]);
 
   const [{ isDragging }, drag] = useDrag({
     type: 'basket-item',
@@ -94,7 +101,7 @@ export const BacketItem = ({
       <ConstructorElement
         type={type}
         isLocked={isLocked}
-        text={item.name}
+        text={bunText ? `${item.name} ${bunText}` : item.name}
         price={item.price}
         thumbnail={item.image_mobile}
         handleClose={() => (!isLocked && onDelete ? onDelete(item._id) : undefined)}
