@@ -1,38 +1,33 @@
-import { getIngredients } from '@/api/ingredients.api';
-import { BurgerConstructor } from '@/components/burger-contructor/burger-constructor';
-import { useEffect, useState } from 'react';
+import { useAppDispatch } from '@/services/hooks';
+import { loadIngredients } from '@/services/ingredients/actions';
+import { getIngredientsState } from '@/services/ingredients/selectors';
+import { useEffect } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useSelector } from 'react-redux';
 
-import { AppHeader } from '@components/app-header/app-header';
-import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients';
-
-import type { TIngredientDTO } from '@/contracts/ingredientDTO';
+import { AppHeader } from '../app-header/app-header';
+import { BurgerConstructor } from '../burger-contructor/burger-constructor';
+import { BurgerIngredients } from '../burger-ingredients/burger-ingredients';
 
 import styles from './app.module.css';
 
-type TAppState = {
-  isLoading: boolean;
-  hasError: string | null;
-  ingredients: TIngredientDTO[];
-};
-
 export const App = (): React.JSX.Element => {
-  const [state, setState] = useState<TAppState>({
-    isLoading: false,
-    hasError: null,
-    ingredients: [],
-  });
+  const dispatch = useAppDispatch();
 
-  const fetchIngredients = async (): Promise<void> => {
-    setState((prevState) => ({ ...prevState, isLoading: true }));
-
-    const ingredients = await getIngredients();
-
-    setState((prevState) => ({ ...prevState, isLoading: false, ingredients }));
-  };
+  const { isLoading, error } = useSelector(getIngredientsState);
 
   useEffect(() => {
-    void fetchIngredients();
-  }, []);
+    void dispatch(loadIngredients());
+  }, [dispatch]);
+
+  if (isLoading) {
+    return <div>Загрузка</div>;
+  }
+
+  if (!isLoading && error) {
+    return <h2>{`Ошибка: ${error}`}</h2>;
+  }
 
   return (
     <div className={styles.app}>
@@ -41,13 +36,10 @@ export const App = (): React.JSX.Element => {
         Соберите бургер
       </h1>
       <main className={`${styles.main} pl-5 pr-5`}>
-        {state.isLoading && <div>Загрузка</div>}
-        {!state.isLoading && (
-          <>
-            <BurgerIngredients ingredients={state.ingredients} />
-            <BurgerConstructor ingredients={state.ingredients} />
-          </>
-        )}
+        <DndProvider backend={HTML5Backend}>
+          <BurgerIngredients />
+          <BurgerConstructor />
+        </DndProvider>
       </main>
     </div>
   );

@@ -1,7 +1,8 @@
 import { Counter, CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
+import { useRef, type ReactElement } from 'react';
+import { useDrag } from 'react-dnd';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
-import type { ReactElement } from 'react';
 
 import styles from './ingredient.module.css';
 
@@ -10,12 +11,27 @@ type TIngredientProps = {
   onClickCb: () => void;
 };
 
+type TDragItem = {
+  id: string;
+};
+
 export const Ingredient = ({
   ingredient,
   onClickCb,
 }: TIngredientProps): ReactElement => {
+  const [{ isDragging }, drag] = useDrag<TDragItem, void, { isDragging: boolean }>({
+    type: 'ingredient',
+    item: { id: ingredient._id, ...ingredient },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+  const ingredientRef = useRef(null);
+  const ingredientClasses = `${styles.ingredient} ${isDragging ? 'styles.dragging' : ''}`;
+  drag(ingredientRef);
+
   return (
-    <div className={styles.ingredient} onClick={onClickCb}>
+    <div ref={ingredientRef} className={ingredientClasses} onClick={onClickCb}>
       <picture>
         <source
           media="(max-width: 600px)"
@@ -36,7 +52,9 @@ export const Ingredient = ({
       <div className={`text text_type_main-default ${styles.ingredientName}`}>
         {ingredient.name}
       </div>
-      <Counter count={1} size="default" extraClass="m-1" />
+      {ingredient?.count && ingredient.count > 0 && (
+        <Counter count={ingredient.count} size="default" extraClass="m-1" />
+      )}
     </div>
   );
 };

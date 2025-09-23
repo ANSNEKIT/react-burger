@@ -14,10 +14,6 @@ export enum EIngredientTypeTitles {
   sauce = 'Соусы',
 }
 
-export type TOrder = {
-  id: number;
-};
-
 export type TFetchResponse<T> = {
   data: T;
 };

@@ -27,8 +27,16 @@
 }
 
 .modalClose {
-  width: 24px;
-  height: 24px;
+  position: absolute;
+  top: 60px;
+  right: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 27px;
+  height: 27px;
+  margin: 0;
+  padding: 0;
   color: #f2f2f3;
   background: none;
   border: none;
@@ -44,8 +52,10 @@
 
 .modalHeader {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  width: 100%;
+  height: 64px;
+  margin-right: 40px;
 }
 
 .modalTitle {

@@ -19,3 +19,8 @@
 .ingredientName {
   text-align: center;
 }
+
+.dragging {
+  cursor: grabbing;
+  opacity: 0.5;
+}

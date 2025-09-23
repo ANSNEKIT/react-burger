@@ -1,5 +1,19 @@
-import doneStatusImg from '@/images/done.png';
-import { useEffect, useMemo, useState } from 'react';
+import { createOrder } from '@/services/basket/actions';
+import {
+  addIngredient,
+  clearBasket,
+  removeIngredient,
+  setBun,
+} from '@/services/basket/reducer';
+import {
+  getOrder,
+  getBasketBun,
+  getBasketIngredients,
+} from '@/services/basket/selectors';
+import { useAppDispatch, useAppSelector } from '@/services/hooks';
+import { EIngredientType } from '@/utils/types';
+import { useMemo, useRef } from 'react';
+import { useDrop } from 'react-dnd';
 
 import { BacketInfo } from '../backet-info/backet-info';
 import { BacketItem } from '../backet-item/backet-item';
@@ -7,112 +21,123 @@ import { Modal } from '../base-modal/base-modal';
 import { OrderDetails } from '../order-details/order-datails';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
-import type { TOrder } from '@utils/types';
 import type { ReactElement } from 'react';
 
-import orderDetailsStyles from '../order-details/order-details.module.css';
 import styles from './burger-constructor.module.css';
 
-type TBurgerConstructorProps = {
-  ingredients: TIngredientDTO[];
-};
-
-type TBurgerConstructorState = {
-  isShowBacketInfo: boolean;
-  isShowModalOrder: boolean;
-  order: TOrder | null;
-};
-
-export const BurgerConstructor = ({
-  ingredients,
-}: TBurgerConstructorProps): ReactElement => {
-  const [orderState, setOrderState] = useState<TBurgerConstructorState>({
-    isShowBacketInfo: false,
-    isShowModalOrder: false,
-    order: null,
-  });
+export const BurgerConstructor = (): ReactElement => {
+  const dropTargetRef = useRef(null);
+  const order = useAppSelector(getOrder);
+  const basketIngredients = useAppSelector(getBasketIngredients);
+  const basketBun = useAppSelector(getBasketBun);
+  const dispatch = useAppDispatch();
 
   const totalPrice = useMemo(() => {
-    if (!ingredients.length) {
-      return 0;
-    }
+    const totalBunPrice = (basketBun?.price ?? 0) * 2;
+    const totalIngredientsPrice = basketIngredients.reduce(
+      (acc, el) => (acc += el.price),
+      0
+    );
+    return totalBunPrice + totalIngredientsPrice;
+  }, [basketBun, basketIngredients]);
 
-    return ingredients.reduce((acc, el) => (acc += el.price), 0);
-  }, [ingredients]);
+  const isShowTotal = useMemo(
+    () => basketIngredients.length > 0 || !!basketBun,
+    [basketBun, basketIngredients]
+  );
 
-  useEffect(() => {
-    setOrderState((prevState) => ({
-      ...prevState,
-      isShowBacketInfo: ingredients.length > 0 && totalPrice >= 0,
-    }));
-  }, [totalPrice, ingredients]);
+  const isDisabledSubmit = useMemo(
+    () => basketIngredients.length === 0 || !basketBun,
+    [basketBun, basketIngredients]
+  );
+
+  const isShowModalOrder = useMemo(() => order?.number, [order]);
 
   const onBacketClick = (): void => {
-    setOrderState((prevState) => ({
-      ...prevState,
-      order: { id: 34536 },
-      isShowModalOrder: true,
-    }));
+    if (!basketBun) {
+      return;
+    }
+    const orderPayload = {
+      ingredients: [basketBun._id, ...basketIngredients.map((el) => el._id)],
+    };
+
+    void dispatch(createOrder(orderPayload));
   };
 
   const onCloseOrderModal = (): void => {
-    setOrderState((prevState) => ({
-      ...prevState,
-      isShowModalOrder: false,
-    }));
+    dispatch(clearBasket());
   };
 
+  const onDeleteBasketItem = (id: string): void => {
+    dispatch(removeIngredient(id));
+  };
+
+  const onIngredientDrop = (item: TIngredientDTO): void => {
+    if (item.type === EIngredientType.bun) {
+      if (basketBun?._id === item._id) {
+        return;
+      }
+      dispatch(setBun({ ...item, id: crypto.randomUUID() }));
+    } else {
+      dispatch(addIngredient({ ...item, id: crypto.randomUUID() }));
+    }
+  };
+
+  const [{ isOver }, drop] = useDrop({
+    accept: 'ingredient',
+    drop: onIngredientDrop,
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  });
+  drop(dropTargetRef);
+
+  const burgerConstructorClasses = `${styles.burger_constructor} ${isOver ? styles.dropTarget : ''}`;
+
   return (
-    <section className={styles.burger_constructor}>
+    <section ref={dropTargetRef} className={burgerConstructorClasses}>
       <h2 className="visuallyHidden">Order</h2>
 
       <div className={`mb-10 ${styles.backetItems}`}>
-        {ingredients.map((el, idx) => {
-          let type: 'top' | 'bottom' | undefined;
-          const isTop = idx === 0;
-          const isBottom = idx === ingredients.length - 1;
-          if (isTop) {
-            type = 'top';
-          } else if (isBottom) {
-            type = 'bottom';
-          }
+        {basketBun && (
+          <BacketItem item={basketBun} type="top" isLocked={true} isDraggable={false} />
+        )}
 
+        {basketIngredients.map((el, index) => {
           return (
             <BacketItem
-              key={el._id}
+              key={el.id}
               item={el}
-              type={type}
-              isLocked={isTop || isBottom}
-              isDraggable={!isTop && !isBottom}
+              index={index}
+              isLocked={false}
+              isDraggable={true}
+              onDelete={onDeleteBasketItem}
             />
           );
         })}
+
+        {basketBun && (
+          <BacketItem
+            item={basketBun}
+            type="bottom"
+            isLocked={true}
+            isDraggable={false}
+          />
+        )}
       </div>
 
-      {orderState.isShowBacketInfo && (
-        <BacketInfo totalPrice={totalPrice} onBacketClick={onBacketClick} />
+      {isShowTotal && (
+        <BacketInfo
+          totalPrice={totalPrice}
+          isDisabledSubmit={isDisabledSubmit}
+          onBacketClick={onBacketClick}
+        />
       )}
 
-      {orderState.isShowModalOrder && orderState.order && (
-        <OrderDetails>
-          <Modal onClose={onCloseOrderModal}>
-            <div className={orderDetailsStyles.innerWrap}>
-              <h2 className="mb-8 text text_type_digits-large">{orderState.order.id}</h2>
-              <p className="mb-15 text text_type_main-medium">Идентификатор заказа</p>
-              <img
-                src={doneStatusImg}
-                className={`mb-15 ${orderDetailsStyles.statusImage}`}
-                alt="order status image"
-              />
-              <p className="mb-2 text text_type_main-default">
-                Ваш заказ начали готовить
-              </p>
-              <p className="text text_type_main-default text_color_inactive">
-                Дождитесь готовности на орбитальной станции
-              </p>
-            </div>
-          </Modal>
-        </OrderDetails>
+      {isShowModalOrder && order?.number && (
+        <Modal onClose={onCloseOrderModal}>
+          <OrderDetails orderNumber={order.number} />
+        </Modal>
       )}
     </section>
   );
