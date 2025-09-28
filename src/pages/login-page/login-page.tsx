@@ -1,4 +1,4 @@
-import Auth from '@/components/auth/auth';
+import Form from '@/components/form/form';
 import {
   Button,
   EmailInput,
@@ -39,7 +39,7 @@ const LoginPage = (): ReactElement => {
 
   return (
     <div className="page pageCenter">
-      <Auth title="Вход" links={<Links />}>
+      <Form title="Вход" links={<Links />}>
         <>
           <EmailInput
             name={'email'}
@@ -65,7 +65,7 @@ const LoginPage = (): ReactElement => {
             Войти
           </Button>
         </>
-      </Auth>
+      </Form>
     </div>
   );
 };

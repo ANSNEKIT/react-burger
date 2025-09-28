@@ -1,4 +1,4 @@
-import Auth from '@/components/auth/auth';
+import Form from '@/components/form/form';
 import {
   Button,
   Input,
@@ -34,7 +34,7 @@ const ResetPasswordPage = (): ReactElement => {
 
   return (
     <div className="page pageCenter">
-      <Auth title="Восстановление пароля" links={<Links />}>
+      <Form title="Восстановление пароля" links={<Links />}>
         <>
           <PasswordInput
             name={'password'}
@@ -61,7 +61,7 @@ const ResetPasswordPage = (): ReactElement => {
             Сохранить
           </Button>
         </>
-      </Auth>
+      </Form>
     </div>
   );
 };

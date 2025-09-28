@@ -1,4 +1,4 @@
-.auth {
+.formWrap {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -6,7 +6,7 @@
   width: 480px;
 }
 
-.authTitle {
+.formTitle {
   text-align: center;
 }
 

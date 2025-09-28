@@ -1,4 +1,4 @@
-import Auth from '@/components/auth/auth';
+import Form from '@/components/form/form';
 import { Button, EmailInput } from '@krgaa/react-developer-burger-ui-components';
 import React from 'react';
 
@@ -26,7 +26,7 @@ const ForgotPasswordPage = (): ReactElement => {
 
   return (
     <div className="page pageCenter">
-      <Auth title="Восстановление пароля" links={<Links />}>
+      <Form title="Восстановление пароля" links={<Links />}>
         <>
           <EmailInput
             name={'email'}
@@ -46,7 +46,7 @@ const ForgotPasswordPage = (): ReactElement => {
             Восстановить
           </Button>
         </>
-      </Auth>
+      </Form>
     </div>
   );
 };
