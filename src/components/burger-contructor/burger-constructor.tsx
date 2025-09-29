@@ -92,7 +92,7 @@ export const BurgerConstructor = (): ReactElement => {
   });
   drop(dropTargetRef);
 
-  const burgerConstructorClasses = `${styles.burger_constructor} ${isOver ? styles.dropTarget : ''}`;
+  const burgerConstructorClasses = `${styles.burgerConstructor} ${isOver ? styles.dropTarget : ''}`;
 
   return (
     <section ref={dropTargetRef} className={burgerConstructorClasses}>

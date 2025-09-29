@@ -103,8 +103,11 @@ export const BurgerIngredients = (): ReactElement => {
   }, [categoriesRef, dispatch, onScrollCategoryIngredients]);
 
   return (
-    <>
-      <section className={styles.burger_ingredients}>
+    <div className={styles.burgerIngredientsWrap}>
+      <h2 className={`${styles.title} text text_type_main-large mt-10 mb-5`}>
+        Соберите бургер
+      </h2>
+      <section className={styles.burgerIngredients}>
         <nav className={'mb-10'}>
           <BurgerTabs activeTab={activeCategory} onClickTab={onToggleCategory} />
         </nav>
@@ -127,6 +130,6 @@ export const BurgerIngredients = (): ReactElement => {
           <IngredientDetails detail={currentIngredient} />
         </Modal>
       )}
-    </>
+    </div>
   );
 };
