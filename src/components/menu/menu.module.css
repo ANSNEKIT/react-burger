@@ -1,0 +1,24 @@
+.menuList {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 64px;
+  margin: 0;
+  padding: 0;
+}
+
+.menuItemLink {
+  color: #8585ad;
+  text-decoration: none;
+  transition: all 0.5s ease-out;
+
+  &:hover {
+    color: #5b5bcc;
+  }
+}

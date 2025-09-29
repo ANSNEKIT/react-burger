@@ -3,9 +3,9 @@ import type { ReactElement } from 'react';
 import styles from './form.module.css';
 
 type TAuthProps = {
-  title: string;
+  title?: string;
   children: ReactElement;
-  links: ReactElement;
+  links?: ReactElement;
 };
 
 const Form = ({ title, children, links }: TAuthProps): ReactElement => {
@@ -17,7 +17,9 @@ const Form = ({ title, children, links }: TAuthProps): ReactElement => {
         </h1>
       )}
       <form className={styles.form}>{children}</form>
-      <div className={`text text_type_main-default ${styles.links}`}>{links}</div>
+      {links && (
+        <div className={`text text_type_main-default ${styles.links}`}>{links}</div>
+      )}
     </div>
   );
 };
