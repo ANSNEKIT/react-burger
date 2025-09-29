@@ -3,9 +3,9 @@ import { IngredientDetails } from '@/components/ingredient-details/ingredient-de
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { ReactElement } from 'react';
 
-import styles from './ingredient-page.module.css';
+import styles from './ingredient.module.css';
 
-const IngredientPage = (): ReactElement => {
+const Ingredient = (): ReactElement => {
   const currentIngredient: TIngredientDTO = {
     _id: '643d69a5c3f7b9001cfa0941',
     name: 'Биокотлета из марсианской Магнолии',
@@ -22,11 +22,11 @@ const IngredientPage = (): ReactElement => {
   };
 
   return (
-    <div className={`page ${styles.ingredientPage}`}>
+    <div className={`page ${styles.ingredient}`}>
       <h2 className="text text_type_main-large">Детали ингредиента</h2>
       <IngredientDetails detail={currentIngredient} />
     </div>
   );
 };
 
-export default IngredientPage;
+export default Ingredient;

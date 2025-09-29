@@ -8,9 +8,9 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useSelector } from 'react-redux';
 
-import styles from './constructor-page.module.css';
+import styles from './home.module.css';
 
-const ConstructorPage = (): ReactElement => {
+const Home = (): ReactElement => {
   const dispatch = useAppDispatch();
 
   const { isLoading, error } = useSelector(getIngredientsState);
@@ -42,4 +42,4 @@ const ConstructorPage = (): ReactElement => {
   );
 };
 
-export default ConstructorPage;
+export default Home;

@@ -1,4 +1,4 @@
-import ConstructorPage from '@/pages/constructor-page/constructor-page';
+import Home from '@/pages/home/home';
 
 import { AppHeader } from '../app-header/app-header';
 
@@ -10,7 +10,7 @@ export const App = (): ReactElement => {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <ConstructorPage />
+      <Home />
     </div>
   );
 };

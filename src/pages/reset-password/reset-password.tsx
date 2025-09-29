@@ -1,21 +1,29 @@
 import Form from '@/components/form/form';
-import { Button, EmailInput } from '@krgaa/react-developer-burger-ui-components';
+import {
+  Button,
+  Input,
+  PasswordInput,
+} from '@krgaa/react-developer-burger-ui-components';
 import React from 'react';
 
 import type { ChangeEvent, ReactElement, SyntheticEvent } from 'react';
 
-const ForgotPasswordPage = (): ReactElement => {
-  const [email, setEmail] = React.useState('');
+const ResetPassword = (): ReactElement => {
+  const [state, setState] = React.useState({
+    password: '',
+    emailCode: '',
+  });
   const onChange = (e: ChangeEvent): void => {
     const target = e.target as HTMLFormElement;
+    const name = target.name;
     const val = target.value as string;
-    setEmail(val);
+    setState({ ...state, [name]: val });
   };
 
   const onSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
 
-    console.log('submit email ', email);
+    console.log('submit resetPassword ', state);
   };
 
   const Links = (): ReactElement => (
@@ -28,11 +36,18 @@ const ForgotPasswordPage = (): ReactElement => {
     <div className="page pageCenter">
       <Form title="Восстановление пароля" links={<Links />}>
         <>
-          <EmailInput
-            name={'email'}
-            value={email}
-            placeholder="Укажите email"
-            isIcon={false}
+          <PasswordInput
+            name={'password'}
+            value={state.password}
+            placeholder="Введите новый пароль"
+            extraClass="mb-6"
+            onChange={onChange}
+          />
+          <Input
+            type={'text'}
+            name={'emailCode'}
+            value={state.emailCode}
+            placeholder="Введите код из письма"
             extraClass="mb-6"
             onChange={onChange}
           />
@@ -43,7 +58,7 @@ const ForgotPasswordPage = (): ReactElement => {
             extraClass="submitButton"
             onClick={onSubmit}
           >
-            Восстановить
+            Сохранить
           </Button>
         </>
       </Form>
@@ -51,4 +66,4 @@ const ForgotPasswordPage = (): ReactElement => {
   );
 };
 
-export default ForgotPasswordPage;
+export default ResetPassword;

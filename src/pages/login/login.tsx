@@ -8,7 +8,7 @@ import React from 'react';
 
 import type { ChangeEvent, ReactElement, SyntheticEvent } from 'react';
 
-const LoginPage = (): ReactElement => {
+const Login = (): ReactElement => {
   const [state, setState] = React.useState({
     email: '',
     password: '',
@@ -70,4 +70,4 @@ const LoginPage = (): ReactElement => {
   );
 };
 
-export default LoginPage;
+export default Login;

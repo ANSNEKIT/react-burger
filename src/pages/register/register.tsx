@@ -1,22 +1,15 @@
 import Form from '@/components/form/form';
-import Menu from '@/components/menu/menu';
 import {
+  Button,
   EmailInput,
   Input,
   PasswordInput,
 } from '@krgaa/react-developer-burger-ui-components';
 import React from 'react';
 
-import type { ChangeEvent, ReactElement } from 'react';
+import type { ChangeEvent, ReactElement, SyntheticEvent } from 'react';
 
-import styles from './profile-page.module.css';
-
-const ProfilePage = (): ReactElement => {
-  const menuItems = [
-    { id: crypto.randomUUID(), name: 'Профиль', to: '#' },
-    { id: crypto.randomUUID(), name: 'История заказов', to: '#' },
-    { id: crypto.randomUUID(), name: 'Выход', to: '#' },
-  ];
+const Register = (): ReactElement => {
   const [state, setState] = React.useState({
     name: '',
     email: '',
@@ -29,10 +22,21 @@ const ProfilePage = (): ReactElement => {
     setState({ ...state, [name]: val });
   };
 
+  const onSubmit = (e: SyntheticEvent): void => {
+    e.preventDefault();
+
+    console.log('submit data ', state);
+  };
+
+  const Links = (): ReactElement => (
+    <p>
+      Уже зарегистрированы? <span>Войти</span>
+    </p>
+  );
+
   return (
-    <div className={`page ${styles.profilePage}`}>
-      <Menu items={menuItems} />
-      <Form>
+    <div className="page pageCenter">
+      <Form title="Регистрация" links={<Links />}>
         <>
           <Input
             type={'text'}
@@ -40,14 +44,13 @@ const ProfilePage = (): ReactElement => {
             value={state.name}
             placeholder={'Имя'}
             extraClass="mb-6"
-            icon="DragIcon"
             onChange={onChange}
           />
           <EmailInput
             name={'email'}
             value={state.email}
             placeholder="Логин"
-            isIcon={true}
+            isIcon={false}
             extraClass="mb-6"
             onChange={onChange}
           />
@@ -55,13 +58,21 @@ const ProfilePage = (): ReactElement => {
             name={'password'}
             value={state.password}
             extraClass="mb-6"
-            icon="EditIcon"
             onChange={onChange}
           />
+          <Button
+            htmlType="submit"
+            type="primary"
+            size="medium"
+            extraClass="submitButton"
+            onClick={onSubmit}
+          >
+            Зарегистрироваться
+          </Button>
         </>
       </Form>
     </div>
   );
 };
 
-export default ProfilePage;
+export default Register;
