@@ -1,17 +1,15 @@
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
-import { setActiveCatigory, setCurrentIngredient } from '@/services/ingredients/reducer';
+import { setActiveCatigory } from '@/services/ingredients/reducer';
 import {
   getActiveCategory,
   getBurgerIngredients,
-  getCurrentIngredient,
 } from '@/services/ingredients/selectors';
 import { EIngredientTypeTitles, type TIngredientType } from '@/utils/types';
 import { useEffect, useCallback, useMemo, useRef, type ReactElement } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { Modal } from '../base-modal/base-modal';
 import { BurgerCategory } from '../burger-category/burger-category';
 import { BurgerTabs } from '../burger-tabs/burger-tabs';
-import { IngredientDetails } from '../ingredient-details/ingredient-details';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 
@@ -19,9 +17,9 @@ import styles from './burger-ingredients.module.css';
 
 export const BurgerIngredients = (): ReactElement => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const ingredientsByType = useAppSelector(getBurgerIngredients);
   const activeCategory = useAppSelector(getActiveCategory);
-  const currentIngredient = useAppSelector(getCurrentIngredient);
 
   const categoriesRef = useRef<HTMLDivElement>(null);
   const bunRef = useRef<HTMLDivElement>(null);
@@ -37,12 +35,10 @@ export const BurgerIngredients = (): ReactElement => {
     [bunRef, mainRef, sauceRef]
   );
 
-  const onCloseIngredientModal = (): void => {
-    dispatch(setCurrentIngredient(null));
-  };
-
   const onSelectIngredient = (ingredient: TIngredientDTO): void => {
-    dispatch(setCurrentIngredient(ingredient));
+    void navigate(`/ingredients/${ingredient._id}`, {
+      state: { background: 'home' },
+    });
   };
 
   const onToggleCategory = (payload: TIngredientType): void => {
@@ -124,12 +120,6 @@ export const BurgerIngredients = (): ReactElement => {
           ))}
         </div>
       </section>
-
-      {currentIngredient && (
-        <Modal title="Детали ингредиента" onClose={onCloseIngredientModal}>
-          <IngredientDetails detail={currentIngredient} />
-        </Modal>
-      )}
     </div>
   );
 };

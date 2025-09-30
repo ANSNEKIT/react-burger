@@ -1,28 +1,55 @@
+import { Button } from '@krgaa/react-developer-burger-ui-components';
+import { NavLink } from 'react-router-dom';
+
 import type { ReactElement } from 'react';
 
 import styles from './menu.module.css';
 
-type TMenuItem = {
+export type TMenuItem = {
   id: string;
+  type?: string;
   name: string;
   to: string;
 };
 
 type TMenuProps = {
-  items: TMenuItem[];
+  links: TMenuItem[];
+  buttons: TMenuItem[];
+  onClickButton: (item: TMenuItem) => void;
 };
 
-const Menu = ({ items }: TMenuProps): ReactElement => {
+const Menu = ({ links, buttons, onClickButton }: TMenuProps): ReactElement => {
   return (
-    <ul className={styles.menuList}>
-      {items.map((item) => (
-        <li key={item.id} className={`text text_type_main-medium ${styles.menuItem}`}>
-          <a href={item.to} className={styles.menuItemLink}>
-            {item.name}
-          </a>
-        </li>
+    <nav>
+      <ul className={styles.menuList}>
+        {links.map((item) => (
+          <li key={item.id} className={`text text_type_main-medium ${styles.menuItem}`}>
+            <NavLink
+              to={item.to}
+              className={({ isActive }) =>
+                isActive
+                  ? `${styles.menuItemLink} ${styles.active}`
+                  : `${styles.menuItemLink}`
+              }
+            >
+              {item.name}
+            </NavLink>
+          </li>
+        ))}
+      </ul>
+      {buttons.map((btn) => (
+        <Button
+          key={btn.id}
+          htmlType="button"
+          type="secondary"
+          size="large"
+          extraClass={`text text_type_main-medium ${styles.menuItem} ${styles.menuButton}`}
+          onClick={() => onClickButton(btn)}
+        >
+          {btn.name}
+        </Button>
       ))}
-    </ul>
+    </nav>
   );
 };
 

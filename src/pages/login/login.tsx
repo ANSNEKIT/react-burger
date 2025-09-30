@@ -5,6 +5,7 @@ import {
   PasswordInput,
 } from '@krgaa/react-developer-burger-ui-components';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import type { ChangeEvent, ReactElement, SyntheticEvent } from 'react';
 
@@ -29,10 +30,10 @@ const Login = (): ReactElement => {
   const Links = (): ReactElement => (
     <>
       <p>
-        Вы — новый пользователь? <span>Зарегистрироваться</span>
+        Вы — новый пользователь? <Link to="/register">Зарегистрироваться</Link>
       </p>
       <p>
-        Забыли пароль? <span>Восстановить пароль</span>
+        Забыли пароль? <Link to="/forgot-password">Восстановить пароль</Link>
       </p>
     </>
   );

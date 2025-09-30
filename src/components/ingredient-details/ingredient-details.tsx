@@ -1,5 +1,8 @@
-import type { TIngredientDTO } from '@/contracts/ingredientDTO';
-import type { ReactElement } from 'react';
+import { useAppDispatch, useAppSelector } from '@/services/hooks';
+import { setCurrentIngredient } from '@/services/ingredients/reducer';
+import { getCurrentIngredient } from '@/services/ingredients/selectors';
+import { useEffect, type ReactElement } from 'react';
+import { useParams } from 'react-router-dom';
 
 import styles from './ingredient-details.module.css';
 
@@ -8,13 +11,21 @@ export type TComposition = {
   value: number;
 };
 
-export type TIngredientDetailModalProps = {
-  detail: TIngredientDTO;
-};
+const IngredientDetails = (): ReactElement => {
+  const { id } = useParams();
+  const dispatch = useAppDispatch();
+  const detail = useAppSelector(getCurrentIngredient);
 
-export const IngredientDetails = ({
-  detail,
-}: TIngredientDetailModalProps): ReactElement => {
+  useEffect(() => {
+    if (id) {
+      dispatch(setCurrentIngredient(id));
+    }
+  }, [id, dispatch]);
+
+  if (!detail) {
+    return <div>Не найден элемент id: {id}</div>;
+  }
+
   const compositions = [
     {
       name: 'Калории, ккал',
@@ -59,3 +70,5 @@ export const IngredientDetails = ({
     </div>
   );
 };
+
+export default IngredientDetails;

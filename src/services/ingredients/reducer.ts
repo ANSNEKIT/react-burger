@@ -30,8 +30,11 @@ export const ingredientsSlice = createSlice({
     setActiveCatigory(state, action: PayloadAction<TIngredientType>) {
       state.activeCategory = action.payload;
     },
-    setCurrentIngredient(state, action: PayloadAction<TIngredientDTO | null>) {
-      state.currentIngredient = action.payload;
+    setCurrentIngredient(state, action: PayloadAction<string>) {
+      const ingredient = state.ingredients.find((el) => el._id === action.payload);
+      if (ingredient) {
+        state.currentIngredient = ingredient;
+      }
     },
   },
   extraReducers: (builder) => {

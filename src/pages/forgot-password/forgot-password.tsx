@@ -1,6 +1,7 @@
 import Form from '@/components/form/form';
 import { Button, EmailInput } from '@krgaa/react-developer-burger-ui-components';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import type { ChangeEvent, ReactElement, SyntheticEvent } from 'react';
 
@@ -20,7 +21,7 @@ const ForgotPassword = (): ReactElement => {
 
   const Links = (): ReactElement => (
     <p>
-      Вспомнили пароль? <span>Войти</span>
+      Вспомнили пароль? <Link to="/login">Войти</Link>
     </p>
   );
 

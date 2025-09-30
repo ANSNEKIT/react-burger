@@ -14,11 +14,19 @@
 }
 
 .menuItemLink {
-  color: #8585ad;
   text-decoration: none;
   transition: all 0.5s ease-out;
+}
+
+.menuItemLink.active {
+  color: #fff !important;
+}
+
+.menuButton,
+.menuItemLink {
+  color: #8585ad !important;
 
   &:hover {
-    color: #5b5bcc;
+    color: #5b5bcc !important;
   }
 }

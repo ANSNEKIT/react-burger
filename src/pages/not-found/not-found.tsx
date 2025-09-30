@@ -6,7 +6,7 @@ import type { ReactElement } from 'react';
 const NotFound = (): ReactElement => {
   const navigate = useNavigate();
 
-  const handleGoHome = (): void => {
+  const onGoHome = (): void => {
     void navigate('/');
   };
 
@@ -21,7 +21,7 @@ const NotFound = (): ReactElement => {
           К сожалению, страница не существует((
         </p>
 
-        <Button htmlType="button" type="primary" size="large" onClick={handleGoHome}>
+        <Button htmlType="button" type="primary" size="large" onClick={onGoHome}>
           Вернуться на главную
         </Button>
       </div>
