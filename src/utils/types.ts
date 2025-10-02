@@ -14,8 +14,9 @@ export enum EIngredientTypeTitles {
   sauce = 'Соусы',
 }
 
-export type TFetchResponse<T> = {
-  data: T;
+export type TUserAuth = {
+  email: string;
+  name: string;
 };
 
 export type TIngredientCategoryType = {
