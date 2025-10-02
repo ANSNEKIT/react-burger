@@ -1,4 +1,5 @@
 import { AppHeader } from '@/components/app-header/app-header';
+import Protected from '@/components/app-protected-route/app-protected-route';
 import { Modal } from '@/components/base-modal/base-modal';
 import IngredientDetails from '@/components/ingredient-details/ingredient-details';
 import ForgotPassword from '@/pages/forgot-password/forgot-password';
@@ -29,22 +30,41 @@ export const App = (): ReactElement => {
       <AppHeader />
       <main className={`${styles.mainContent} pl-5 pr-5`}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Protected component={<Home />} />} />
 
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/login"
+            element={<Protected isOnlyUnAuth component={<Login />} />}
+          />
+          <Route
+            path="/register"
+            element={<Protected isOnlyUnAuth component={<Register />} />}
+          />
+          <Route
+            path="/forgot-password"
+            element={<Protected component={<ForgotPassword />} />}
+          />
+          <Route
+            path="/reset-password"
+            element={<Protected component={<ResetPassword />} />}
+          />
+          <Route path="/profile" element={<Protected component={<Profile />} />} />
           <Route
             path="/orders"
             element={
-              <div className="page pageCenter">
-                <h2 className="">Лента заказов</h2>
-              </div>
+              <Protected
+                component={
+                  <div className="page pageCenter">
+                    <h2 className="">Лента заказов</h2>
+                  </div>
+                }
+              />
             }
           />
-          <Route path="/ingredients/:id" element={<Ingredient />} />
+          <Route
+            path="/ingredients/:id"
+            element={<Protected component={<Ingredient />} />}
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
 
@@ -53,11 +73,16 @@ export const App = (): ReactElement => {
             <Route
               path="/ingredients/:ingredientId"
               element={
-                <Modal onClose={onModalClose}>
-                  <IngredientDetails />
-                </Modal>
+                <Protected
+                  component={
+                    <Modal onClose={onModalClose}>
+                      <IngredientDetails />
+                    </Modal>
+                  }
+                />
               }
             />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         )}
       </main>
