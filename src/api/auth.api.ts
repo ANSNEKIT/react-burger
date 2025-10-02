@@ -1,7 +1,6 @@
 import { customFetch } from './utils';
 
 import type {
-  TFetchResponse,
   TLoginData,
   TNewPasswordData,
   TRegisterData,
@@ -13,17 +12,13 @@ import type {
   TUserResponse,
 } from './types';
 
-export const resetPasswordApi = (
-  email: string
-): Promise<TFetchResponse<TSuccessResponse>> => {
+export const resetPasswordApi = (email: string): Promise<TSuccessResponse> => {
   return customFetch<TResetPasswordData, TSuccessResponse>('post', '/password-reset', {
     email,
   });
 };
 
-export const newPasswordApi = (
-  data: TNewPasswordData
-): Promise<TFetchResponse<TSuccessResponse>> => {
+export const newPasswordApi = (data: TNewPasswordData): Promise<TSuccessResponse> => {
   return customFetch<TNewPasswordData, TSuccessResponse>(
     'post',
     '/password-reset/reset',
@@ -31,9 +26,7 @@ export const newPasswordApi = (
   );
 };
 
-export const registerApi = (
-  data: TRegisterData
-): Promise<TFetchResponse<TSuccessAuthResponse>> => {
+export const registerApi = (data: TRegisterData): Promise<TSuccessAuthResponse> => {
   return customFetch<TRegisterData, TSuccessAuthResponse>(
     'post',
     '/auth/register',
@@ -41,31 +34,23 @@ export const registerApi = (
   );
 };
 
-export const loginApi = (
-  data: TLoginData
-): Promise<TFetchResponse<TSuccessAuthResponse>> => {
+export const loginApi = (data: TLoginData): Promise<TSuccessAuthResponse> => {
   return customFetch<TLoginData, TSuccessAuthResponse>('post', '/auth/login', data);
 };
 
-export const getTokenApi = (
-  data: TTokenData
-): Promise<TFetchResponse<TSuccessAuthTokenResponse>> => {
+export const getTokenApi = (data: TTokenData): Promise<TSuccessAuthTokenResponse> => {
   return customFetch<TTokenData, TSuccessAuthTokenResponse>('post', '/auth/token', data);
 };
 
-export const getUserApi = (data: TTokenData): Promise<TFetchResponse<TUserResponse>> => {
+export const getUserApi = (data: TTokenData): Promise<TUserResponse> => {
   return customFetch<TTokenData, TUserResponse>('get', '/auth/user', data);
 };
 
-export const changeUserApi = (
-  data: TTokenData
-): Promise<TFetchResponse<TUserResponse>> => {
+export const changeUserApi = (data: TTokenData): Promise<TUserResponse> => {
   return customFetch<TTokenData, TUserResponse>('patch', '/auth/user', data);
 };
 
-export const logoutApi = (
-  data: TTokenData
-): Promise<TFetchResponse<TSuccessAuthTokenResponse>> => {
+export const logoutApi = (data: TTokenData): Promise<TSuccessAuthTokenResponse> => {
   return customFetch<TTokenData, TSuccessAuthTokenResponse>(
     'post',
     '/auth/logout',

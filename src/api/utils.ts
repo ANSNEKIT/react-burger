@@ -1,4 +1,4 @@
-import type { TFetchMethods, TFetchResponse } from './types';
+import type { TFetchMethods, TSuccessResponse } from './types';
 
 export const getResponse = <T>(res: Response): Promise<T> => {
   if (!res.ok) {
@@ -8,21 +8,21 @@ export const getResponse = <T>(res: Response): Promise<T> => {
   return res.json();
 };
 
-export const customFetch = <TData, TResponse>(
+export const customFetch = <TData = object, TResponse = TSuccessResponse>(
   method: TFetchMethods,
   url: string,
-  data: TData,
+  data: TData = {} as TData,
   options: RequestInit = {}
-): Promise<TFetchResponse<TResponse>> => {
+): Promise<TResponse> => {
   const baseUrl = 'https://norma.nomoreparties.space/api';
   const resultUrl = baseUrl + url;
   return fetch(resultUrl, {
     method,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
+    body: method !== 'get' ? JSON.stringify(data) : undefined,
     ...options,
   })
-    .then(getResponse<TFetchResponse<TResponse>>)
+    .then(getResponse<TResponse>)
     .catch((err: Error) => {
       throw new Error(`HTTP error! ${err?.message}`);
     });

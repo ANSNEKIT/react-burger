@@ -1,26 +1,38 @@
+import type { TIngredientDTO } from '@/contracts/ingredientDTO';
+import type { TOrder } from '@/services/basket/types';
 import type { TUserAuth } from '@/utils/types';
 
 export type TFetchMethods = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
-export type TFetchResponse<T> = {
-  data: T;
-};
-
+// ============== Fertch Response ============
 export type TSuccessResponse = {
   success: boolean;
-  message: string;
+  message?: string;
 };
 
-export type TSuccessAuthTokenResponse = {
-  success: boolean;
+export type TIngredientsResponse = TSuccessResponse & {
+  data: TIngredientDTO[];
+};
+
+export type TSuccessAuthTokenResponse = TSuccessResponse & {
   accessToken: string;
   refreshToken: string;
 };
 
-export type TSuccessAuthResponse = TSuccessAuthTokenResponse & {
+export type TSuccessAuthResponse = TSuccessResponse & {
   user: TUserAuth;
 };
 
+export type TUserResponse = TSuccessResponse & {
+  user: TUserAuth;
+};
+
+export type TOrderResponse = TSuccessResponse & {
+  name: string;
+  order: TOrder;
+};
+
+// =============== Fetch payload data ============
 export type TResetPasswordData = {
   email: string;
 };
@@ -40,9 +52,8 @@ export type TTokenData = {
   token: string;
 };
 
-export type TLoginData = Omit<TRegisterData, 'name'>;
-
-export type TUserResponse = {
-  success: boolean;
-  user: TUserAuth;
+export type TOrderData = {
+  ingredients: string[];
 };
+
+export type TLoginData = Omit<TRegisterData, 'name'>;

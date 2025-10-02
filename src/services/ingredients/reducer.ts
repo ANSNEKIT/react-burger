@@ -1,11 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import { addIngredient, clearBasket, removeIngredient, setBun } from '../basket/reducer';
 import { clearBunCount, clearCounts, incrementCount, loadIngredients } from './actions';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { TIngredientType } from '@/utils/types';
-import type { PayloadAction } from '@reduxjs/toolkit';
 
 export type TIngredientState = {
   ingredients: TIngredientDTO[];
