@@ -2,6 +2,8 @@ import { useAppSelector } from '@/services/hooks';
 import { getIsAuthChecked, getUser } from '@/services/user/selectors';
 import { Navigate, useLocation } from 'react-router-dom';
 
+import Loader from '../app-loader/app-loader';
+
 import type { ReactElement } from 'react';
 import type { Location } from 'react-router-dom';
 
@@ -19,7 +21,12 @@ const Protected = ({
   const location = useLocation() as Location<{ from: { pathname: string } }>;
 
   if (!isAuthChecked) {
-    return <div>Загрузка 123...</div>;
+    return (
+      <div className="page pageCenter">
+        <h2 className="text text_type_main-large">Загрузка...</h2>
+        <Loader />;
+      </div>
+    );
   }
 
   // Защищенный роут и не авторизованы

@@ -10,7 +10,9 @@ import NotFound from '@/pages/not-found/not-found';
 import Profile from '@/pages/profile/profile';
 import Register from '@/pages/register/register';
 import ResetPassword from '@/pages/reset-password/reset-password';
-import { useCallback, type ReactElement } from 'react';
+import { useAppDispatch } from '@/services/hooks';
+import { checkAuth } from '@/services/user/actions';
+import { useCallback, useEffect, type ReactElement } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import styles from './app.module.css';
@@ -18,8 +20,13 @@ import styles from './app.module.css';
 export const App = (): ReactElement => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const background = location.state?.background as unknown as string;
+
+  useEffect(() => {
+    void dispatch(checkAuth());
+  }, [dispatch]);
 
   const onModalClose = useCallback(() => {
     void navigate(-1);
