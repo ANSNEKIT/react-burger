@@ -1,8 +1,7 @@
+import Loader from '@/components/loader/loader';
 import { useAppSelector } from '@/services/hooks';
 import { getIsAuthChecked, getUser } from '@/services/user/selectors';
 import { Navigate, useLocation } from 'react-router-dom';
-
-import Loader from '../app-loader/app-loader';
 
 import type { ReactElement } from 'react';
 import type { Location } from 'react-router-dom';

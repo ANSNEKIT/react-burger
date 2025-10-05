@@ -8,6 +8,7 @@ import Ingredient from '@/pages/ingredient/ingredient';
 import Login from '@/pages/login/login';
 import NotFound from '@/pages/not-found/not-found';
 import Profile from '@/pages/profile/profile';
+import ProfileInfo from '@/pages/profile/profile-info';
 import Register from '@/pages/register/register';
 import ResetPassword from '@/pages/reset-password/reset-password';
 import { useAppDispatch } from '@/services/hooks';
@@ -37,7 +38,6 @@ export const App = (): ReactElement => {
       <AppHeader />
       <main className={`${styles.mainContent} pl-5 pr-5`}>
         <Routes>
-          <Route path="/" element={<Home />} />
           <Route path="/ingredients/:id" element={<Ingredient />} />
 
           <Route
@@ -50,13 +50,12 @@ export const App = (): ReactElement => {
           />
           <Route
             path="/forgot-password"
-            element={<Protected component={<ForgotPassword />} />}
+            element={<Protected isOnlyUnAuth component={<ForgotPassword />} />}
           />
           <Route
             path="/reset-password"
-            element={<Protected component={<ResetPassword />} />}
+            element={<Protected isOnlyUnAuth component={<ResetPassword />} />}
           />
-          <Route path="/profile" element={<Protected component={<Profile />} />} />
           <Route
             path="/orders"
             element={
@@ -69,6 +68,24 @@ export const App = (): ReactElement => {
               />
             }
           />
+          <Route path="profile" element={<Protected component={<Profile />} />}>
+            <Route index element={<Protected component={<ProfileInfo />} />} />
+            <Route
+              path="orders"
+              element={
+                <Protected
+                  component={
+                    <div className="page pageCenter">
+                      <h2 className="">История заказов</h2>
+                    </div>
+                  }
+                />
+              }
+            />
+          </Route>
+
+          <Route path="/" element={<Home />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
 

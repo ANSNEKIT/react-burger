@@ -1,5 +1,5 @@
 import { Button } from '@krgaa/react-developer-burger-ui-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
 import type { ReactElement } from 'react';
 
@@ -19,6 +19,8 @@ type TMenuProps = {
 };
 
 const Menu = ({ links, buttons, onClickButton }: TMenuProps): ReactElement => {
+  const location = useLocation();
+
   return (
     <nav>
       <ul className={styles.menuList}>
@@ -26,8 +28,8 @@ const Menu = ({ links, buttons, onClickButton }: TMenuProps): ReactElement => {
           <li key={item.id} className={`text text_type_main-medium ${styles.menuItem}`}>
             <NavLink
               to={item.to}
-              className={({ isActive }) =>
-                isActive
+              className={() =>
+                location.pathname === item.to
                   ? `${styles.menuItemLink} ${styles.active}`
                   : `${styles.menuItemLink}`
               }

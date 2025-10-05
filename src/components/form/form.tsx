@@ -1,4 +1,4 @@
-import Loader from '../app-loader/app-loader';
+import Loader from '@/components/loader/loader';
 
 import type { ReactElement } from 'react';
 
