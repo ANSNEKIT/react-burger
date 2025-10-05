@@ -1,15 +1,23 @@
 import Form from '@/components/form/form';
+import { useAppDispatch, useAppSelector } from '@/services/hooks';
+import { newPassword } from '@/services/user/actions';
+import { getError, getIsLoading } from '@/services/user/selectors';
 import {
   Button,
   Input,
   PasswordInput,
 } from '@krgaa/react-developer-burger-ui-components';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import type { ChangeEvent, ReactElement, SyntheticEvent } from 'react';
 
 const ResetPassword = (): ReactElement => {
+  const isLoading = useAppSelector(getIsLoading);
+  const error = useAppSelector(getError);
+  const isEmailConfirmed = Boolean(localStorage.getItem('isEmailConfirmed') ?? false);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [state, setState] = React.useState({
     password: '',
     emailCode: '',
@@ -21,10 +29,22 @@ const ResetPassword = (): ReactElement => {
     setState({ ...state, [name]: val });
   };
 
+  useEffect(() => {
+    if (isEmailConfirmed) {
+      localStorage.removeItem('isEmailConfirmed');
+    }
+  }, [isEmailConfirmed]);
+
   const onSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
 
-    console.log('submit resetPassword ', state);
+    const data = {
+      password: state.password,
+      token: state.emailCode,
+    };
+    void dispatch(newPassword(data)).then(() => {
+      void navigate('/');
+    });
   };
 
   const Links = (): ReactElement => (
@@ -35,7 +55,12 @@ const ResetPassword = (): ReactElement => {
 
   return (
     <div className="page pageCenter">
-      <Form title="Восстановление пароля" links={<Links />}>
+      <Form
+        title="Восстановление пароля"
+        links={<Links />}
+        isLoading={isLoading}
+        error={error}
+      >
         <>
           <PasswordInput
             name={'password'}
@@ -57,6 +82,7 @@ const ResetPassword = (): ReactElement => {
             type="primary"
             size="medium"
             extraClass="submitButton"
+            disabled={isLoading}
             onClick={onSubmit}
           >
             Сохранить

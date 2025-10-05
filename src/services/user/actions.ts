@@ -29,7 +29,7 @@ export const register = createAsyncThunk<TUserAuth, TRegisterData>(
   }
 );
 
-export const resetPassword = createAsyncThunk<TSuccessResponse, TResetPasswordData>(
+export const resetPassword = createAsyncThunk<boolean, TResetPasswordData>(
   'user/forgotPassword',
   async (data: TResetPasswordData) => {
     return await userApi.resetPassword(data);
@@ -51,8 +51,11 @@ export const logout = createAsyncThunk<TSuccessAuthTokenResponse, void>(
 export const checkAuth = createAsyncThunk('user/checkAuth', async (_, { dispatch }) => {
   if (userApi.isTokenExists()) {
     const user = await userApi.getUser();
+
     if (user) {
       dispatch(setUser(user));
+      dispatch(setAuthChecked(true));
+    } else {
       dispatch(setAuthChecked(true));
     }
   } else {

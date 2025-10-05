@@ -13,12 +13,20 @@ import type {
 } from './types';
 import type { TUserAuth } from '@/utils/types';
 
-const resetPassword = async (data: TResetPasswordData): Promise<TSuccessResponse> => {
-  return customFetch<TResetPasswordData, TSuccessResponse>(
-    'post',
-    '/password-reset',
-    data
-  );
+const resetPassword = async (data: TResetPasswordData): Promise<boolean> => {
+  try {
+    const res = await customFetch<TResetPasswordData, TSuccessResponse>(
+      'post',
+      '/password-reset',
+      data
+    );
+    if (res.success) {
+      localStorage.setItem('isEmailConfirmed', `${res.success}`);
+    }
+    return res.success;
+  } catch (_) {
+    return false;
+  }
 };
 
 const newPassword = async (data: TNewPasswordData): Promise<TSuccessResponse> => {

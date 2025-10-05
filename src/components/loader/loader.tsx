@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-import styles from './app-loader.module.css';
+import styles from './loader.module.css';
 
 type TLoaderProps = {
   size?: 'small' | 'medium' | 'large';

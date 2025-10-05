@@ -6,7 +6,7 @@ import { login, logout, register } from './actions';
 import type { TUserAuth } from '@/utils/types';
 import type { Action, SerializedError, PayloadAction } from '@reduxjs/toolkit';
 
-export type TInitState = {
+export type TUserState = {
   user: TUserAuth | null;
   isAuthChecked: boolean;
   isEmailConfirmed: boolean;
@@ -20,7 +20,7 @@ export type TPayloadAction<T> = {
   error?: SerializedError;
 };
 
-const initialState: TInitState = {
+const initialState: TUserState = {
   user: null,
   isAuthChecked: false,
   isEmailConfirmed: false,
