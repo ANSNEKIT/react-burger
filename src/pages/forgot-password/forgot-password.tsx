@@ -1,11 +1,19 @@
 import Form from '@/components/form/form';
+import { useAppDispatch, useAppSelector } from '@/services/hooks';
+import { resetPassword } from '@/services/user/actions';
+import { getError, getIsLoading } from '@/services/user/selectors';
 import { Button, EmailInput } from '@krgaa/react-developer-burger-ui-components';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import type { ChangeEvent, ReactElement, SyntheticEvent } from 'react';
 
 const ForgotPassword = (): ReactElement => {
+  const isLoading = useAppSelector(getIsLoading);
+  const error = useAppSelector(getError);
+  const isEmailConfirmed = Boolean(localStorage.getItem('isEmailConfirmed') ?? false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [email, setEmail] = React.useState('');
   const onChange = (e: ChangeEvent): void => {
     const target = e.target as HTMLFormElement;
@@ -13,10 +21,16 @@ const ForgotPassword = (): ReactElement => {
     setEmail(val);
   };
 
+  useEffect(() => {
+    if (isEmailConfirmed) {
+      void navigate('/reset-password');
+    }
+  }, [navigate, isEmailConfirmed]);
+
   const onSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
 
-    console.log('submit email ', email);
+    void dispatch(resetPassword({ email })).then(void navigate('/reset-password'));
   };
 
   const Links = (): ReactElement => (
@@ -27,7 +41,12 @@ const ForgotPassword = (): ReactElement => {
 
   return (
     <div className="page pageCenter">
-      <Form title="Восстановление пароля" links={<Links />}>
+      <Form
+        title="Восстановление пароля"
+        links={<Links />}
+        isLoading={isLoading}
+        error={error}
+      >
         <>
           <EmailInput
             name={'email'}
@@ -42,6 +61,7 @@ const ForgotPassword = (): ReactElement => {
             type="primary"
             size="medium"
             extraClass="submitButton"
+            disabled={isLoading}
             onClick={onSubmit}
           >
             Восстановить
