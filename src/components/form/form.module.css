@@ -14,7 +14,21 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 80px;
+}
+
+.formError {
+  margin: 0;
+  margin-top: 24px;
+  padding: 0;
+  color: var(--colors-interface-error);
+}
+
+.formLoader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
 }
 
 .links {
@@ -23,5 +37,6 @@
   justify-content: center;
   align-items: center;
   gap: 16px;
+  margin-top: 60px;
   color: #8585ad;
 }

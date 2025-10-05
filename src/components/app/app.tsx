@@ -37,7 +37,8 @@ export const App = (): ReactElement => {
       <AppHeader />
       <main className={`${styles.mainContent} pl-5 pr-5`}>
         <Routes>
-          <Route path="/" element={<Protected component={<Home />} />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/ingredients/:id" element={<Ingredient />} />
 
           <Route
             path="/login"
@@ -68,10 +69,6 @@ export const App = (): ReactElement => {
               />
             }
           />
-          <Route
-            path="/ingredients/:id"
-            element={<Protected component={<Ingredient />} />}
-          />
           <Route path="*" element={<NotFound />} />
         </Routes>
 
@@ -80,13 +77,9 @@ export const App = (): ReactElement => {
             <Route
               path="/ingredients/:ingredientId"
               element={
-                <Protected
-                  component={
-                    <Modal onClose={onModalClose}>
-                      <IngredientDetails />
-                    </Modal>
-                  }
-                />
+                <Modal onClose={onModalClose}>
+                  <IngredientDetails />
+                </Modal>
               }
             />
             <Route path="*" element={<NotFound />} />

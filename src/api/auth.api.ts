@@ -1,4 +1,4 @@
-import { customFetch } from './utils';
+import { customFetch, fetchWithRefresh } from './utils';
 
 import type {
   TLoginData,
@@ -11,14 +11,17 @@ import type {
   TTokenData,
   TUserResponse,
 } from './types';
+import type { TUserAuth } from '@/utils/types';
 
-export const resetPasswordApi = (email: string): Promise<TSuccessResponse> => {
-  return customFetch<TResetPasswordData, TSuccessResponse>('post', '/password-reset', {
-    email,
-  });
+const resetPassword = async (data: TResetPasswordData): Promise<TSuccessResponse> => {
+  return customFetch<TResetPasswordData, TSuccessResponse>(
+    'post',
+    '/password-reset',
+    data
+  );
 };
 
-export const newPasswordApi = (data: TNewPasswordData): Promise<TSuccessResponse> => {
+const newPassword = async (data: TNewPasswordData): Promise<TSuccessResponse> => {
   return customFetch<TNewPasswordData, TSuccessResponse>(
     'post',
     '/password-reset/reset',
@@ -26,34 +29,79 @@ export const newPasswordApi = (data: TNewPasswordData): Promise<TSuccessResponse
   );
 };
 
-export const registerApi = (data: TRegisterData): Promise<TSuccessAuthResponse> => {
+const register = async (data: TRegisterData): Promise<TSuccessAuthResponse> => {
   return customFetch<TRegisterData, TSuccessAuthResponse>(
     'post',
     '/auth/register',
     data
+  ).then((data) => {
+    localStorage.setItem('accessToken', data.accessToken);
+    localStorage.setItem('refreshToken', data.refreshToken);
+    return data;
+  });
+};
+
+const login = async (data: TLoginData): Promise<TSuccessAuthResponse> => {
+  return customFetch<TLoginData, TSuccessAuthResponse>('post', '/auth/login', data).then(
+    (data) => {
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      return data;
+    }
   );
 };
 
-export const loginApi = (data: TLoginData): Promise<TSuccessAuthResponse> => {
-  return customFetch<TLoginData, TSuccessAuthResponse>('post', '/auth/login', data);
-};
-
-export const getTokenApi = (data: TTokenData): Promise<TSuccessAuthTokenResponse> => {
-  return customFetch<TTokenData, TSuccessAuthTokenResponse>('post', '/auth/token', data);
-};
-
-export const getUserApi = (data: TTokenData): Promise<TUserResponse> => {
-  return customFetch<TTokenData, TUserResponse>('get', '/auth/user', data);
-};
-
-export const changeUserApi = (data: TTokenData): Promise<TUserResponse> => {
-  return customFetch<TTokenData, TUserResponse>('patch', '/auth/user', data);
-};
-
-export const logoutApi = (data: TTokenData): Promise<TSuccessAuthTokenResponse> => {
+const refreshToken = async (): Promise<TSuccessAuthTokenResponse> => {
+  const data = {
+    token: localStorage.getItem('refreshToken') ?? '',
+  };
   return customFetch<TTokenData, TSuccessAuthTokenResponse>(
     'post',
-    '/auth/logout',
+    '/auth/token',
     data
-  );
+  ).then((refreshData) => {
+    if (!refreshData.success) {
+      // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+      return Promise.reject(refreshData);
+    }
+    localStorage.setItem('refreshToken', refreshData.refreshToken);
+    localStorage.setItem('accessToken', refreshData.accessToken);
+    return refreshData;
+  });
+};
+
+const getUser = async (): Promise<TUserAuth | null> => {
+  try {
+    const res = await fetchWithRefresh<TTokenData, TUserResponse>('get', '/auth/user');
+    return res.user;
+  } catch (_) {
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('accessToken');
+    return null;
+  }
+};
+
+const changeUser = async (data: TTokenData): Promise<TUserResponse> => {
+  return fetchWithRefresh<TTokenData, TUserResponse>('patch', '/auth/user', data);
+};
+
+const logout = async (): Promise<TSuccessAuthTokenResponse> => {
+  const token = localStorage.getItem('refreshToken') ?? '';
+  return customFetch<TTokenData, TSuccessAuthTokenResponse>('post', '/auth/logout', {
+    token,
+  });
+};
+
+const isTokenExists = (): boolean => !!localStorage.getItem('accessToken');
+
+export const userApi = {
+  resetPassword,
+  newPassword,
+  register,
+  login,
+  refreshToken,
+  getUser,
+  changeUser,
+  logout,
+  isTokenExists,
 };

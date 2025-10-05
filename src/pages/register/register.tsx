@@ -1,4 +1,7 @@
 import Form from '@/components/form/form';
+import { useAppDispatch, useAppSelector } from '@/services/hooks';
+import { register } from '@/services/user/actions';
+import { getError, getIsLoading } from '@/services/user/selectors';
 import {
   Button,
   EmailInput,
@@ -11,6 +14,9 @@ import { Link } from 'react-router-dom';
 import type { ChangeEvent, ReactElement, SyntheticEvent } from 'react';
 
 const Register = (): ReactElement => {
+  const isLoading = useAppSelector(getIsLoading);
+  const error = useAppSelector(getError);
+  const dispatch = useAppDispatch();
   const [state, setState] = React.useState({
     name: '',
     email: '',
@@ -26,7 +32,7 @@ const Register = (): ReactElement => {
   const onSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
 
-    console.log('submit data ', state);
+    void dispatch(register(state));
   };
 
   const Links = (): ReactElement => (
@@ -37,7 +43,7 @@ const Register = (): ReactElement => {
 
   return (
     <div className="page pageCenter">
-      <Form title="Регистрация" links={<Links />}>
+      <Form title="Регистрация" links={<Links />} isLoading={isLoading} error={error}>
         <>
           <Input
             type={'text'}
@@ -66,6 +72,7 @@ const Register = (): ReactElement => {
             type="primary"
             size="medium"
             extraClass="submitButton"
+            disabled={isLoading}
             onClick={onSubmit}
           >
             Зарегистрироваться

@@ -3,15 +3,15 @@ import type { TOrder } from '@/services/basket/types';
 import type { TUserAuth } from '@/utils/types';
 
 export type TFetchMethods = 'get' | 'post' | 'put' | 'patch' | 'delete';
-
-// ============== Fertch Response ============
-export type TSuccessResponse = {
-  success: boolean;
-  message?: string;
+export type TFetchError = Error & {
+  status: number;
+  message: string;
 };
 
-export type TIngredientsResponse = TSuccessResponse & {
-  data: TIngredientDTO[];
+// ============== Fertch Response ============
+export type TSuccessResponse = Response & {
+  success: boolean;
+  message?: string;
 };
 
 export type TSuccessAuthTokenResponse = TSuccessResponse & {
@@ -19,18 +19,25 @@ export type TSuccessAuthTokenResponse = TSuccessResponse & {
   refreshToken: string;
 };
 
-export type TSuccessAuthResponse = TSuccessResponse & {
-  user: TUserAuth;
+export type TIngredientsResponse = TSuccessResponse & {
+  data: TIngredientDTO[];
 };
 
-export type TUserResponse = TSuccessResponse & {
-  user: TUserAuth;
-};
+export type TSuccessAuthResponse = TSuccessResponse &
+  TSuccessAuthTokenResponse & {
+    user: TUserAuth;
+  };
 
-export type TOrderResponse = TSuccessResponse & {
-  name: string;
-  order: TOrder;
-};
+export type TUserResponse = TSuccessResponse &
+  TSuccessAuthTokenResponse & {
+    user: TUserAuth;
+  };
+
+export type TOrderResponse = TSuccessResponse &
+  TSuccessAuthTokenResponse & {
+    name: string;
+    order: TOrder;
+  };
 
 // =============== Fetch payload data ============
 export type TResetPasswordData = {

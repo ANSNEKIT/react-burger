@@ -24,17 +24,17 @@ const Protected = ({
     return (
       <div className="page pageCenter">
         <h2 className="text text_type_main-large">Загрузка...</h2>
-        <Loader />;
+        <Loader size="large" />;
       </div>
     );
   }
 
-  // Защищенный роут и не авторизованы
+  // Роуты для авторизованных и протух токен
   if (!isOnlyUnAuth && !user) {
     return <Navigate to="/login" />;
   }
 
-  // Не защищенный роут и авторизованы
+  // Роуты Логин, регистрация и прошли авторизацию
   if (isOnlyUnAuth && user) {
     const { from } = location.state ?? { from: { pathname: '/' } };
     return <Navigate to={from} />;

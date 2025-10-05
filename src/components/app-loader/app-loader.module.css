@@ -1,0 +1,206 @@
+.loader {
+  position: relative;
+  display: inline-block;
+  grid-column: 1 / -1;
+  place-self: center center;
+  color: #8585ad;
+}
+
+/* Размеры лоадера - маленький */
+
+.small {
+  width: 40px;
+  height: 40px;
+}
+
+.small div {
+  transform-origin: 20px 20px;
+}
+
+.small div::after {
+  width: 3.6px;
+  height: 3.6px;
+  margin: -1.8px 0 0 -1.8px;
+}
+
+/* Размеры лоадера - средний */
+
+.medium {
+  width: 80px;
+  height: 80px;
+}
+
+.medium div {
+  transform-origin: 40px 40px;
+}
+
+.medium div::after {
+  width: 7.2px;
+  height: 7.2px;
+  margin: -3.6px 0 0 -3.6px;
+}
+
+.large {
+  width: 120px;
+  height: 120px;
+}
+
+.large div {
+  transform-origin: 60px 60px;
+}
+
+.large div::after {
+  width: 10.8px;
+  height: 10.8px;
+  margin: -5.4px 0 0 -5.4px;
+}
+
+.loader div {
+  animation: lds-loader 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+
+.loader div::after {
+  position: absolute;
+  display: block;
+  background: currentcolor;
+  border-radius: 50%;
+  content: ' ';
+}
+
+/* Позиционирование точек для маленького размера */
+
+.small div:nth-child(1)::after {
+  top: 31.31px;
+  left: 31.31px;
+}
+
+.small div:nth-child(2)::after {
+  top: 33.85px;
+  left: 28px;
+}
+
+.small div:nth-child(3)::after {
+  top: 35.45px;
+  left: 24.14px;
+}
+
+.small div:nth-child(4)::after {
+  top: 36px;
+  left: 20px;
+}
+
+.small div:nth-child(5)::after {
+  top: 35.45px;
+  left: 15.85px;
+}
+
+.small div:nth-child(6)::after {
+  top: 33.85px;
+  left: 12px;
+}
+
+.small div:nth-child(7)::after {
+  top: 31.31px;
+  left: 8.68px;
+}
+
+.small div:nth-child(8)::after {
+  top: 28px;
+  left: 6.14px;
+}
+
+/* Позиционирование точек для среднего размера */
+
+.medium div:nth-child(1)::after {
+  top: 62.62px;
+  left: 62.62px;
+}
+
+.medium div:nth-child(2)::after {
+  top: 67.71px;
+  left: 56px;
+}
+
+.medium div:nth-child(3)::after {
+  top: 70.9px;
+  left: 48.28px;
+}
+
+.medium div:nth-child(4)::after {
+  top: 72px;
+  left: 40px;
+}
+
+.medium div:nth-child(5)::after {
+  top: 70.9px;
+  left: 31.71px;
+}
+
+.medium div:nth-child(6)::after {
+  top: 67.71px;
+  left: 24px;
+}
+
+.medium div:nth-child(7)::after {
+  top: 62.62px;
+  left: 17.37px;
+}
+
+.medium div:nth-child(8)::after {
+  top: 56px;
+  left: 12.28px;
+}
+
+/* Позиционирование точек для большого размера */
+
+.large div:nth-child(1)::after {
+  top: 93.94px;
+  left: 93.94px;
+}
+
+.large div:nth-child(2)::after {
+  top: 101.56px;
+  left: 84px;
+}
+
+.large div:nth-child(3)::after {
+  top: 106.36px;
+  left: 72.42px;
+}
+
+.large div:nth-child(4)::after {
+  top: 108px;
+  left: 60px;
+}
+
+.large div:nth-child(5)::after {
+  top: 106.36px;
+  left: 47.57px;
+}
+
+.large div:nth-child(6)::after {
+  top: 101.56px;
+  left: 36px;
+}
+
+.large div:nth-child(7)::after {
+  top: 93.94px;
+  left: 26.05px;
+}
+
+.large div:nth-child(8)::after {
+  top: 84px;
+  left: 18.43px;
+}
+
+/* Ключевые кадры анимации вращения */
+
+@keyframes lds-loader {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

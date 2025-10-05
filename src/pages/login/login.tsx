@@ -1,4 +1,7 @@
 import Form from '@/components/form/form';
+import { useAppDispatch, useAppSelector } from '@/services/hooks';
+import { login } from '@/services/user/actions';
+import { getError, getIsLoading } from '@/services/user/selectors';
 import {
   Button,
   EmailInput,
@@ -10,10 +13,14 @@ import { Link } from 'react-router-dom';
 import type { ChangeEvent, ReactElement, SyntheticEvent } from 'react';
 
 const Login = (): ReactElement => {
+  const isLoading = useAppSelector(getIsLoading);
+  const error = useAppSelector(getError);
+  const dispatch = useAppDispatch();
   const [state, setState] = React.useState({
     email: '',
     password: '',
   });
+
   const onChange = (e: ChangeEvent): void => {
     const target = e.target as HTMLFormElement;
     const name = target.name;
@@ -24,7 +31,7 @@ const Login = (): ReactElement => {
   const onSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
 
-    console.log('submit data ', state);
+    void dispatch(login(state));
   };
 
   const Links = (): ReactElement => (
@@ -40,7 +47,7 @@ const Login = (): ReactElement => {
 
   return (
     <div className="page pageCenter">
-      <Form title="Вход" links={<Links />}>
+      <Form title="Вход" links={<Links />} isLoading={isLoading} error={error}>
         <>
           <EmailInput
             name={'email'}
@@ -61,6 +68,7 @@ const Login = (): ReactElement => {
             type="primary"
             size="medium"
             extraClass="submitButton"
+            disabled={isLoading}
             onClick={onSubmit}
           >
             Войти

@@ -1,14 +1,16 @@
-import type { TFetchMethods, TSuccessResponse } from './types';
+import { userApi } from '@/api/auth.api';
 
-export const getResponse = <T>(res: Response): Promise<T> => {
-  if (!res.ok) {
-    throw new Error(`HTTP error! status: ${res.status}`);
+import type { TFetchError, TFetchMethods } from './types';
+
+const checkResponse = <T extends Response>(res: Response): PromiseLike<T> => {
+  if (res.ok) {
+    return res.json();
   }
-
-  return res.json();
+  // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+  return res.json().then((err) => Promise.reject(err));
 };
 
-export const customFetch = <TData = object, TResponse = TSuccessResponse>(
+export const customFetch = <TData = object, TResponse extends Response = Response>(
   method: TFetchMethods,
   url: string,
   data: TData = {} as TData,
@@ -21,9 +23,37 @@ export const customFetch = <TData = object, TResponse = TSuccessResponse>(
     headers: { 'Content-Type': 'application/json' },
     body: method !== 'get' ? JSON.stringify(data) : undefined,
     ...options,
-  })
-    .then(getResponse<TResponse>)
-    .catch((err: Error) => {
-      throw new Error(`HTTP error! ${err?.message}`);
-    });
+  }).then(checkResponse<TResponse>);
+};
+
+export const fetchWithRefresh = async <
+  TData = object,
+  TResponse extends Response = Response,
+>(
+  method: TFetchMethods,
+  url: string,
+  data: TData = {} as TData,
+  options: RequestInit = {}
+): Promise<TResponse> => {
+  const optionsWithToken = {
+    ...options,
+    headers: {
+      authorization: localStorage.getItem('accessToken') ?? '',
+      ...options.headers,
+    },
+  };
+  try {
+    const res = await customFetch<TData, TResponse>(method, url, data, optionsWithToken);
+    return res;
+  } catch (err: unknown) {
+    const error = err as TFetchError;
+
+    if (error.message === 'jwt expired') {
+      const refreshData = await userApi.refreshToken();
+      optionsWithToken.headers.authorization = refreshData.accessToken;
+      return customFetch<TData, TResponse>(method, url, data, optionsWithToken);
+    }
+    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+    return Promise.reject(err);
+  }
 };
