@@ -18,6 +18,7 @@ const Protected = ({
   const user = useAppSelector(getUser);
   const isAuthChecked = useAppSelector(getIsAuthChecked);
   const location = useLocation() as Location<{ from: { pathname: string } }>;
+  const isEmailConfirmed = Boolean(localStorage.getItem('isEmailConfirmed') ?? false);
 
   if (!isAuthChecked) {
     return (
@@ -37,6 +38,15 @@ const Protected = ({
   if (isOnlyUnAuth && user) {
     const { from } = location.state ?? { from: { pathname: '/' } };
     return <Navigate to={from} />;
+  }
+
+  // Роут сброса пароля
+  if (isOnlyUnAuth && location.pathname === '/reset-password') {
+    if (isEmailConfirmed) {
+      localStorage.removeItem('isEmailConfirmed');
+    } else {
+      return <Navigate to="/forgot-password" replace={true} />;
+    }
   }
 
   return component;

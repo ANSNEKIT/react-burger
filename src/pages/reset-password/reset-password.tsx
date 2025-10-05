@@ -7,7 +7,7 @@ import {
   Input,
   PasswordInput,
 } from '@krgaa/react-developer-burger-ui-components';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import type { ChangeEvent, ReactElement, SyntheticEvent } from 'react';
@@ -15,7 +15,6 @@ import type { ChangeEvent, ReactElement, SyntheticEvent } from 'react';
 const ResetPassword = (): ReactElement => {
   const isLoading = useAppSelector(getIsLoading);
   const error = useAppSelector(getError);
-  const isEmailConfirmed = Boolean(localStorage.getItem('isEmailConfirmed') ?? false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [state, setState] = React.useState({
@@ -28,12 +27,6 @@ const ResetPassword = (): ReactElement => {
     const val = target.value as string;
     setState({ ...state, [name]: val });
   };
-
-  useEffect(() => {
-    if (isEmailConfirmed) {
-      localStorage.removeItem('isEmailConfirmed');
-    }
-  }, [isEmailConfirmed]);
 
   const onSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
