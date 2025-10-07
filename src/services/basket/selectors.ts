@@ -7,3 +7,5 @@ export const getBasketIngredients = (store: RootState): TIngredientDTO[] =>
   store.basketSlice.ingredients;
 export const getBasketBun = (store: RootState): TIngredientDTO | null =>
   store.basketSlice.bun;
+export const getIsLoadingOrder = (store: RootState): boolean =>
+  store.basketSlice.isLoading;

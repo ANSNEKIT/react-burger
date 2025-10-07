@@ -53,21 +53,23 @@ export const userSlice = createSlice({
         state.user = null;
       })
       .addMatcher(
-        (action: Action) => action.type.endsWith('/pending'),
+        (action: Action) =>
+          action.type.startsWith('user/') && action.type.endsWith('/pending'),
         (state) => {
           state.isLoading = true;
           state.error = null;
         }
       )
       .addMatcher(
-        (action: Action) => action.type.endsWith('/fulfilled'),
+        (action: Action) =>
+          action.type.startsWith('user/') && action.type.endsWith('/fulfilled'),
         (state) => {
           state.isLoading = false;
         }
       )
       .addMatcher(
         (action: Action): action is PayloadAction<string> =>
-          action.type.endsWith('/rejected'),
+          action.type.startsWith('user/') && action.type.endsWith('/rejected'),
         (state, action: TPayloadAction<string | undefined>) => {
           const err = action?.error
             ? getErrorText(action?.error)

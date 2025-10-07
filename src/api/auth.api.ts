@@ -63,11 +63,12 @@ const refreshToken = async (): Promise<TSuccessAuthTokenResponse> => {
   const data = {
     token: localStorage.getItem('refreshToken') ?? '',
   };
-  return customFetch<TTokenData, TSuccessAuthTokenResponse>(
-    'post',
-    '/auth/token',
-    data
-  ).then((refreshData) => {
+  try {
+    const refreshData = await customFetch<TTokenData, TSuccessAuthTokenResponse>(
+      'post',
+      '/auth/token',
+      data
+    );
     if (!refreshData.success) {
       // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
       return Promise.reject(refreshData);
@@ -75,7 +76,12 @@ const refreshToken = async (): Promise<TSuccessAuthTokenResponse> => {
     localStorage.setItem('refreshToken', refreshData.refreshToken);
     localStorage.setItem('accessToken', refreshData.accessToken);
     return refreshData;
-  });
+  } catch (err) {
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('accessToken');
+    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+    return Promise.reject(err);
+  }
 };
 
 const getUser = async (): Promise<TUserAuth | null> => {

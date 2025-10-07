@@ -9,15 +9,19 @@ import {
   getOrder,
   getBasketBun,
   getBasketIngredients,
+  getIsLoadingOrder,
 } from '@/services/basket/selectors';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
+import { getUser } from '@/services/user/selectors';
 import { EIngredientType } from '@/utils/types';
 import { useMemo, useRef } from 'react';
 import { useDrop } from 'react-dnd';
+import { useNavigate } from 'react-router-dom';
 
 import { BacketInfo } from '../backet-info/backet-info';
 import { BacketItem } from '../backet-item/backet-item';
 import { Modal } from '../base-modal/base-modal';
+import Loader from '../loader/loader';
 import { OrderDetails } from '../order-details/order-datails';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
@@ -28,8 +32,11 @@ import styles from './burger-constructor.module.css';
 export const BurgerConstructor = (): ReactElement => {
   const dropTargetRef = useRef(null);
   const order = useAppSelector(getOrder);
+  const user = useAppSelector(getUser);
   const basketIngredients = useAppSelector(getBasketIngredients);
   const basketBun = useAppSelector(getBasketBun);
+  const isLoadingOrder = useAppSelector(getIsLoadingOrder);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const totalPrice = useMemo(() => {
@@ -47,16 +54,25 @@ export const BurgerConstructor = (): ReactElement => {
   );
 
   const isDisabledSubmit = useMemo(
-    () => basketIngredients.length === 0 || !basketBun,
-    [basketBun, basketIngredients]
+    () => basketIngredients.length === 0 || !basketBun || isLoadingOrder,
+    [basketBun, basketIngredients, isLoadingOrder]
   );
 
-  const isShowModalOrder = useMemo(() => order?.number, [order]);
+  const isShowModalOrder = useMemo(
+    () => isLoadingOrder || order?.number,
+    [isLoadingOrder, order]
+  );
 
-  const onBacketClick = (): void => {
+  const onCreateOrder = (): void => {
     if (!basketBun) {
       return;
     }
+
+    if (!user) {
+      void navigate('/login');
+      return;
+    }
+
     const orderPayload = {
       ingredients: [basketBun._id, ...basketIngredients.map((el) => el._id)],
     };
@@ -65,6 +81,9 @@ export const BurgerConstructor = (): ReactElement => {
   };
 
   const onCloseOrderModal = (): void => {
+    if (isLoadingOrder) {
+      return;
+    }
     dispatch(clearBasket());
   };
 
@@ -126,17 +145,23 @@ export const BurgerConstructor = (): ReactElement => {
         )}
       </div>
 
+      {isLoadingOrder && (
+        <div className="d-flex justify-center">
+          <Loader size="medium" />
+        </div>
+      )}
+
       {isShowTotal && (
         <BacketInfo
           totalPrice={totalPrice}
           isDisabledSubmit={isDisabledSubmit}
-          onBacketClick={onBacketClick}
+          onBacketClick={onCreateOrder}
         />
       )}
 
-      {isShowModalOrder && order?.number && (
+      {isShowModalOrder && (
         <Modal onClose={onCloseOrderModal}>
-          <OrderDetails orderNumber={order.number} />
+          <OrderDetails orderNumber={order?.number ?? null} isLoading={isLoadingOrder} />
         </Modal>
       )}
     </section>

@@ -36,11 +36,11 @@ export const App = (): ReactElement => {
 
   useEffect(() => {
     void dispatch(checkAuth());
-  }, [dispatch]);
+  }, []);
 
   const onModalClose = useCallback(() => {
     void navigate(-1);
-  }, [navigate]);
+  }, []);
 
   return (
     <div className={styles.app}>

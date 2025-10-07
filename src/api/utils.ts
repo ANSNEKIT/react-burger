@@ -20,9 +20,9 @@ export const customFetch = <TData = object, TResponse extends Response = Respons
   const resultUrl = baseUrl + url;
   return fetch(resultUrl, {
     method,
-    headers: { 'Content-Type': 'application/json' },
-    body: method !== 'get' ? JSON.stringify(data) : undefined,
     ...options,
+    headers: { ...options.headers, 'Content-Type': 'application/json; charset=utf-8' },
+    body: method !== 'get' ? JSON.stringify(data) : undefined,
   }).then(checkResponse<TResponse>);
 };
 
