@@ -1,5 +1,5 @@
 import IngredientDetails from '@/components/ingredient-details/ingredient-details';
-import { useAppDispatch } from '@/services/hooks';
+import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { loadIngredients } from '@/services/ingredients/actions';
 import { getIngredientsState } from '@/services/ingredients/selectors';
 import { useEffect, type ReactElement } from 'react';
@@ -9,12 +9,15 @@ import styles from './ingredient.module.css';
 
 const Ingredient = (): ReactElement => {
   const dispatch = useAppDispatch();
-
+  const { ingredients, isLoading: isLoadingIngredinets } =
+    useAppSelector(getIngredientsState);
   const { isLoading, error } = useSelector(getIngredientsState);
 
   useEffect(() => {
-    void dispatch(loadIngredients());
-  }, [dispatch]);
+    if (!isLoadingIngredinets && ingredients.length === 0) {
+      void dispatch(loadIngredients());
+    }
+  }, [isLoadingIngredinets, ingredients, dispatch]);
 
   if (isLoading) {
     return (

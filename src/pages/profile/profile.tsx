@@ -1,6 +1,8 @@
+import Loader from '@/components/loader/loader';
 import Menu, { type TMenuItem } from '@/components/menu/menu';
-import { useAppDispatch } from '@/services/hooks';
+import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { logout } from '@/services/user/actions';
+import { getIsLoading } from '@/services/user/selectors';
 import { Outlet } from 'react-router-dom';
 
 import type { ReactElement } from 'react';
@@ -8,6 +10,7 @@ import type { ReactElement } from 'react';
 import styles from './profile-dashboard.module.css';
 
 const Profile = (): ReactElement => {
+  const isLoading = useAppSelector(getIsLoading);
   const dispatch = useAppDispatch();
   const links = [
     { id: crypto.randomUUID(), name: 'Профиль', to: '/profile' },
@@ -22,6 +25,14 @@ const Profile = (): ReactElement => {
       void dispatch(logout());
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="page pageCenter">
+        <Loader size="large" />
+      </div>
+    );
+  }
 
   return (
     <div className={`page ${styles.profile}`}>

@@ -43,7 +43,7 @@ export const newPassword = createAsyncThunk<TSuccessResponse, TNewPasswordData>(
   }
 );
 
-export const logout = createAsyncThunk<TSuccessAuthTokenResponse, void>(
+export const logout = createAsyncThunk<TSuccessAuthTokenResponse | null, void>(
   'user/logout',
   userApi.logout
 );

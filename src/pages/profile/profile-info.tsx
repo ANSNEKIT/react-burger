@@ -20,13 +20,13 @@ const ProfileInfo = (): ReactElement => {
 
   useEffect(() => {
     if (user) {
-      setState({
+      setState(() => ({
         ...state,
         name: user.name,
         email: user.email,
-      });
+      }));
     }
-  });
+  }, []);
 
   const onChange = (e: ChangeEvent): void => {
     const target = e.target as HTMLFormElement;

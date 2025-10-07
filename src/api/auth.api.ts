@@ -93,11 +93,24 @@ const changeUser = async (data: TTokenData): Promise<TUserResponse> => {
   return fetchWithRefresh<TTokenData, TUserResponse>('patch', '/auth/user', data);
 };
 
-const logout = async (): Promise<TSuccessAuthTokenResponse> => {
+const logout = async (): Promise<TSuccessAuthTokenResponse | null> => {
   const token = localStorage.getItem('refreshToken') ?? '';
-  return customFetch<TTokenData, TSuccessAuthTokenResponse>('post', '/auth/logout', {
-    token,
-  });
+  try {
+    const res = await customFetch<TTokenData, TSuccessAuthTokenResponse>(
+      'post',
+      '/auth/logout',
+      {
+        token,
+      }
+    );
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    return res;
+  } catch (_) {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    return null;
+  }
 };
 
 const isTokenExists = (): boolean => !!localStorage.getItem('accessToken');

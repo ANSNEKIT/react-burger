@@ -56,6 +56,7 @@ export const userSlice = createSlice({
         (action: Action) => action.type.endsWith('/pending'),
         (state) => {
           state.isLoading = true;
+          state.error = null;
         }
       )
       .addMatcher(

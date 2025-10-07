@@ -1,6 +1,6 @@
 import { BurgerConstructor } from '@/components/burger-contructor/burger-constructor';
 import { BurgerIngredients } from '@/components/burger-ingredients/burger-ingredients';
-import { useAppDispatch } from '@/services/hooks';
+import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { loadIngredients } from '@/services/ingredients/actions';
 import { getIngredientsState } from '@/services/ingredients/selectors';
 import { type ReactElement, useEffect } from 'react';
@@ -10,12 +10,15 @@ import { useSelector } from 'react-redux';
 
 const Home = (): ReactElement => {
   const dispatch = useAppDispatch();
-
+  const { ingredients, isLoading: isLoadingIngredinets } =
+    useAppSelector(getIngredientsState);
   const { isLoading, error } = useSelector(getIngredientsState);
 
   useEffect(() => {
-    void dispatch(loadIngredients());
-  }, [dispatch]);
+    if (!isLoadingIngredinets && ingredients.length === 0) {
+      void dispatch(loadIngredients());
+    }
+  }, [isLoadingIngredinets, ingredients, dispatch]);
 
   if (isLoading) {
     return (

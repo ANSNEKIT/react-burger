@@ -23,7 +23,7 @@ export const AppHeader = (): React.JSX.Element => {
             <p className="text text_type_main-default ml-2">Конструктор</p>
           </NavLink>
           <NavLink
-            to="/feed"
+            to="/orders"
             className={({ isActive }) =>
               `ml-10 ${styles.link} ${isActive && styles.link_active}`
             }

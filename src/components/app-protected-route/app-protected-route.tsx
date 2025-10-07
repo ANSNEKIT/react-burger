@@ -1,14 +1,14 @@
 import Loader from '@/components/loader/loader';
 import { useAppSelector } from '@/services/hooks';
 import { getIsAuthChecked, getUser } from '@/services/user/selectors';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useSearchParams } from 'react-router-dom';
 
 import type { ReactElement } from 'react';
 import type { Location } from 'react-router-dom';
 
 type TAppProtectedProps = {
-  isOnlyUnAuth?: boolean;
   component: ReactElement;
+  isOnlyUnAuth?: boolean;
 };
 
 const Protected = ({
@@ -18,6 +18,7 @@ const Protected = ({
   const user = useAppSelector(getUser);
   const isAuthChecked = useAppSelector(getIsAuthChecked);
   const location = useLocation() as Location<{ from: { pathname: string } }>;
+  const [searchParams] = useSearchParams();
   const isEmailConfirmed = Boolean(localStorage.getItem('isEmailConfirmed') ?? false);
 
   if (!isAuthChecked) {
@@ -29,15 +30,15 @@ const Protected = ({
     );
   }
 
-  // Роуты для авторизованных и протух токен
+  // Роуты для авторизованных но зашел неавторизованный
   if (!isOnlyUnAuth && !user) {
-    return <Navigate to="/login" />;
+    return <Navigate to={{ pathname: '/login', search: `to=${location.pathname}` }} />;
   }
 
   // Роуты Логин, регистрация и прошли авторизацию
   if (isOnlyUnAuth && user) {
-    const { from } = location.state ?? { from: { pathname: '/' } };
-    return <Navigate to={from} />;
+    const to = searchParams.get('to') ?? '/';
+    return <Navigate to={to} />;
   }
 
   // Роут сброса пароля

@@ -14,16 +14,25 @@ import ResetPassword from '@/pages/reset-password/reset-password';
 import { useAppDispatch } from '@/services/hooks';
 import { checkAuth } from '@/services/user/actions';
 import { useCallback, useEffect, type ReactElement } from 'react';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  type Location,
+} from 'react-router-dom';
 
 import styles from './app.module.css';
 
+type TLocationState = {
+  background: { pathname: string };
+};
+
 export const App = (): ReactElement => {
-  const location = useLocation();
+  const location = useLocation() as Location<TLocationState>;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const background = location.state?.background as unknown as string;
+  const { background } = location?.state ?? {};
 
   useEffect(() => {
     void dispatch(checkAuth());
