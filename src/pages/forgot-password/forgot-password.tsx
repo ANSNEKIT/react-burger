@@ -1,12 +1,13 @@
 import Form from '@/components/form/form';
+import { useForm } from '@/hooks/use-form';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { resetPassword } from '@/services/user/actions';
 import { getError, getIsLoading } from '@/services/user/selectors';
 import { Button, EmailInput } from '@krgaa/react-developer-burger-ui-components';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import type { ChangeEvent, ReactElement, SyntheticEvent } from 'react';
+import type { ReactElement, SyntheticEvent } from 'react';
 
 const ForgotPassword = (): ReactElement => {
   const isLoading = useAppSelector(getIsLoading);
@@ -14,12 +15,9 @@ const ForgotPassword = (): ReactElement => {
   const isEmailConfirmed = Boolean(localStorage.getItem('isEmailConfirmed') ?? false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [email, setEmail] = React.useState('');
-  const onChange = (e: ChangeEvent): void => {
-    const target = e.target as HTMLFormElement;
-    const val = target.value as string;
-    setEmail(val);
-  };
+  const [state, onChange] = useForm({
+    email: '',
+  });
 
   useEffect(() => {
     if (isEmailConfirmed) {
@@ -30,7 +28,7 @@ const ForgotPassword = (): ReactElement => {
   const onSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
 
-    void dispatch(resetPassword({ email })).then(void navigate('/reset-password'));
+    void dispatch(resetPassword(state)).then(void navigate('/reset-password'));
   };
 
   const Links = (): ReactElement => (
@@ -50,7 +48,7 @@ const ForgotPassword = (): ReactElement => {
         <>
           <EmailInput
             name={'email'}
-            value={email}
+            value={state.email}
             placeholder="Укажите email"
             isIcon={false}
             extraClass="mb-6"

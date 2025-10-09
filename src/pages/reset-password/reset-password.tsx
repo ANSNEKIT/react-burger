@@ -1,4 +1,5 @@
 import Form from '@/components/form/form';
+import { useForm } from '@/hooks/use-form';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { newPassword } from '@/services/user/actions';
 import { getError, getIsLoading } from '@/services/user/selectors';
@@ -7,26 +8,19 @@ import {
   Input,
   PasswordInput,
 } from '@krgaa/react-developer-burger-ui-components';
-import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import type { ChangeEvent, ReactElement, SyntheticEvent } from 'react';
+import type { ReactElement, SyntheticEvent } from 'react';
 
 const ResetPassword = (): ReactElement => {
   const isLoading = useAppSelector(getIsLoading);
   const error = useAppSelector(getError);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [state, setState] = React.useState({
+  const [state, onChange] = useForm({
     password: '',
     emailCode: '',
   });
-  const onChange = (e: ChangeEvent): void => {
-    const target = e.target as HTMLFormElement;
-    const name = target.name;
-    const val = target.value as string;
-    setState({ ...state, [name]: val });
-  };
 
   const onSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();

@@ -1,4 +1,5 @@
 import Form from '@/components/form/form';
+import { useForm } from '@/hooks/use-form';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { changeUser } from '@/services/user/actions';
 import { getUserSlice } from '@/services/user/selectors';
@@ -11,12 +12,12 @@ import {
 import React, { useEffect } from 'react';
 
 import type { TChangeUserData } from '@/api/types';
-import type { ChangeEvent, ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const ProfileInfo = (): ReactElement => {
   const { user, isLoading } = useAppSelector(getUserSlice);
   const dispatch = useAppDispatch();
-  const [state, setState] = React.useState({
+  const [state, onChange, setForm] = useForm({
     name: '',
     email: '',
     password: '',
@@ -32,7 +33,7 @@ const ProfileInfo = (): ReactElement => {
 
   const onUserDefault = (): void => {
     if (user) {
-      setState(() => ({
+      setForm(() => ({
         ...state,
         name: user.name,
         email: user.email,
@@ -44,13 +45,6 @@ const ProfileInfo = (): ReactElement => {
   useEffect(() => {
     onUserDefault();
   }, []);
-
-  const onChange = (e: ChangeEvent): void => {
-    const target = e.target as HTMLFormElement;
-    const name = target.name;
-    const val = target.value as string;
-    setState({ ...state, [name]: val });
-  };
 
   const onChangeUser = (): void => {
     const data = {} as TChangeUserData;
