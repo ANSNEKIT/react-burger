@@ -24,12 +24,20 @@ a {
 
 /* flex classes */
 
+.w-100 {
+  width: 100%;
+}
+
 .d-flex {
   display: flex;
 }
 
 .justify-center {
   justify-content: center;
+}
+
+.justify-end {
+  justify-content: end;
 }
 
 .flex-column {

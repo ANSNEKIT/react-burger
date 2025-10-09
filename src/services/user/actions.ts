@@ -4,6 +4,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { setAuthChecked, setUser } from './reducer';
 
 import type {
+  TChangeUserData,
   TLoginData,
   TNewPasswordData,
   TRegisterData,
@@ -31,16 +32,17 @@ export const register = createAsyncThunk<TUserAuth, TRegisterData>(
 
 export const resetPassword = createAsyncThunk<boolean, TResetPasswordData>(
   'user/forgotPassword',
-  async (data: TResetPasswordData) => {
-    return await userApi.resetPassword(data);
-  }
+  userApi.resetPassword
 );
 
 export const newPassword = createAsyncThunk<TSuccessResponse, TNewPasswordData>(
   'user/forgotPassword',
-  async (data: TNewPasswordData) => {
-    return await userApi.newPassword(data);
-  }
+  userApi.newPassword
+);
+
+export const changeUser = createAsyncThunk<TSuccessResponse, TChangeUserData>(
+  'user/changeUser',
+  userApi.changeUser
 );
 
 export const logout = createAsyncThunk<TSuccessAuthTokenResponse | null, void>(

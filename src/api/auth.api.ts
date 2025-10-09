@@ -1,6 +1,7 @@
 import { customFetch, fetchWithRefresh } from './utils';
 
 import type {
+  TChangeUserData,
   TLoginData,
   TNewPasswordData,
   TRegisterData,
@@ -95,8 +96,8 @@ const getUser = async (): Promise<TUserAuth | null> => {
   }
 };
 
-const changeUser = async (data: TTokenData): Promise<TUserResponse> => {
-  return fetchWithRefresh<TTokenData, TUserResponse>('patch', '/auth/user', data);
+const changeUser = async (data: TChangeUserData): Promise<TUserResponse> => {
+  return fetchWithRefresh<TChangeUserData, TUserResponse>('patch', '/auth/user', data);
 };
 
 const logout = async (): Promise<TSuccessAuthTokenResponse | null> => {

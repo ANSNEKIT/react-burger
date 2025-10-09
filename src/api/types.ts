@@ -55,6 +55,8 @@ export type TRegisterData = {
   name: string;
 };
 
+export type TChangeUserData = Partial<TRegisterData>;
+
 export type TTokenData = {
   token: string;
 };
