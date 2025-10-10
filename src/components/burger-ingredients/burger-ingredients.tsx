@@ -6,18 +6,14 @@ import {
 } from '@/services/ingredients/selectors';
 import { EIngredientTypeTitles, type TIngredientType } from '@/utils/types';
 import { useEffect, useCallback, useMemo, useRef, type ReactElement } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { BurgerCategory } from '../burger-category/burger-category';
 import { BurgerTabs } from '../burger-tabs/burger-tabs';
-
-import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 
 import styles from './burger-ingredients.module.css';
 
 export const BurgerIngredients = (): ReactElement => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const ingredientsByType = useAppSelector(getBurgerIngredients);
   const activeCategory = useAppSelector(getActiveCategory);
 
@@ -34,12 +30,6 @@ export const BurgerIngredients = (): ReactElement => {
     }),
     [bunRef, mainRef, sauceRef]
   );
-
-  const onSelectIngredient = (ingredient: TIngredientDTO): void => {
-    void navigate(`/ingredients/${ingredient._id}`, {
-      state: { background: 'home' },
-    });
-  };
 
   const onToggleCategory = (payload: TIngredientType): void => {
     dispatch(setActiveCatigory(payload));
@@ -111,11 +101,7 @@ export const BurgerIngredients = (): ReactElement => {
         <div className={styles.ingredientsType} ref={categoriesRef}>
           {ingredientsByType.map(({ type, items }, idx) => (
             <div key={`${type}-${idx}`} ref={categoryRefs[type]} className="mb-10">
-              <BurgerCategory
-                title={EIngredientTypeTitles[type]}
-                ingredients={items}
-                onSelectIngredient={(ing) => onSelectIngredient(ing)}
-              />
+              <BurgerCategory title={EIngredientTypeTitles[type]} ingredients={items} />
             </div>
           ))}
         </div>

@@ -47,6 +47,19 @@ export const App = (): ReactElement => {
       <AppHeader />
       <main className={`${styles.mainContent} pl-5 pr-5`}>
         <Routes>
+          {background && (
+            <Route
+              path="/ingredients/:id"
+              element={
+                <>
+                  <Home />
+                  <Modal onClose={onModalClose}>
+                    <IngredientDetails />
+                  </Modal>
+                </>
+              }
+            />
+          )}
           <Route path="/ingredients/:id" element={<Ingredient />} />
 
           <Route
@@ -97,20 +110,6 @@ export const App = (): ReactElement => {
 
           <Route path="*" element={<NotFound />} />
         </Routes>
-
-        {background && (
-          <Routes>
-            <Route
-              path="/ingredients/:ingredientId"
-              element={
-                <Modal onClose={onModalClose}>
-                  <IngredientDetails />
-                </Modal>
-              }
-            />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        )}
       </main>
     </div>
   );
