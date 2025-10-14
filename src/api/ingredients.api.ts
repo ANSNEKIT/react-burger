@@ -1,12 +1,7 @@
-import { getResponse } from './utils';
+import { customFetch } from './utils';
 
-import type { TIngredientDTO } from '@/contracts/ingredientDTO';
-import type { TFetchResponse } from '@/utils/types';
+import type { TIngredientsResponse } from './types';
 
-export const getIngredients = async (): Promise<TFetchResponse<TIngredientDTO[]>> => {
-  return fetch('https://norma.nomoreparties.space/api/ingredients')
-    .then(getResponse<TFetchResponse<TIngredientDTO[]>>)
-    .catch((err: Error) => {
-      throw new Error(`HTTP error! ${err?.message}`);
-    });
+export const getIngredientsApi = (): Promise<TIngredientsResponse> => {
+  return customFetch<object, TIngredientsResponse>('get', '/ingredients');
 };

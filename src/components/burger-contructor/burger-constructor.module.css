@@ -1,8 +1,8 @@
-.burger_constructor {
+.burgerConstructor {
   display: flex;
   flex-direction: column;
   width: 600px;
-  padding-top: 10px;
+  padding-top: 100px;
   padding-bottom: 20px;
   color: var(--text-primary-color);
   border: 2px dashed transparent;
@@ -10,7 +10,7 @@
 
 .dropTarget {
   width: 600px;
-  padding-top: 10px;
+  padding-top: 100px;
   padding-bottom: 20px;
   background-color: rgb(60 60 170 / 10%);
   border: 2px dashed #3939b3;

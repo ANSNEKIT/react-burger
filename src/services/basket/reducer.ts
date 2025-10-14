@@ -10,12 +10,14 @@ export type TBasketState = {
   bun: TIngredientDTO | null;
   ingredients: TIngredientDTO[];
   order: TOrder | null;
+  isLoading: boolean;
 };
 
 const initialState: TBasketState = {
   bun: null,
   ingredients: [],
   order: null,
+  isLoading: false,
 };
 
 export const basketSlice = createSlice({
@@ -55,11 +57,16 @@ export const basketSlice = createSlice({
   },
   extraReducers(builder) {
     builder
+      .addCase(createOrder.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(createOrder.fulfilled, (state, action) => {
-        state.order = action.payload.order;
+        state.order = action.payload?.order ?? null;
+        state.isLoading = false;
       })
       .addCase(createOrder.rejected, (state) => {
         state.order = null;
+        state.isLoading = false;
       });
   },
 });

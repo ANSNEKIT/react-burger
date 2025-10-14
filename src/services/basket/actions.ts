@@ -1,9 +1,11 @@
-import { createOrderApi, type TOrderPayload, type TOrderData } from '@/api/order.api';
+import { createOrderApi } from '@/api/order.api';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-export const createOrder = createAsyncThunk<TOrderData, TOrderPayload>(
+import type { TOrderData, TOrderResponse } from '@/api/types';
+
+export const createOrder = createAsyncThunk<TOrderResponse, TOrderData>(
   'basket/createOrder',
-  async (payload: TOrderPayload) => {
+  async (payload: TOrderData) => {
     return await createOrderApi(payload);
   }
 );

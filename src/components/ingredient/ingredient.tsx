@@ -8,17 +8,13 @@ import styles from './ingredient.module.css';
 
 type TIngredientProps = {
   ingredient: TIngredientDTO;
-  onClickCb: () => void;
 };
 
 type TDragItem = {
   id: string;
 };
 
-export const Ingredient = ({
-  ingredient,
-  onClickCb,
-}: TIngredientProps): ReactElement => {
+export const Ingredient = ({ ingredient }: TIngredientProps): ReactElement => {
   const [{ isDragging }, drag] = useDrag<TDragItem, void, { isDragging: boolean }>({
     type: 'ingredient',
     item: { id: ingredient._id, ...ingredient },
@@ -31,7 +27,7 @@ export const Ingredient = ({
   drag(ingredientRef);
 
   return (
-    <div ref={ingredientRef} className={ingredientClasses} onClick={onClickCb}>
+    <div ref={ingredientRef} className={ingredientClasses}>
       <picture>
         <source
           media="(max-width: 600px)"

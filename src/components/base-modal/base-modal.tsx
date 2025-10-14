@@ -21,12 +21,6 @@ export const Modal = ({ title, children, onClose }: TBaseModalProps): ReactEleme
   }
 
   useEffect(() => {
-    // if (!modalRootEl) {
-    //   const el = document.createElement('div');
-    //   el.id = 'modal-root';
-    //   document.body.appendChild(el);
-    // }
-
     const handleKeyDown = (evt: KeyboardEvent): void => {
       if (evt.code === 'Escape') {
         onClose();
@@ -45,9 +39,10 @@ export const Modal = ({ title, children, onClose }: TBaseModalProps): ReactEleme
 
     if (target.closest('#modalContent') && target.dataset.id !== 'modalClose') {
       if (target.closest('[data-id="modalClose"]')) {
+        evt.stopPropagation();
         onClose();
+        return;
       }
-      return;
     }
 
     onClose();

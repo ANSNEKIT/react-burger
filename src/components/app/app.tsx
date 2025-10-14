@@ -1,45 +1,115 @@
+import { AppHeader } from '@/components/app-header/app-header';
+import Protected from '@/components/app-protected-route/app-protected-route';
+import { Modal } from '@/components/base-modal/base-modal';
+import IngredientDetails from '@/components/ingredient-details/ingredient-details';
+import ForgotPassword from '@/pages/forgot-password/forgot-password';
+import Home from '@/pages/home/home';
+import Ingredient from '@/pages/ingredient/ingredient';
+import Login from '@/pages/login/login';
+import NotFound from '@/pages/not-found/not-found';
+import Profile from '@/pages/profile/profile';
+import ProfileInfo from '@/pages/profile/profile-info';
+import Register from '@/pages/register/register';
+import ResetPassword from '@/pages/reset-password/reset-password';
 import { useAppDispatch } from '@/services/hooks';
-import { loadIngredients } from '@/services/ingredients/actions';
-import { getIngredientsState } from '@/services/ingredients/selectors';
-import { useEffect } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useSelector } from 'react-redux';
-
-import { AppHeader } from '../app-header/app-header';
-import { BurgerConstructor } from '../burger-contructor/burger-constructor';
-import { BurgerIngredients } from '../burger-ingredients/burger-ingredients';
+import { checkAuth } from '@/services/user/actions';
+import { useCallback, useEffect, type ReactElement } from 'react';
+import {
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  type Location,
+} from 'react-router-dom';
 
 import styles from './app.module.css';
 
-export const App = (): React.JSX.Element => {
-  const dispatch = useAppDispatch();
+type TLocationState = {
+  background: { pathname: string };
+};
 
-  const { isLoading, error } = useSelector(getIngredientsState);
+export const App = (): ReactElement => {
+  const location = useLocation() as Location<TLocationState>;
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { background } = location?.state ?? {};
 
   useEffect(() => {
-    void dispatch(loadIngredients());
-  }, [dispatch]);
+    void dispatch(checkAuth());
+  }, []);
 
-  if (isLoading) {
-    return <div>Загрузка</div>;
-  }
-
-  if (!isLoading && error) {
-    return <h2>{`Ошибка: ${error}`}</h2>;
-  }
+  const onModalClose = useCallback(() => {
+    void navigate(-1);
+  }, []);
 
   return (
     <div className={styles.app}>
       <AppHeader />
-      <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}>
-        Соберите бургер
-      </h1>
-      <main className={`${styles.main} pl-5 pr-5`}>
-        <DndProvider backend={HTML5Backend}>
-          <BurgerIngredients />
-          <BurgerConstructor />
-        </DndProvider>
+      <main className={`${styles.mainContent} pl-5 pr-5`}>
+        <Routes>
+          {background && (
+            <Route
+              path="/ingredients/:id"
+              element={
+                <>
+                  <Home />
+                  <Modal onClose={onModalClose}>
+                    <IngredientDetails />
+                  </Modal>
+                </>
+              }
+            />
+          )}
+          <Route path="/ingredients/:id" element={<Ingredient />} />
+
+          <Route
+            path="/login"
+            element={<Protected isOnlyUnAuth component={<Login />} />}
+          />
+          <Route
+            path="/register"
+            element={<Protected isOnlyUnAuth component={<Register />} />}
+          />
+          <Route
+            path="/forgot-password"
+            element={<Protected isOnlyUnAuth component={<ForgotPassword />} />}
+          />
+          <Route
+            path="/reset-password"
+            element={<Protected isOnlyUnAuth component={<ResetPassword />} />}
+          />
+          <Route
+            path="/orders"
+            element={
+              <Protected
+                component={
+                  <div className="page pageCenter">
+                    <h2 className="">Лента заказов</h2>
+                  </div>
+                }
+              />
+            }
+          />
+          <Route path="profile" element={<Protected component={<Profile />} />}>
+            <Route index element={<Protected component={<ProfileInfo />} />} />
+            <Route
+              path="orders"
+              element={
+                <Protected
+                  component={
+                    <div className="page pageCenter">
+                      <h2 className="">История заказов</h2>
+                    </div>
+                  }
+                />
+              }
+            />
+          </Route>
+
+          <Route path="/" element={<Home />} />
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </main>
     </div>
   );

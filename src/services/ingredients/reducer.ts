@@ -1,11 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import { addIngredient, clearBasket, removeIngredient, setBun } from '../basket/reducer';
 import { clearBunCount, clearCounts, incrementCount, loadIngredients } from './actions';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { TIngredientType } from '@/utils/types';
-import type { PayloadAction } from '@reduxjs/toolkit';
 
 export type TIngredientState = {
   ingredients: TIngredientDTO[];
@@ -30,8 +29,11 @@ export const ingredientsSlice = createSlice({
     setActiveCatigory(state, action: PayloadAction<TIngredientType>) {
       state.activeCategory = action.payload;
     },
-    setCurrentIngredient(state, action: PayloadAction<TIngredientDTO | null>) {
-      state.currentIngredient = action.payload;
+    setCurrentIngredient(state, action: PayloadAction<string>) {
+      const ingredient = state.ingredients.find((el) => el._id === action.payload);
+      if (ingredient) {
+        state.currentIngredient = ingredient;
+      }
     },
   },
   extraReducers: (builder) => {
