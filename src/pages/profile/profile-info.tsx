@@ -11,7 +11,7 @@ import {
 } from '@krgaa/react-developer-burger-ui-components';
 import React, { useEffect } from 'react';
 
-import type { TChangeUserData } from '@/api/types';
+import type { TChangeUserData } from '@/types/transport';
 import type { ReactElement } from 'react';
 
 const ProfileInfo = (): ReactElement => {

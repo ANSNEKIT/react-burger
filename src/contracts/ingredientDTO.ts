@@ -1,4 +1,4 @@
-import type { TIngredientType } from '@/utils/types';
+import type { TIngredientType } from '@/types/types';
 
 export type TIngredientDTO = {
   id?: string;

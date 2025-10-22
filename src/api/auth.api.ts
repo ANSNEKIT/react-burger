@@ -6,17 +6,16 @@ import type {
   TNewPasswordData,
   TRegisterData,
   TResetPasswordData,
-  TSuccessAuthResponse,
-  TSuccessAuthTokenResponse,
-  TSuccessResponse,
+  TResponseUserBody,
+  TResponseTokenBody,
+  TResponseBody,
   TTokenData,
-  TUserResponse,
-} from './types';
-import type { TUserAuth } from '@/utils/types';
+} from '@/types/transport';
+import type { TUserAuth } from '@/types/types';
 
 const resetPassword = async (data: TResetPasswordData): Promise<boolean> => {
   try {
-    const res = await customFetch<TResetPasswordData, TSuccessResponse>(
+    const res = await customFetch<TResetPasswordData, TResponseBody>(
       'post',
       '/password-reset',
       data
@@ -30,16 +29,16 @@ const resetPassword = async (data: TResetPasswordData): Promise<boolean> => {
   }
 };
 
-const newPassword = async (data: TNewPasswordData): Promise<TSuccessResponse> => {
-  return customFetch<TNewPasswordData, TSuccessResponse>(
+const newPassword = async (data: TNewPasswordData): Promise<TResponseBody> => {
+  return customFetch<TNewPasswordData, TResponseBody>(
     'post',
     '/password-reset/reset',
     data
   );
 };
 
-const register = async (data: TRegisterData): Promise<TSuccessAuthResponse> => {
-  return customFetch<TRegisterData, TSuccessAuthResponse>(
+const register = async (data: TRegisterData): Promise<TResponseUserBody> => {
+  return customFetch<TRegisterData, TResponseUserBody>(
     'post',
     '/auth/register',
     data
@@ -50,8 +49,8 @@ const register = async (data: TRegisterData): Promise<TSuccessAuthResponse> => {
   });
 };
 
-const login = async (data: TLoginData): Promise<TSuccessAuthResponse> => {
-  return customFetch<TLoginData, TSuccessAuthResponse>('post', '/auth/login', data).then(
+const login = async (data: TLoginData): Promise<TResponseUserBody> => {
+  return customFetch<TLoginData, TResponseUserBody>('post', '/auth/login', data).then(
     (data) => {
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
@@ -60,12 +59,12 @@ const login = async (data: TLoginData): Promise<TSuccessAuthResponse> => {
   );
 };
 
-const refreshToken = async (): Promise<TSuccessAuthTokenResponse> => {
+const refreshToken = async (): Promise<Omit<TResponseTokenBody, 'user'>> => {
   const data = {
     token: localStorage.getItem('refreshToken') ?? '',
   };
   try {
-    const refreshData = await customFetch<TTokenData, TSuccessAuthTokenResponse>(
+    const refreshData = await customFetch<TTokenData, Omit<TResponseTokenBody, 'user'>>(
       'post',
       '/auth/token',
       data
@@ -85,25 +84,29 @@ const refreshToken = async (): Promise<TSuccessAuthTokenResponse> => {
   }
 };
 
-const getUser = async (): Promise<TUserAuth | null> => {
+const getUser = async (): Promise<TUserAuth> => {
   try {
-    const res = await fetchWithRefresh<TTokenData, TUserResponse>('get', '/auth/user');
+    const res = await fetchWithRefresh<TTokenData, TResponseUserBody>(
+      'get',
+      '/auth/user'
+    );
     return res.user;
-  } catch (_) {
+  } catch (err) {
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('accessToken');
-    return null;
+    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+    return Promise.reject(err);
   }
 };
 
-const changeUser = async (data: TChangeUserData): Promise<TUserResponse> => {
-  return fetchWithRefresh<TChangeUserData, TUserResponse>('patch', '/auth/user', data);
+const changeUser = async (data: TChangeUserData): Promise<TResponseBody> => {
+  return fetchWithRefresh<TChangeUserData, TResponseBody>('patch', '/auth/user', data);
 };
 
-const logout = async (): Promise<TSuccessAuthTokenResponse | null> => {
+const logout = async (): Promise<TResponseTokenBody> => {
   const token = localStorage.getItem('refreshToken') ?? '';
   try {
-    const res = await customFetch<TTokenData, TSuccessAuthTokenResponse>(
+    const res = await customFetch<TTokenData, TResponseTokenBody>(
       'post',
       '/auth/logout',
       {
@@ -113,10 +116,11 @@ const logout = async (): Promise<TSuccessAuthTokenResponse | null> => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     return res;
-  } catch (_) {
+  } catch (err) {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    return null;
+    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+    return Promise.reject(err);
   }
 };
 

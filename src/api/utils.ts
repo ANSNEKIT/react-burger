@@ -1,6 +1,6 @@
 import { userApi } from '@/api/auth.api';
 
-import type { TFetchError, TFetchMethods } from './types';
+import type { TFetchError, TFetchMethods } from '@/types/transport';
 
 const checkResponse = <T extends Response>(res: Response): PromiseLike<T> => {
   if (res.ok) {
@@ -16,7 +16,7 @@ export const customFetch = <TData = object, TResponse extends Response = Respons
   data: TData = {} as TData,
   options: RequestInit = {}
 ): Promise<TResponse> => {
-  const baseUrl = 'https://norma.nomoreparties.space/api';
+  const baseUrl = 'https://norma.education-services.ru/api';
   const resultUrl = baseUrl + url;
   return fetch(resultUrl, {
     method,

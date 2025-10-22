@@ -1,7 +1,7 @@
-import { EIngredientType, EIngredientTypeTitles } from '@/utils/types';
+import { EIngredientType, EIngredientTypeTitles } from '@/types/enums';
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
 
-import type { TIngredientType } from '@/utils/types';
+import type { TIngredientType } from '@/types/types';
 import type { ReactElement } from 'react';
 
 import styles from './burger-tabs.module.css';

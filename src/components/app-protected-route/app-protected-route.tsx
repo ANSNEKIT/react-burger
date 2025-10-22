@@ -18,7 +18,6 @@ const Protected = ({
   const user = useAppSelector(getUser);
   const isAuthChecked = useAppSelector(getIsAuthChecked);
   const location = useLocation() as Location<{ from: { pathname: string } }>;
-  // const [searchParams] = useSearchParams();
   const isEmailConfirmed = Boolean(localStorage.getItem('isEmailConfirmed') ?? false);
 
   if (!isAuthChecked) {

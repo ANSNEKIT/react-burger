@@ -1,6 +1,6 @@
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { TOrder } from '@/services/basket/types';
-import type { TUserAuth } from '@/utils/types';
+import type { TUserAuth } from '@/types/types';
 
 export type TFetchMethods = 'get' | 'post' | 'put' | 'patch' | 'delete';
 export type TFetchError = Error & {
@@ -9,35 +9,41 @@ export type TFetchError = Error & {
 };
 
 // ============== Fertch Response ============
-export type TSuccessResponse = Response & {
+
+export type TCustomResponse<T> = Body & {
+  readonly headers: Headers;
+  readonly ok: boolean;
+  readonly redirected: boolean;
+  readonly status: number;
+  readonly statusText: string;
+  readonly trailer: Promise<Headers>;
+  readonly type: ResponseType;
+  readonly url: string;
+  clone(): Response;
+  json(): Promise<T>;
+};
+
+export type TResponseBody = Response & {
   success: boolean;
   message?: string;
 };
 
-export type TSuccessAuthTokenResponse = TSuccessResponse & {
+export type TResponseUserBody = TResponseBody & {
   accessToken: string;
   refreshToken: string;
+  user: TUserAuth;
 };
 
-export type TIngredientsResponse = TSuccessResponse & {
+export type TResponseTokenBody = Omit<TResponseUserBody, 'user'>;
+
+export type TIngredientsResponseBody = TResponseBody & {
   data: TIngredientDTO[];
 };
 
-export type TSuccessAuthResponse = TSuccessResponse &
-  TSuccessAuthTokenResponse & {
-    user: TUserAuth;
-  };
-
-export type TUserResponse = TSuccessResponse &
-  TSuccessAuthTokenResponse & {
-    user: TUserAuth;
-  };
-
-export type TOrderResponse = TSuccessResponse &
-  TSuccessAuthTokenResponse & {
-    name: string;
-    order: TOrder;
-  };
+export type TOrderResponseBody = TResponseTokenBody & {
+  name: string;
+  order: TOrder;
+};
 
 // =============== Fetch payload data ============
 export type TResetPasswordData = {
@@ -61,7 +67,7 @@ export type TTokenData = {
   token: string;
 };
 
-export type TOrderData = {
+export type TCreateOrderData = {
   ingredients: string[];
 };
 

@@ -1,10 +1,9 @@
 import { getIngredientsApi } from '@/api/ingredients.api';
+import { EIngredientType } from '@/types/enums';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { EIngredientType } from './../../utils/types';
-
 import type { TIngredientState } from './reducer';
-import type { TIngredientsResponse } from '@/api/types';
+import type { TIngredientsResponseBody } from '@/types/transport';
 import type { WritableDraft } from 'immer';
 
 export const incrementCount = (
@@ -39,7 +38,7 @@ export const clearCounts = (state: WritableDraft<TIngredientState>): void => {
   });
 };
 
-export const loadIngredients = createAsyncThunk<TIngredientsResponse, void>(
+export const loadIngredients = createAsyncThunk<TIngredientsResponseBody, void>(
   'ingredients/loadIngredients',
   getIngredientsApi
 );

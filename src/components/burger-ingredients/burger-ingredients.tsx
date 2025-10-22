@@ -4,11 +4,13 @@ import {
   getActiveCategory,
   getBurgerIngredients,
 } from '@/services/ingredients/selectors';
-import { EIngredientTypeTitles, type TIngredientType } from '@/utils/types';
+import { EIngredientTypeTitles } from '@/types/enums';
 import { useEffect, useCallback, useMemo, useRef, type ReactElement } from 'react';
 
 import { BurgerCategory } from '../burger-category/burger-category';
 import { BurgerTabs } from '../burger-tabs/burger-tabs';
+
+import type { TIngredientType } from '@/types/types';
 
 import styles from './burger-ingredients.module.css';
 
@@ -17,10 +19,10 @@ export const BurgerIngredients = (): ReactElement => {
   const ingredientsByType = useAppSelector(getBurgerIngredients);
   const activeCategory = useAppSelector(getActiveCategory);
 
-  const categoriesRef = useRef<HTMLDivElement>(null);
-  const bunRef = useRef<HTMLDivElement>(null);
-  const mainRef = useRef<HTMLDivElement>(null);
-  const sauceRef = useRef<HTMLDivElement>(null);
+  const categoriesRef = useRef<HTMLDivElement | null>(null);
+  const bunRef = useRef<HTMLDivElement | null>(null);
+  const mainRef = useRef<HTMLDivElement | null>(null);
+  const sauceRef = useRef<HTMLDivElement | null>(null);
 
   const categoryRefs = useMemo(
     () => ({

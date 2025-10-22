@@ -22,11 +22,9 @@ import {
   type Location,
 } from 'react-router-dom';
 
-import styles from './app.module.css';
+import type { TLocationState } from '@/types/types';
 
-type TLocationState = {
-  background: { pathname: string };
-};
+import styles from './app.module.css';
 
 export const App = (): ReactElement => {
   const location = useLocation() as Location<TLocationState>;
@@ -97,7 +95,7 @@ export const App = (): ReactElement => {
               element={
                 <Protected
                   component={
-                    <div className="page pageCenter">
+                    <div className="page d-flex justify-center">
                       <h2 className="">История заказов</h2>
                     </div>
                   }

@@ -9,10 +9,10 @@ import type {
   TNewPasswordData,
   TRegisterData,
   TResetPasswordData,
-  TSuccessAuthTokenResponse,
-  TSuccessResponse,
-} from '@/api/types';
-import type { TUserAuth } from '@/utils/types';
+  TResponseBody,
+  TResponseTokenBody,
+} from '@/types/transport';
+import type { TUserAuth } from '@/types/types';
 
 export const login = createAsyncThunk<TUserAuth, TLoginData>(
   'user/login',
@@ -35,17 +35,17 @@ export const resetPassword = createAsyncThunk<boolean, TResetPasswordData>(
   userApi.resetPassword
 );
 
-export const newPassword = createAsyncThunk<TSuccessResponse, TNewPasswordData>(
+export const newPassword = createAsyncThunk<TResponseBody, TNewPasswordData>(
   'user/forgotPassword',
   userApi.newPassword
 );
 
-export const changeUser = createAsyncThunk<TSuccessResponse, TChangeUserData>(
+export const changeUser = createAsyncThunk<TResponseBody, TChangeUserData>(
   'user/changeUser',
   userApi.changeUser
 );
 
-export const logout = createAsyncThunk<TSuccessAuthTokenResponse | null, void>(
+export const logout = createAsyncThunk<TResponseTokenBody, void>(
   'user/logout',
   userApi.logout
 );

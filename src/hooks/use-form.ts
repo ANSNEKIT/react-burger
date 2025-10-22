@@ -4,11 +4,12 @@ import type { ChangeEvent } from 'react';
 
 export type FormEvent<T> = (e: ChangeEvent<T>) => void;
 export type SetFormEvent<T> = (val: React.SetStateAction<T>) => void;
-
-export const useForm = <T extends Record<string, string>>(
+export type TUserForm = <T extends Record<string, string>>(
   baseForm: T
-): [T, FormEvent<HTMLInputElement>, SetFormEvent<T>] => {
-  const [form, setForm] = React.useState<T>(baseForm);
+) => [T, FormEvent<HTMLInputElement>, SetFormEvent<T>];
+
+export const useForm: TUserForm = (baseForm) => {
+  const [form, setForm] = React.useState(baseForm);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const target = e.target;

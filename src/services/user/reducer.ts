@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { login, logout, register } from './actions';
 
-import type { TUserAuth } from '@/utils/types';
+import type { TUserAuth } from '@/types/types';
 import type { Action, SerializedError, PayloadAction } from '@reduxjs/toolkit';
 
 export type TUserState = {

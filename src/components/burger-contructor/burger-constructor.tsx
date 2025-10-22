@@ -13,7 +13,7 @@ import {
 } from '@/services/basket/selectors';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { getUser } from '@/services/user/selectors';
-import { EIngredientType } from '@/utils/types';
+import { EIngredientType } from '@/types/enums';
 import { useMemo, useRef } from 'react';
 import { useDrop } from 'react-dnd';
 import { useNavigate } from 'react-router-dom';
@@ -25,12 +25,13 @@ import Loader from '../loader/loader';
 import { OrderDetails } from '../order-details/order-datails';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
+import type { TDragItem } from '@/types/types';
 import type { ReactElement } from 'react';
 
 import styles from './burger-constructor.module.css';
 
 export const BurgerConstructor = (): ReactElement => {
-  const dropTargetRef = useRef(null);
+  const dropTargetRef = useRef<HTMLElement | null>(null);
   const order = useAppSelector(getOrder);
   const user = useAppSelector(getUser);
   const basketIngredients = useAppSelector(getBasketIngredients);
@@ -102,7 +103,7 @@ export const BurgerConstructor = (): ReactElement => {
     }
   };
 
-  const [{ isOver }, drop] = useDrop({
+  const [{ isOver }, drop] = useDrop<TDragItem, unknown, { isOver: boolean }>({
     accept: 'ingredient',
     drop: onIngredientDrop,
     collect: (monitor) => ({

@@ -1,6 +1,6 @@
 import type { RootState } from '../store';
 import type { TUserState } from './reducer';
-import type { TUserAuth } from '@/utils/types';
+import type { TUserAuth } from '@/types/types';
 
 export const getUserSlice = (store: RootState): TUserState => store.userSlice;
 export const getUser = (store: RootState): TUserAuth | null => store.userSlice.user;
