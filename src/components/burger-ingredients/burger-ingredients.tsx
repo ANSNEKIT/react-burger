@@ -1,3 +1,4 @@
+import { BurgerCategory, BurgerTabs } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { setActiveCatigory } from '@/services/ingredients/reducer';
 import {
@@ -7,14 +8,11 @@ import {
 import { EIngredientTypeTitles } from '@/types/enums';
 import { useEffect, useCallback, useMemo, useRef, type ReactElement } from 'react';
 
-import { BurgerCategory } from '../burger-category/burger-category';
-import { BurgerTabs } from '../burger-tabs/burger-tabs';
-
 import type { TIngredientType } from '@/types/types';
 
 import styles from './burger-ingredients.module.css';
 
-export const BurgerIngredients = (): ReactElement => {
+const BurgerIngredients = (): ReactElement => {
   const dispatch = useAppDispatch();
   const ingredientsByType = useAppSelector(getBurgerIngredients);
   const activeCategory = useAppSelector(getActiveCategory);
@@ -111,3 +109,5 @@ export const BurgerIngredients = (): ReactElement => {
     </div>
   );
 };
+
+export default BurgerIngredients;

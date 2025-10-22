@@ -10,7 +10,7 @@ type TIngredientProps = {
   ingredient: TIngredientDTO;
 };
 
-export const Ingredient = ({ ingredient }: TIngredientProps): ReactElement => {
+const Ingredient = ({ ingredient }: TIngredientProps): ReactElement => {
   const ingredientRef = useRef<HTMLDivElement | null>(null);
   const [{ isDragging }, drag] = useDrag<TIngredientDTO, void, { isDragging: boolean }>({
     type: 'ingredient',
@@ -51,3 +51,5 @@ export const Ingredient = ({ ingredient }: TIngredientProps): ReactElement => {
     </div>
   );
 };
+
+export default Ingredient;

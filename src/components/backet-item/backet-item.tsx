@@ -21,7 +21,7 @@ export type TBacketItemProps = {
   onDelete?: (id: string) => void;
 };
 
-export const BacketItem = ({
+const BacketItem = ({
   index = -1,
   item,
   type,
@@ -110,3 +110,5 @@ export const BacketItem = ({
     </div>
   );
 };
+
+export default BacketItem;

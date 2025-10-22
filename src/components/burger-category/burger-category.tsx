@@ -1,6 +1,5 @@
+import { Ingredient } from '@/components';
 import { Link, useLocation } from 'react-router-dom';
-
-import { Ingredient } from '../ingredient/ingredient';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { ReactElement } from 'react';
@@ -12,10 +11,7 @@ type TBurgerCategoryProps = {
   ingredients: TIngredientDTO[];
 };
 
-export const BurgerCategory = ({
-  title,
-  ingredients,
-}: TBurgerCategoryProps): ReactElement => {
+const BurgerCategory = ({ title, ingredients }: TBurgerCategoryProps): ReactElement => {
   const location = useLocation();
   return (
     <div>
@@ -28,10 +24,12 @@ export const BurgerCategory = ({
             state={{ background: location.pathname }}
             className={styles.link}
           >
-            <Ingredient key={ing._id} ingredient={ing} />
+            <Ingredient key={ing._id} />
           </Link>
         ))}
       </div>
     </div>
   );
 };
+
+export default BurgerCategory;

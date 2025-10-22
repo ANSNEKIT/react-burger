@@ -11,10 +11,7 @@ type TBurgerTabsProps = {
   onClickTab: (tab: TIngredientType) => void;
 };
 
-export const BurgerTabs = ({
-  activeTab,
-  onClickTab,
-}: TBurgerTabsProps): ReactElement => {
+const BurgerTabs = ({ activeTab, onClickTab }: TBurgerTabsProps): ReactElement => {
   return (
     <ul className={styles.menu}>
       <li className={styles.menuItem}>
@@ -47,3 +44,5 @@ export const BurgerTabs = ({
     </ul>
   );
 };
+
+export default BurgerTabs;

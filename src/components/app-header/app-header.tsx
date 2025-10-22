@@ -8,7 +8,7 @@ import { NavLink } from 'react-router-dom';
 
 import styles from './app-header.module.css';
 
-export const AppHeader = (): React.JSX.Element => {
+const AppHeader = (): React.JSX.Element => {
   return (
     <header className={styles.header}>
       <nav className={`${styles.menu} p-4`}>
@@ -48,3 +48,5 @@ export const AppHeader = (): React.JSX.Element => {
     </header>
   );
 };
+
+export default AppHeader;

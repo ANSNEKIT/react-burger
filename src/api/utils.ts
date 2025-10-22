@@ -16,6 +16,8 @@ export const customFetch = <TData = object, TResponse extends Response = Respons
   data: TData = {} as TData,
   options: RequestInit = {}
 ): Promise<TResponse> => {
+  // https://norma.nomoreparties.space/api
+  // https://norma.education-services.ru/api
   const baseUrl = 'https://norma.education-services.ru/api';
   const resultUrl = baseUrl + url;
   return fetch(resultUrl, {

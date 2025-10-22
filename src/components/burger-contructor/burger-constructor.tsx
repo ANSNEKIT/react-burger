@@ -1,3 +1,4 @@
+import { BacketInfo, BacketItem, Modal, OrderDetails, Loader } from '@/components';
 import { createOrder } from '@/services/basket/actions';
 import {
   addIngredient,
@@ -18,19 +19,13 @@ import { useMemo, useRef } from 'react';
 import { useDrop } from 'react-dnd';
 import { useNavigate } from 'react-router-dom';
 
-import { BacketInfo } from '../backet-info/backet-info';
-import { BacketItem } from '../backet-item/backet-item';
-import { Modal } from '../base-modal/base-modal';
-import Loader from '../loader/loader';
-import { OrderDetails } from '../order-details/order-datails';
-
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { TDragItem } from '@/types/types';
 import type { ReactElement } from 'react';
 
 import styles from './burger-constructor.module.css';
 
-export const BurgerConstructor = (): ReactElement => {
+const BurgerConstructor = (): ReactElement => {
   const dropTargetRef = useRef<HTMLElement | null>(null);
   const order = useAppSelector(getOrder);
   const user = useAppSelector(getUser);
@@ -168,3 +163,5 @@ export const BurgerConstructor = (): ReactElement => {
     </section>
   );
 };
+
+export default BurgerConstructor;
