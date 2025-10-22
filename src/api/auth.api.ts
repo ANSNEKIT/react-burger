@@ -59,12 +59,12 @@ const login = async (data: TLoginData): Promise<TResponseUserBody> => {
   );
 };
 
-const refreshToken = async (): Promise<Omit<TResponseTokenBody, 'user'>> => {
+const refreshToken = async (): Promise<TResponseTokenBody> => {
   const data = {
     token: localStorage.getItem('refreshToken') ?? '',
   };
   try {
-    const refreshData = await customFetch<TTokenData, Omit<TResponseTokenBody, 'user'>>(
+    const refreshData = await customFetch<TTokenData, TResponseTokenBody>(
       'post',
       '/auth/token',
       data
