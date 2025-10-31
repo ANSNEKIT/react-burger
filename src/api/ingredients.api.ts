@@ -1,7 +1,7 @@
 import { customFetch } from './utils';
 
-import type { TIngredientsResponse } from './types';
+import type { TCreateOrderData, TIngredientsResponseBody } from '@/types/transport';
 
-export const getIngredientsApi = (): Promise<TIngredientsResponse> => {
-  return customFetch<object, TIngredientsResponse>('get', '/ingredients');
+export const getIngredientsApi = (): Promise<TIngredientsResponseBody> => {
+  return customFetch<TCreateOrderData, TIngredientsResponseBody>('get', '/ingredients');
 };

@@ -1,16 +1,10 @@
 import { Button } from '@krgaa/react-developer-burger-ui-components';
 import { NavLink, useLocation } from 'react-router-dom';
 
+import type { TMenuItem } from '@/types/types';
 import type { ReactElement } from 'react';
 
 import styles from './menu.module.css';
-
-export type TMenuItem = {
-  id: string;
-  type?: string;
-  name: string;
-  to: string;
-};
 
 type TMenuProps = {
   links: TMenuItem[];

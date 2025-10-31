@@ -1,13 +1,10 @@
-import {
-  EIngredientType,
-  type TIngredientCategoryType,
-  type TIngredientType,
-} from '@/utils/types';
+import { EIngredientType } from '@/types/enums';
 import { createSelector } from '@reduxjs/toolkit';
 
 import type { RootState } from '../store';
 import type { TIngredientState } from './reducer';
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
+import type { TIngredientCategoryType, TIngredientType } from '@/types/types';
 
 export const getIngredients = (store: RootState): TIngredientDTO[] =>
   store.ingredientsSlice.ingredients;

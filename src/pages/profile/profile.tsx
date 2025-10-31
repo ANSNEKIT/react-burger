@@ -1,10 +1,11 @@
 import Loader from '@/components/loader/loader';
-import Menu, { type TMenuItem } from '@/components/menu/menu';
+import Menu from '@/components/menu/menu';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { logout } from '@/services/user/actions';
 import { getIsLoading } from '@/services/user/selectors';
 import { Outlet } from 'react-router-dom';
 
+import type { TMenuItem } from '@/types/types';
 import type { ReactElement } from 'react';
 
 import styles from './profile-dashboard.module.css';

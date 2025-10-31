@@ -4,7 +4,7 @@ import { addIngredient, clearBasket, removeIngredient, setBun } from '../basket/
 import { clearBunCount, clearCounts, incrementCount, loadIngredients } from './actions';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
-import type { TIngredientType } from '@/utils/types';
+import type { TIngredientType } from '@/types/types';
 
 export type TIngredientState = {
   ingredients: TIngredientDTO[];

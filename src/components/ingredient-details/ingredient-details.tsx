@@ -12,7 +12,7 @@ export type TComposition = {
 };
 
 const IngredientDetails = (): ReactElement => {
-  const { id } = useParams();
+  const { id } = useParams<string>();
   const dispatch = useAppDispatch();
   const detail = useAppSelector(getCurrentIngredient);
 

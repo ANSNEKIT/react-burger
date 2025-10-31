@@ -4,6 +4,7 @@ import { createOrder } from './actions';
 
 import type { TOrder } from './types';
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
+import type { TOrderResponseBody } from '@/types/transport';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export type TBasketState = {
@@ -60,10 +61,13 @@ export const basketSlice = createSlice({
       .addCase(createOrder.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createOrder.fulfilled, (state, action) => {
-        state.order = action.payload?.order ?? null;
-        state.isLoading = false;
-      })
+      .addCase(
+        createOrder.fulfilled,
+        (state, action: PayloadAction<TOrderResponseBody>) => {
+          state.order = action.payload?.order ?? null;
+          state.isLoading = false;
+        }
+      )
       .addCase(createOrder.rejected, (state) => {
         state.order = null;
         state.isLoading = false;

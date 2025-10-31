@@ -1,7 +1,7 @@
-import { EIngredientType, EIngredientTypeTitles } from '@/utils/types';
+import { EIngredientType, EIngredientTypeTitles } from '@/types/enums';
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
 
-import type { TIngredientType } from '@/utils/types';
+import type { TIngredientType } from '@/types/types';
 import type { ReactElement } from 'react';
 
 import styles from './burger-tabs.module.css';
@@ -11,10 +11,7 @@ type TBurgerTabsProps = {
   onClickTab: (tab: TIngredientType) => void;
 };
 
-export const BurgerTabs = ({
-  activeTab,
-  onClickTab,
-}: TBurgerTabsProps): ReactElement => {
+const BurgerTabs = ({ activeTab, onClickTab }: TBurgerTabsProps): ReactElement => {
   return (
     <ul className={styles.menu}>
       <li className={styles.menuItem}>
@@ -47,3 +44,5 @@ export const BurgerTabs = ({
     </ul>
   );
 };
+
+export default BurgerTabs;

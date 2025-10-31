@@ -8,10 +8,11 @@ import { useMemo, useRef, type ReactElement } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
+import type { TDragItem } from '@/types/types';
 
 import styles from './backet-item.module.css';
 
-export type IBacketItemProps = {
+export type TBacketItemProps = {
   index?: number;
   item: TIngredientDTO;
   isDraggable: boolean;
@@ -20,14 +21,14 @@ export type IBacketItemProps = {
   onDelete?: (id: string) => void;
 };
 
-export const BacketItem = ({
+const BacketItem = ({
   index = -1,
   item,
   type,
   isDraggable,
   isLocked,
   onDelete,
-}: IBacketItemProps): ReactElement => {
+}: TBacketItemProps): ReactElement => {
   const basketItemRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useAppDispatch();
 
@@ -38,9 +39,9 @@ export const BacketItem = ({
     return type === 'top' ? '(верх)' : '(низ)';
   }, [type]);
 
-  const [{ isDragging }, drag] = useDrag({
+  const [{ isDragging }, drag] = useDrag<TDragItem, unknown, { isDragging: boolean }>({
     type: 'basket-item',
-    item: { id: item._id, index },
+    item: { id: item._id, index, ...item },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -54,9 +55,9 @@ export const BacketItem = ({
     },
   });
 
-  const [_, drop] = useDrop({
+  const [_, drop] = useDrop<TDragItem, unknown, unknown>({
     accept: 'basket-item',
-    hover(item: { id: number; index: number }, monitor) {
+    hover(item: TDragItem, monitor) {
       const dragIndex = item.index;
       const hoverIndex = index;
 
@@ -109,3 +110,5 @@ export const BacketItem = ({
     </div>
   );
 };
+
+export default BacketItem;

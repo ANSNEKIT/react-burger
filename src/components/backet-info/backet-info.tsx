@@ -10,7 +10,7 @@ export type TBacketInfoProps = {
   onBacketClick: () => void;
 };
 
-export const BacketInfo = ({
+const BacketInfo = ({
   totalPrice,
   isDisabledSubmit = false,
   onBacketClick,
@@ -34,3 +34,5 @@ export const BacketInfo = ({
     </div>
   );
 };
+
+export default BacketInfo;

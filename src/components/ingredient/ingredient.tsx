@@ -10,21 +10,18 @@ type TIngredientProps = {
   ingredient: TIngredientDTO;
 };
 
-type TDragItem = {
-  id: string;
-};
-
-export const Ingredient = ({ ingredient }: TIngredientProps): ReactElement => {
-  const [{ isDragging }, drag] = useDrag<TDragItem, void, { isDragging: boolean }>({
+const Ingredient = ({ ingredient }: TIngredientProps): ReactElement => {
+  const ingredientRef = useRef<HTMLDivElement | null>(null);
+  const [{ isDragging }, drag] = useDrag<TIngredientDTO, void, { isDragging: boolean }>({
     type: 'ingredient',
     item: { id: ingredient._id, ...ingredient },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   });
-  const ingredientRef = useRef(null);
-  const ingredientClasses = `${styles.ingredient} ${isDragging ? 'styles.dragging' : ''}`;
   drag(ingredientRef);
+
+  const ingredientClasses = `${styles.ingredient} ${isDragging ? 'styles.dragging' : ''}`;
 
   return (
     <div ref={ingredientRef} className={ingredientClasses}>
@@ -54,3 +51,5 @@ export const Ingredient = ({ ingredient }: TIngredientProps): ReactElement => {
     </div>
   );
 };
+
+export default Ingredient;

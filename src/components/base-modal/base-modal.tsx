@@ -1,4 +1,4 @@
-import { ModalOverlay } from '@/components/modal-overlay/modal-overlay';
+import { ModalOverlay } from '@/components';
 import { CloseIcon } from '@krgaa/react-developer-burger-ui-components';
 import { useEffect, type ReactElement, type JSX, type MouseEventHandler } from 'react';
 import ReactDOM from 'react-dom';
@@ -11,7 +11,7 @@ type TBaseModalProps = {
   onClose: () => void;
 };
 
-export const Modal = ({ title, children, onClose }: TBaseModalProps): ReactElement => {
+const Modal = ({ title, children, onClose }: TBaseModalProps): ReactElement => {
   const modalRootEl: HTMLElement | null = document.getElementById('modal-root');
 
   if (!modalRootEl) {
@@ -72,3 +72,5 @@ export const Modal = ({ title, children, onClose }: TBaseModalProps): ReactEleme
 
   return <>{modalRootEl && ReactDOM.createPortal(BaseModal, modalRootEl)}</>;
 };
+
+export default Modal;

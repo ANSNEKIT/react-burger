@@ -1,5 +1,4 @@
-import { BurgerConstructor } from '@/components/burger-contructor/burger-constructor';
-import { BurgerIngredients } from '@/components/burger-ingredients/burger-ingredients';
+import { BurgerIngredients, BurgerConstructor } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { loadIngredients } from '@/services/ingredients/actions';
 import { getIngredientsState } from '@/services/ingredients/selectors';

@@ -1,7 +1,9 @@
 import { fetchWithRefresh } from './utils';
 
-import type { TOrderData, TOrderResponse } from './types';
+import type { TCreateOrderData, TOrderResponseBody } from '@/types/transport';
 
-export const createOrderApi = (payload: TOrderData): Promise<TOrderResponse> => {
-  return fetchWithRefresh<object, TOrderResponse>('post', '/orders', payload);
+export const createOrderApi = (
+  payload: TCreateOrderData
+): Promise<TOrderResponseBody> => {
+  return fetchWithRefresh<object, TOrderResponseBody>('post', '/orders', payload);
 };

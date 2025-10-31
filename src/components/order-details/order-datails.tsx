@@ -10,10 +10,7 @@ export type TOrderModalProps = {
   isLoading: boolean;
 };
 
-export const OrderDetails = ({
-  orderNumber,
-  isLoading,
-}: TOrderModalProps): ReactElement => {
+const OrderDetails = ({ orderNumber, isLoading }: TOrderModalProps): ReactElement => {
   return (
     <div className={styles.innerWrap}>
       {isLoading && (
@@ -43,3 +40,5 @@ export const OrderDetails = ({
     </div>
   );
 };
+
+export default OrderDetails;
