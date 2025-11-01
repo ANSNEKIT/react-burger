@@ -9,11 +9,11 @@ import BurgerIngredients from '@/components/burger-ingredients/burger-ingredient
 import BurgerTabs from '@/components/burger-tabs/burger-tabs';
 import Form from '@/components/form/form';
 import IngredientDetails from '@/components/ingredient-details/ingredient-details';
+import Ingredient from '@/components/ingredient/ingredient';
 import Loader from '@/components/loader/loader';
 import Menu from '@/components/menu/menu';
 import ModalOverlay from '@/components/modal-overlay/modal-overlay';
 import OrderDetails from '@/components/order-details/order-datails';
-import Ingredient from '@/pages/ingredient/ingredient';
 
 export {
   AppHeader,

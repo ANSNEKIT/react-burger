@@ -5,7 +5,7 @@ import { getIngredientsState } from '@/services/ingredients/selectors';
 import { useEffect, type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
-import styles from './ingredient.module.css';
+import styles from './ingredient-page.module.css';
 
 const Ingredient = (): ReactElement => {
   const dispatch = useAppDispatch();

@@ -24,7 +24,7 @@ const BurgerCategory = ({ title, ingredients }: TBurgerCategoryProps): ReactElem
             state={{ background: location.pathname }}
             className={styles.link}
           >
-            <Ingredient key={ing._id} />
+            <Ingredient ingredient={ing} />
           </Link>
         ))}
       </div>

@@ -2,7 +2,7 @@ import { AppHeader, Protected, Modal, IngredientDetails } from '@/components';
 import {
   ForgotPassword,
   Home,
-  Ingredient,
+  IngredientPage,
   Login,
   NotFound,
   Profile,
@@ -50,14 +50,14 @@ export const App = (): ReactElement => {
               element={
                 <>
                   <Home />
-                  <Modal onClose={onModalClose}>
+                  <Modal onClose={onModalClose} title="Детали ингредиента">
                     <IngredientDetails />
                   </Modal>
                 </>
               }
             />
           )}
-          <Route path="/ingredients/:id" element={<Ingredient />} />
+          <Route path="/ingredients/:id" element={<IngredientPage />} />
 
           <Route
             path="/login"

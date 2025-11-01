@@ -1,6 +1,6 @@
 import ForgotPassword from '@/pages/forgot-password/forgot-password';
 import Home from '@/pages/home/home';
-import Ingredient from '@/pages/ingredient/ingredient';
+import IngredientPage from '@/pages/ingredient-page/ingredient-page';
 import Login from '@/pages/login/login';
 import NotFound from '@/pages/not-found/not-found';
 import Profile from '@/pages/profile/profile';
@@ -11,7 +11,7 @@ import ResetPassword from '@/pages/reset-password/reset-password';
 export {
   ForgotPassword,
   Home,
-  Ingredient,
+  IngredientPage,
   Login,
   NotFound,
   Profile,
