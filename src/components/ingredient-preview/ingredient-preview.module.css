@@ -1,0 +1,40 @@
+.previewRoot {
+  display: flex;
+}
+
+.ingredientItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 -5px;
+  background:
+    linear-gradient(#1a1a2e, #1a1a2e) padding-box,
+    linear-gradient(45deg, #801ab2, #4c4cff) border-box;
+  border: 2px solid transparent;
+  border-radius: 100px;
+}
+
+.ingredientImage {
+  width: 100px;
+  height: 60px;
+}
+
+.overPreview {
+  position: relative;
+}
+
+.overPreviewCount {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #1c1c1c99;
+  border-radius: 100px;
+  transform: translate(-50%, -50%);
+}

@@ -7,6 +7,7 @@ import BurgerCategory from '@/components/burger-category/burger-category';
 import BurgerConstructor from '@/components/burger-contructor/burger-constructor';
 import BurgerIngredients from '@/components/burger-ingredients/burger-ingredients';
 import BurgerTabs from '@/components/burger-tabs/burger-tabs';
+import FeedItem from '@/components/feed-item/feed-item';
 import Form from '@/components/form/form';
 import IngredientDetails from '@/components/ingredient-details/ingredient-details';
 import Ingredient from '@/components/ingredient/ingredient';
@@ -32,4 +33,5 @@ export {
   BurgerIngredients,
   BurgerConstructor,
   Form,
+  FeedItem,
 };
