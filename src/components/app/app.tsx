@@ -9,6 +9,8 @@ import {
   ProfileInfo,
   Register,
   ResetPassword,
+  Feed,
+  FeedItemPage,
 } from '@/pages';
 import { useAppDispatch } from '@/services/hooks';
 import { checkAuth } from '@/services/user/actions';
@@ -59,6 +61,9 @@ export const App = (): ReactElement => {
           )}
           <Route path="/ingredients/:id" element={<IngredientPage />} />
 
+          <Route path="/feed" element={<Protected component={<Feed />} />} />
+          <Route path="/feed/:id" element={<Protected component={<FeedItemPage />} />} />
+
           <Route
             path="/login"
             element={<Protected isOnlyUnAuth component={<Login />} />}
@@ -75,31 +80,14 @@ export const App = (): ReactElement => {
             path="/reset-password"
             element={<Protected isOnlyUnAuth component={<ResetPassword />} />}
           />
-          <Route
-            path="/orders"
-            element={
-              <Protected
-                component={
-                  <div className="page pageCenter">
-                    <h2 className="">Лента заказов</h2>
-                  </div>
-                }
-              />
-            }
-          />
+
+          {/* Страница Профиль */}
           <Route path="profile" element={<Protected component={<Profile />} />}>
             <Route index element={<Protected component={<ProfileInfo />} />} />
+            <Route path="orders" element={<Protected component={<Feed />} />} />
             <Route
-              path="orders"
-              element={
-                <Protected
-                  component={
-                    <div className="page d-flex justify-center">
-                      <h2 className="">История заказов</h2>
-                    </div>
-                  }
-                />
-              }
+              path="orders/:id"
+              element={<Protected component={<FeedItemPage />} />}
             />
           </Route>
 

@@ -1,0 +1,23 @@
+.ingredientRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 64px;
+  height: 64px;
+  background:
+    linear-gradient(#1a1a2e, #1a1a2e) padding-box,
+    linear-gradient(45deg, #801ab2, #4c4cff) border-box;
+  border: 2px solid transparent;
+  border-radius: 100px;
+}
+
+.image {
+  width: 100px;
+  height: 60px;
+}

@@ -1,0 +1,36 @@
+.feedPage {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.feedWrap {
+  display: flex;
+  gap: 60px;
+}
+
+.feeds {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 500px;
+  padding: 0 8px;
+  overflow: auto;
+}
+
+.stat {
+  width: 580px;
+}
+
+.statOrders {
+  display: flex;
+  gap: 36px;
+}
+
+.statOrdersBlock {
+  width: 50%;
+}
+
+.orderLink {
+  color: #0cc;
+}

@@ -1,3 +1,5 @@
+import FeedItemPage from '@/pages/feed-item/feed-item-page';
+import Feed from '@/pages/feed/feed';
 import ForgotPassword from '@/pages/forgot-password/forgot-password';
 import Home from '@/pages/home/home';
 import IngredientPage from '@/pages/ingredient-page/ingredient-page';
@@ -18,4 +20,6 @@ export {
   ProfileInfo,
   Register,
   ResetPassword,
+  Feed,
+  FeedItemPage,
 };

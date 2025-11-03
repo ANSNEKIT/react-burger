@@ -3,21 +3,18 @@ import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { loadIngredients } from '@/services/ingredients/actions';
 import { getIngredientsState } from '@/services/ingredients/selectors';
 import { useEffect, type ReactElement } from 'react';
-import { useSelector } from 'react-redux';
 
 import styles from './ingredient-page.module.css';
 
 const Ingredient = (): ReactElement => {
   const dispatch = useAppDispatch();
-  const { ingredients, isLoading: isLoadingIngredinets } =
-    useAppSelector(getIngredientsState);
-  const { isLoading, error } = useSelector(getIngredientsState);
+  const { ingredients, isLoading, error } = useAppSelector(getIngredientsState);
 
   useEffect(() => {
-    if (!isLoadingIngredinets && ingredients.length === 0) {
+    if (!isLoading && ingredients.length === 0) {
       void dispatch(loadIngredients());
     }
-  }, [isLoadingIngredinets, ingredients, dispatch]);
+  }, [isLoading, ingredients, dispatch]);
 
   if (isLoading) {
     return (

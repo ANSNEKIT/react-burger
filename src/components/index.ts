@@ -10,6 +10,7 @@ import BurgerTabs from '@/components/burger-tabs/burger-tabs';
 import FeedItem from '@/components/feed-item/feed-item';
 import Form from '@/components/form/form';
 import IngredientDetails from '@/components/ingredient-details/ingredient-details';
+import IngredientRow from '@/components/ingredient-row/ingredient-row';
 import Ingredient from '@/components/ingredient/ingredient';
 import Loader from '@/components/loader/loader';
 import Menu from '@/components/menu/menu';
@@ -34,4 +35,5 @@ export {
   BurgerConstructor,
   Form,
   FeedItem,
+  IngredientRow,
 };
