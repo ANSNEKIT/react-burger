@@ -9,3 +9,9 @@ export enum EIngredientTypeTitles {
   main = 'Начинки',
   sauce = 'Соусы',
 }
+
+export enum EWebsocketStatus {
+  CONNECTING = 'CONNECTING',
+  ONLINE = 'ONLINE',
+  OFFLINE = 'OFFLINE',
+}

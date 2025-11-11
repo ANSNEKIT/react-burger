@@ -2,35 +2,49 @@ import {
   CurrencyIcon,
   FormattedDate,
 } from '@krgaa/react-developer-burger-ui-components';
+import { useMemo, type ReactElement } from 'react';
 import { Link } from 'react-router-dom';
 
 import IngredientPreview from '../ingredient-preview/ingredient-preview';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
-import type { ReactElement } from 'react';
+import type { TOrderDTO } from '@/contracts/orderDTO';
 
 import styles from './feed-item.module.css';
 
 type TFeedItemProps = {
-  itemId: string;
+  feed: TOrderDTO;
   ingredients: TIngredientDTO[];
 };
 
-const FeedItem = ({ ingredients, itemId }: TFeedItemProps): ReactElement => {
+const FeedItem = ({ ingredients, feed }: TFeedItemProps): ReactElement => {
+  const feedPrice = useMemo(
+    () =>
+      ingredients.reduce((acc, ing) => {
+        if (ing.count) {
+          return acc + ing.count * ing.price;
+        }
+        return acc + ing.price;
+      }, 0),
+    [ingredients]
+  );
   return (
-    <Link to={`/feed/${itemId}`} className={styles.feed}>
+    <Link to={`/feed/${feed.number}`} className={styles.feed}>
       <div className={styles.feedWrap}>
         <div className={styles.header}>
-          <h3 className="text text_type_digits-default">#034535</h3>
-          <FormattedDate className={styles.createdDate} date={new Date()} />
+          <h3 className="text text_type_digits-default">#{feed.number}</h3>
+          <FormattedDate
+            className={styles.createdDate}
+            date={new Date(feed.createdAt)}
+          />
         </div>
-        <h2 className="text text_type_main-medium">Death Star Starship Main бургер</h2>
+        <h2 className="text text_type_main-medium">{feed.name}</h2>
         <div className={styles.feedPreviewBlock}>
           <div className={styles.feedPreview}>
             <IngredientPreview ingredients={ingredients} />
           </div>
           <div className={`${styles.price} text text_type_digits-default nowrap`}>
-            480
+            {feedPrice}
             <CurrencyIcon type="primary" />
           </div>
         </div>

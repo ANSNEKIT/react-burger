@@ -9,6 +9,9 @@ import type { TIngredientCategoryType, TIngredientType } from '@/types/types';
 export const getIngredients = (store: RootState): TIngredientDTO[] =>
   store.ingredientsSlice.ingredients;
 
+export const getMapIngredints = (store: RootState): [string, TIngredientDTO][] =>
+  store.ingredientsSlice.mapIngredients;
+
 export const getIngredientsState = (store: RootState): TIngredientState =>
   store.ingredientsSlice;
 

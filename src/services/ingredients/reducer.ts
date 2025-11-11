@@ -8,6 +8,7 @@ import type { TIngredientType } from '@/types/types';
 
 export type TIngredientState = {
   ingredients: TIngredientDTO[];
+  mapIngredients: [string, TIngredientDTO][];
   activeCategory: TIngredientType;
   currentIngredient: TIngredientDTO | null;
   isLoading: boolean;
@@ -16,6 +17,7 @@ export type TIngredientState = {
 
 const initialState: TIngredientState = {
   ingredients: [],
+  mapIngredients: [],
   currentIngredient: null,
   activeCategory: 'main',
   isLoading: false,
@@ -49,6 +51,7 @@ export const ingredientsSlice = createSlice({
       .addCase(loadIngredients.fulfilled, (state, action) => {
         state.isLoading = false;
         state.ingredients = action.payload.data;
+        state.mapIngredients = state.ingredients.map((ing) => [ing._id, ing]);
       })
       .addCase(addIngredient, (state, action) => {
         incrementCount(state, action.payload._id);

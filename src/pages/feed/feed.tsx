@@ -1,26 +1,57 @@
 import { FeedItem, Loader } from '@/components';
+import { connect, disconnect } from '@/services/feed/actions';
+import { getFeedSlice } from '@/services/feed/selectors';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { loadIngredients } from '@/services/ingredients/actions';
-import { getIngredientsState } from '@/services/ingredients/selectors';
-import { useEffect, type ReactElement } from 'react';
+import { getIngredientsState, getMapIngredints } from '@/services/ingredients/selectors';
+import { EWebsocketStatus } from '@/types/enums';
+import { useEffect, useMemo, type ReactElement } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+
+import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 
 import styles from './feed.module.css';
 
 const headerHeight = 56;
 const titleHeight = 40;
-const successOrders = ['03110', '03111', '03112', '03113', '03114', '03115'];
-const waitingOrders = ['04100', '04101', '04102'];
 
 const Feed = (): ReactElement => {
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const { ingredients, isLoading, error } = useAppSelector(getIngredientsState);
+  const { ingredients, isLoading: isLoadingIngs } = useAppSelector(getIngredientsState);
+  const { status, feeds, error } = useAppSelector(getFeedSlice);
+  const mapIngredients = useAppSelector(getMapIngredints);
+  const mappedIngredients = useMemo(() => new Map(mapIngredients), [mapIngredients]);
+  const isLoading = useMemo(() => status === EWebsocketStatus.CONNECTING, [status]);
+  const successFeeds = useMemo(
+    () => feeds.filter((feed) => feed.status === 'done'),
+    [feeds]
+  );
+  const successFeedsOne = useMemo(() => successFeeds.slice(0, 10), [successFeeds]);
+  const successFeedsTwo = useMemo(() => successFeeds.slice(10, 19), [successFeeds]);
+  const waitingFeeds = useMemo(
+    () => feeds.filter((feed) => feed.status !== 'done'),
+    [feeds]
+  );
+  const waitingFeedsOne = useMemo(() => waitingFeeds.slice(0, 10), [waitingFeeds]);
+  const waitingFeedsTwo = useMemo(() => waitingFeeds.slice(10, 19), [waitingFeeds]);
+
+  const formattedIngredients = (ids: string[]): TIngredientDTO[] => {
+    return ids
+      .map((id) => mappedIngredients.get(id))
+      .filter(Boolean) as TIngredientDTO[];
+  };
 
   useEffect(() => {
-    if (!isLoading && ingredients.length === 0) {
-      void dispatch(loadIngredients());
+    if (!isLoadingIngs && ingredients.length === 0) {
+      void dispatch(loadIngredients()).then(() => {
+        void dispatch(connect('wss://norma.education-services.ru/orders/all'));
+      });
+    } else {
+      void dispatch(connect('wss://norma.education-services.ru/orders/all'));
     }
+
+    return (): void => void dispatch(disconnect());
   }, []);
 
   const feedsStyle: React.CSSProperties = {
@@ -30,53 +61,92 @@ const Feed = (): ReactElement => {
   return (
     <div className={styles.feedPage}>
       <h1 className={`mt-10 mb-5 text text_type_main-large`}>Лента заказов</h1>
+
       <div className={styles.feedWrap}>
+        {isLoading && <Loader size="large" />}
+
+        {!isLoading && error && (
+          <h2 className="text text_type_main-large">Ошибка: {error}</h2>
+        )}
+
         <div className={styles.feeds} style={feedsStyle}>
-          {isLoading && <Loader size="large" />}
-
-          {!isLoading && error && (
-            <h2 className="text text_type_main-large">Ошибка: {error}</h2>
-          )}
-
           {!isLoading &&
             !error &&
-            new Array(20)
-              .fill(0)
-              .map((_, index) => (
-                <FeedItem
-                  key={index}
-                  itemId={index.toString()}
-                  ingredients={ingredients}
-                />
-              ))}
+            feeds.length > 0 &&
+            feeds.map((feed, index) => (
+              <FeedItem
+                key={index}
+                feed={feed}
+                ingredients={formattedIngredients(feed.ingredients)}
+              />
+            ))}
         </div>
         <div className={styles.stat}>
           {/* Списки заказов */}
           <div className={`${styles.statOrders} mb-15`}>
             <div className={styles.statOrdersBlock}>
               <h3 className="text text_type_main-medium mb-6">Готовы:</h3>
-              <div>
-                {successOrders.map((orderId) => (
-                  <Link
-                    key={orderId}
-                    to={`/feed/${orderId}`}
-                    state={{ background: location.pathname }}
-                    className={`${styles.orderLink} mb-2`}
-                  >
-                    <div className="text text_type_digits-default">{orderId}</div>
-                  </Link>
-                ))}
+              <div className={styles.statColumnsWrap}>
+                {/* Готовы 1 колонка */}
+                <div>
+                  {successFeedsOne.map((feed) => (
+                    <Link
+                      key={feed.number}
+                      to={`/feed/${feed.number}`}
+                      state={{ background: location.pathname }}
+                      className={`${styles.orderLink} mb-2`}
+                    >
+                      <div className="text text_type_digits-default mb-2">
+                        {feed.number}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Готовы 2 колонка */}
+                <div>
+                  {successFeedsTwo.map((feed) => (
+                    <Link
+                      key={feed.number}
+                      to={`/feed/${feed.number}`}
+                      state={{ background: location.pathname }}
+                      className={`${styles.orderLink} mb-2`}
+                    >
+                      <div className="text text_type_digits-default mb-2">
+                        {feed.number}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
 
             <div className={styles.statOrdersBlock}>
               <h3 className="text text_type_main-medium mb-6">В работе:</h3>
-              <div>
-                {waitingOrders.map((orderId) => (
-                  <div key={orderId} className="text text_type_digits-default mb-2">
-                    {orderId}
-                  </div>
-                ))}
+              <div className={styles.statColumnsWrap}>
+                {/* В работе 1 колонка */}
+                <div>
+                  {waitingFeedsOne.map((feed) => (
+                    <div
+                      key={feed.number}
+                      className="text text_type_digits-default mb-2"
+                    >
+                      {feed.number}
+                    </div>
+                  ))}
+                </div>
+
+                {/* В работе 2 колонка */}
+                <div>
+                  {waitingFeedsTwo.map((feed) => (
+                    <div
+                      key={feed.number}
+                      className="text text_type_digits-default mb-2"
+                    >
+                      {feed.number}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
