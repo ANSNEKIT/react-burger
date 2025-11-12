@@ -62,7 +62,7 @@ export const App = (): ReactElement => {
           <Route path="/ingredients/:id" element={<IngredientPage />} />
 
           <Route path="/feed" element={<Feed />} />
-          <Route path="/feed/:id" element={<Protected component={<FeedItemPage />} />} />
+          <Route path="/feed/:feedNumber" element={<FeedItemPage />} />
 
           <Route
             path="/login"

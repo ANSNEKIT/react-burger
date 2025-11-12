@@ -1,0 +1,22 @@
+.stat {
+  width: 580px;
+}
+
+.statOrders {
+  display: flex;
+  gap: 36px;
+}
+
+.statOrdersBlock {
+  width: 50%;
+}
+
+.statColumnsWrap {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+.orderLink {
+  color: #0cc;
+}

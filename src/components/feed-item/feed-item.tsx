@@ -19,13 +19,7 @@ type TFeedItemProps = {
 
 const FeedItem = ({ ingredients, feed }: TFeedItemProps): ReactElement => {
   const feedPrice = useMemo(
-    () =>
-      ingredients.reduce((acc, ing) => {
-        if (ing.count) {
-          return acc + ing.count * ing.price;
-        }
-        return acc + ing.price;
-      }, 0),
+    () => ingredients.reduce((acc, ing) => acc + ing.price, 0),
     [ingredients]
   );
   return (

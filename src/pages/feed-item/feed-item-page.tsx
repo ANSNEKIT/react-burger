@@ -1,49 +1,59 @@
-import { IngredientRow } from '@/components';
-import {
-  CurrencyIcon,
-  FormattedDate,
-} from '@krgaa/react-developer-burger-ui-components';
-
-import type { ReactElement } from 'react';
-
-import styles from './feed-item-page.module.css';
+import { Loader, OrderItem } from '@/components';
+import { getGlobalOrder } from '@/services/common/selectors';
+import { loadFeed } from '@/services/feed/actions';
+import { getFeedSlice } from '@/services/feed/selectors';
+import { useAppDispatch, useAppSelector } from '@/services/hooks';
+import { loadIngredients } from '@/services/ingredients/actions';
+import { getIngredientsState } from '@/services/ingredients/selectors';
+import { convertIdsToIngredients } from '@/utils/convert-ids-to-ingredients';
+import { convertToQniqIngredients } from '@/utils/convert-to-qniq-ingredients';
+import { useEffect, useMemo, type ReactElement } from 'react';
+import { useParams } from 'react-router-dom';
 
 const FeedItem = (): ReactElement => {
+  const { feedNumber } = useParams<string>();
+  const dispatch = useAppDispatch();
+  const { mapIngredients } = useAppSelector(getIngredientsState);
+  const { isLoading, error } = useAppSelector(getFeedSlice);
+  const orderByAllSlice = useAppSelector((state) => getGlobalOrder(state, feedNumber!));
+
+  const orderQniqIngredients = useMemo(() => {
+    if (!orderByAllSlice) {
+      return [];
+    }
+    const mappedIngredients = new Map(mapIngredients);
+    const orderIngs = convertIdsToIngredients(
+      orderByAllSlice.ingredients,
+      mappedIngredients
+    );
+    const qniqOrderIngs = convertToQniqIngredients(orderIngs);
+    return qniqOrderIngs;
+  }, [orderByAllSlice, mapIngredients]);
+
+  useEffect(() => {
+    if (!orderByAllSlice && feedNumber) {
+      void dispatch(loadIngredients());
+      void dispatch(loadFeed({ orderId: feedNumber }));
+    }
+  }, []);
+
+  console.log('feedItem >> feed', orderByAllSlice);
+
   return (
     <div className="page pageCenter">
-      <div className={`${styles.feedItem}`}>
-        <h2 className="text-center text text_type_digits-default mb-10">#034533</h2>
+      {isLoading && !error && <Loader size="large" />}
 
-        <div className="mb-15">
-          <h1 className="text text_type_main-medium mb-3">
-            Black Hole Singularity острый бургер
-          </h1>
-          <div className={`${styles.orderStatus} text text_type_main-default`}>
-            Выполнен
-          </div>
-        </div>
+      {!isLoading && error && (
+        <div className="text-center text text_type_digits-default">Oшибка: {error}</div>
+      )}
 
-        <div className={`${styles.feedIngredientsBlock} mb-10`}>
-          <h2 className="text text_type_main-medium mb-6">Состав:</h2>
-          <div className={styles.feedIngredients}>
-            {Array(20)
-              .fill(0)
-              .map((_, index) => (
-                <IngredientRow key={index} />
-              ))}
-          </div>
-        </div>
+      {!isLoading && !error && !orderByAllSlice && (
+        <div className="text-center text text_type_digits-default">Заказ не найден</div>
+      )}
 
-        <div className={styles.feedFooter}>
-          <div className="">
-            <FormattedDate date={new Date()} className="text_color_inactive" />
-          </div>
-          <div className="d-flex align-center">
-            <p className="text text_type_digits-default mr-2">510</p>
-            <CurrencyIcon type="primary" />
-          </div>
-        </div>
-      </div>
+      {orderByAllSlice && (
+        <OrderItem item={orderByAllSlice} itemIngredients={orderQniqIngredients} />
+      )}
     </div>
   );
 };

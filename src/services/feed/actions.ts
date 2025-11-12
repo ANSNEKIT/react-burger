@@ -1,6 +1,8 @@
-import { createAction } from '@reduxjs/toolkit';
+import { orderApi } from '@/api/order.api';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import type { TAllOrders } from '@/contracts/orderDTO';
+import type { TOrderData, TOrderResponseBody } from '@/types/transport';
 
 export const connect = createAction<string, 'feed/connect'>('feed/connect');
 export const disconnect = createAction('feed/disconnect');
@@ -10,6 +12,13 @@ export const onOpen = createAction('feed/onopen');
 export const onMessage = createAction<TAllOrders, 'feed/onmessage'>('feed/onmessage');
 export const onError = createAction<string, 'feed/onerror'>('feed/onerror');
 export const onClose = createAction('feed/onclose');
+
+export const loadFeed = createAsyncThunk<TOrderResponseBody, TOrderData>(
+  'feed/getOrder',
+  async (payload: TOrderData) => {
+    return await orderApi.getOrder(payload);
+  }
+);
 
 export type FeedActionTypes =
   | ReturnType<typeof connect>

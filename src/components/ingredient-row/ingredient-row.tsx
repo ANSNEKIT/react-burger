@@ -6,7 +6,7 @@ import type { ReactElement } from 'react';
 import styles from './ingredient-row.module.css';
 
 type TIngredientRowProps = {
-  ingredient?: TIngredientDTO;
+  ingredient: TIngredientDTO;
 };
 
 const IngredientRow = ({ ingredient }: TIngredientRowProps): ReactElement => {
@@ -16,12 +16,14 @@ const IngredientRow = ({ ingredient }: TIngredientRowProps): ReactElement => {
         <img
           src={ingredient?.image_mobile}
           className={`${styles.image}`}
-          alt={ingredient?.name ?? 'Ингредиент image'}
+          alt={ingredient.name}
         />
       </div>
-      <h3 className="grow-1 text text_type_main-default">Флюоресцентная булка R2-D3</h3>
+      <h3 className="grow-1 text text_type_main-default">{ingredient.name}</h3>
       <div className="d-flex align-center">
-        <p className="text text_type_digits-default mr-2">2 x 510</p>
+        <p className="text text_type_digits-default mr-2">
+          {ingredient?.count ?? 1} x {ingredient.price}
+        </p>
         <CurrencyIcon type="primary" />
       </div>
     </div>

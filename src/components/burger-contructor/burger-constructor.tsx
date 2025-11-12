@@ -1,4 +1,4 @@
-import { BacketInfo, BacketItem, Modal, OrderDetails, Loader } from '@/components';
+import { BacketInfo, BacketItem, Modal, OrderCreated, Loader } from '@/components';
 import { createOrder } from '@/services/basket/actions';
 import {
   addIngredient,
@@ -157,7 +157,7 @@ const BurgerConstructor = (): ReactElement => {
 
       {isShowModalOrder && (
         <Modal onClose={onCloseOrderModal}>
-          <OrderDetails orderNumber={order?.number ?? null} isLoading={isLoadingOrder} />
+          <OrderCreated orderNumber={order?.number ?? null} isLoading={isLoadingOrder} />
         </Modal>
       )}
     </section>

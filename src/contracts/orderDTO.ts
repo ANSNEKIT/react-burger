@@ -6,6 +6,7 @@ export type TOrderDTO = {
   number: number;
   createdAt: string;
   updatedAt: string;
+  owner?: string;
 };
 
 export type TAllOrders = {

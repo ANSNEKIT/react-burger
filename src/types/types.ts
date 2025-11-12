@@ -34,3 +34,8 @@ export type TPayloadAction<T> = {
   type: string;
   error?: SerializedError;
 };
+
+// export type TOrderIngredint = {
+//   id: string;
+//   ingredient: TIngredientDTO;
+// };
