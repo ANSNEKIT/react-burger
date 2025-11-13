@@ -1,4 +1,4 @@
-import { AppHeader, Protected, Modal, IngredientDetails } from '@/components';
+import { AppHeader, Protected, Modal, IngredientDetails, OrderItem } from '@/components';
 import {
   ForgotPassword,
   Home,
@@ -46,7 +46,9 @@ export const App = (): ReactElement => {
       <AppHeader />
       <main className={`${styles.mainContent} pl-5 pr-5`}>
         <Routes>
-          {background && (
+          <Route path="/" element={<Home />} />
+
+          {background && background.pathname === '/' && (
             <Route
               path="/ingredients/:id"
               element={
@@ -62,6 +64,19 @@ export const App = (): ReactElement => {
           <Route path="/ingredients/:id" element={<IngredientPage />} />
 
           <Route path="/feed" element={<Feed />} />
+          {background && background.pathname === '/feed' && background.param && (
+            <Route
+              path="/feed/:feedNumber"
+              element={
+                <>
+                  <Feed />
+                  <Modal onClose={onModalClose} title={`#${background.param}`}>
+                    <OrderItem number={background.param} extraClass="mt-6" />
+                  </Modal>
+                </>
+              }
+            />
+          )}
           <Route path="/feed/:feedNumber" element={<FeedItemPage />} />
 
           <Route
@@ -90,8 +105,6 @@ export const App = (): ReactElement => {
               element={<Protected component={<FeedItemPage />} />}
             />
           </Route>
-
-          <Route path="/" element={<Home />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>

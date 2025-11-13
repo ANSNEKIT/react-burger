@@ -1,4 +1,4 @@
-import FeedItemPage from '@/pages/feed-item/feed-item-page';
+import FeedItemPage from '@/pages/feed-item-page/feed-item-page';
 import Feed from '@/pages/feed/feed';
 import ForgotPassword from '@/pages/forgot-password/forgot-password';
 import Home from '@/pages/home/home';

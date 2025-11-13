@@ -3,7 +3,10 @@ import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { SerializedError } from '@reduxjs/toolkit';
 
 export type TLocationState = {
-  background: { pathname: string };
+  background: {
+    pathname: string;
+    param?: string;
+  };
 };
 
 export type TDragItem = TIngredientDTO & {

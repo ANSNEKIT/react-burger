@@ -3,12 +3,13 @@ import {
   FormattedDate,
 } from '@krgaa/react-developer-burger-ui-components';
 import { useMemo, type ReactElement } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import IngredientPreview from '../ingredient-preview/ingredient-preview';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { TOrderDTO } from '@/contracts/orderDTO';
+import type { TLocationState } from '@/types/types';
 
 import styles from './feed-item.module.css';
 
@@ -18,12 +19,18 @@ type TFeedItemProps = {
 };
 
 const FeedItem = ({ ingredients, feed }: TFeedItemProps): ReactElement => {
+  const { pathname } = useLocation();
+
   const feedPrice = useMemo(
     () => ingredients.reduce((acc, ing) => acc + ing.price, 0),
     [ingredients]
   );
+  const linkState: TLocationState = {
+    background: { pathname, param: feed.number.toString() },
+  };
+
   return (
-    <Link to={`/feed/${feed.number}`} className={styles.feed}>
+    <Link to={`/feed/${feed.number}`} state={linkState} className={styles.feed}>
       <div className={styles.feedWrap}>
         <div className={styles.header}>
           <h3 className="text text_type_digits-default">#{feed.number}</h3>

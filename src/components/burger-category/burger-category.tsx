@@ -21,7 +21,7 @@ const BurgerCategory = ({ title, ingredients }: TBurgerCategoryProps): ReactElem
           <Link
             key={ing._id}
             to={`/ingredients/${ing._id}`}
-            state={{ background: location.pathname }}
+            state={{ background: { pathname: location.pathname } }}
             className={styles.link}
           >
             <Ingredient ingredient={ing} />

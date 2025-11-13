@@ -4,31 +4,14 @@ import { loadFeed } from '@/services/feed/actions';
 import { getFeedSlice } from '@/services/feed/selectors';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { loadIngredients } from '@/services/ingredients/actions';
-import { getIngredientsState } from '@/services/ingredients/selectors';
-import { convertIdsToIngredients } from '@/utils/convert-ids-to-ingredients';
-import { convertToQniqIngredients } from '@/utils/convert-to-qniq-ingredients';
-import { useEffect, useMemo, type ReactElement } from 'react';
+import { useEffect, type ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 
 const FeedItem = (): ReactElement => {
   const { feedNumber } = useParams<string>();
   const dispatch = useAppDispatch();
-  const { mapIngredients } = useAppSelector(getIngredientsState);
   const { isLoading, error } = useAppSelector(getFeedSlice);
   const orderByAllSlice = useAppSelector((state) => getGlobalOrder(state, feedNumber!));
-
-  const orderQniqIngredients = useMemo(() => {
-    if (!orderByAllSlice) {
-      return [];
-    }
-    const mappedIngredients = new Map(mapIngredients);
-    const orderIngs = convertIdsToIngredients(
-      orderByAllSlice.ingredients,
-      mappedIngredients
-    );
-    const qniqOrderIngs = convertToQniqIngredients(orderIngs);
-    return qniqOrderIngs;
-  }, [orderByAllSlice, mapIngredients]);
 
   useEffect(() => {
     if (!orderByAllSlice && feedNumber) {
@@ -36,8 +19,6 @@ const FeedItem = (): ReactElement => {
       void dispatch(loadFeed({ orderId: feedNumber }));
     }
   }, []);
-
-  console.log('feedItem >> feed', orderByAllSlice);
 
   return (
     <div className="page pageCenter">
@@ -51,8 +32,13 @@ const FeedItem = (): ReactElement => {
         <div className="text-center text text_type_digits-default">Заказ не найден</div>
       )}
 
-      {orderByAllSlice && (
-        <OrderItem item={orderByAllSlice} itemIngredients={orderQniqIngredients} />
+      {orderByAllSlice && feedNumber && (
+        <>
+          <h2 className="text-center text text_type_digits-default mb-10">
+            #{feedNumber}
+          </h2>
+          <OrderItem number={feedNumber} />
+        </>
       )}
     </div>
   );
