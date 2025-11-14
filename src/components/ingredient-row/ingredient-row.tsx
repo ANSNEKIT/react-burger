@@ -20,7 +20,7 @@ const IngredientRow = ({ ingredient }: TIngredientRowProps): ReactElement => {
         />
       </div>
       <h3 className="grow-1 text text_type_main-default">{ingredient.name}</h3>
-      <div className="d-flex align-center">
+      <div className="d-flex align-center nowrap">
         <p className="text text_type_digits-default mr-2">
           {ingredient?.count ?? 1} x {ingredient.price}
         </p>
