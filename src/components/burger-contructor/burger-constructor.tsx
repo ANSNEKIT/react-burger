@@ -1,4 +1,4 @@
-import { BacketInfo, BacketItem, Modal, OrderCreated, Loader } from '@/components';
+import { BacketInfo, BacketItem, Modal, OrderCreated } from '@/components';
 import { createOrder } from '@/services/basket/actions';
 import {
   addIngredient,
@@ -78,7 +78,7 @@ const BurgerConstructor = (): ReactElement => {
 
   const onCloseOrderModal = (): void => {
     if (isLoadingOrder) {
-      return;
+      void navigate('/feed');
     }
     dispatch(clearBasket());
   };
@@ -140,12 +140,6 @@ const BurgerConstructor = (): ReactElement => {
           />
         )}
       </div>
-
-      {isLoadingOrder && (
-        <div className="d-flex justify-center">
-          <Loader size="medium" />
-        </div>
-      )}
 
       {isShowTotal && (
         <BacketInfo
