@@ -1,6 +1,10 @@
+import { Loader } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { setCurrentIngredient } from '@/services/ingredients/reducer';
-import { getCurrentIngredient } from '@/services/ingredients/selectors';
+import {
+  getCurrentIngredient,
+  getIngredientsState,
+} from '@/services/ingredients/selectors';
 import { useEffect, type ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -14,16 +18,33 @@ export type TComposition = {
 const IngredientDetails = (): ReactElement => {
   const { id } = useParams<string>();
   const dispatch = useAppDispatch();
+  const { isLoading } = useAppSelector(getIngredientsState);
   const detail = useAppSelector(getCurrentIngredient);
 
   useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+
     if (id) {
       dispatch(setCurrentIngredient(id));
     }
-  }, [id, dispatch]);
+  }, [id, isLoading]);
+
+  if (isLoading && !detail) {
+    return (
+      <div className={`${styles.innerWrap} mt-15`}>
+        <Loader size="large" />
+      </div>
+    );
+  }
 
   if (!detail) {
-    return <div>Не найден элемент id: {id}</div>;
+    return (
+      <div className={`${styles.innerWrap} mt-15`}>
+        <h2 className="text text_type_main-default">Не найден элемент id: {id}</h2>
+      </div>
+    );
   }
 
   const compositions = [
