@@ -1,4 +1,5 @@
 import { getGlobalOrder } from '@/services/common/selectors';
+// import { getGlobalOrder } from '@/services/common/selectors';
 import { useAppSelector } from '@/services/hooks';
 import { getIngredientsState } from '@/services/ingredients/selectors';
 import { EOrderStatusTitles } from '@/types/enums';
@@ -8,27 +9,38 @@ import {
   CurrencyIcon,
   FormattedDate,
 } from '@krgaa/react-developer-burger-ui-components';
-import { useMemo, type ReactElement } from 'react';
+import { useEffect, useMemo, useState, type ReactElement } from 'react';
 
 import IngredientRow from '../ingredient-row/ingredient-row';
+import Loader from '../loader/loader';
 
 import styles from './order-item.module.css';
 
 type TOrderProps = {
-  number: string;
   extraClass?: string;
 };
 
-const OrderItem = ({ number, extraClass }: TOrderProps): ReactElement => {
+const OrderItem = ({ extraClass }: TOrderProps): ReactElement => {
   const { mapIngredients } = useAppSelector(getIngredientsState);
-  const item = useAppSelector((state) => getGlobalOrder(state, number));
+  const item = useAppSelector(getGlobalOrder);
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (item) {
+      setIsLoading(false);
+    }
+  }, [item]);
+
   const itemIngredients = useMemo(() => {
     if (!item) {
       return [];
     }
+
     const mappedIngredients = new Map(mapIngredients);
     const orderIngs = convertIdsToIngredients(item.ingredients, mappedIngredients);
     const qniqOrderIngs = convertToQniqIngredients(orderIngs);
+
     return qniqOrderIngs;
   }, [item, mapIngredients]);
 
@@ -37,9 +49,17 @@ const OrderItem = ({ number, extraClass }: TOrderProps): ReactElement => {
     0
   );
 
+  if (isLoading && !item) {
+    return (
+      <div className={`${styles.feedItem} ${extraClass ?? ''}`}>
+        <Loader size="large" />
+      </div>
+    );
+  }
+
   if (!item) {
     return (
-      <div className={`${styles.feedItem}`}>
+      <div className={`${styles.feedItem} ${extraClass ?? ''}`}>
         <h2 className="text-center text text_type_main-medium mb-10">Не найден заказ</h2>
       </div>
     );
