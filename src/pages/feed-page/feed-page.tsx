@@ -2,8 +2,7 @@ import { Feed } from '@/components';
 import { connect, disconnect } from '@/services/feed/actions';
 import { getFeedSlice } from '@/services/feed/selectors';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
-import { loadIngredients } from '@/services/ingredients/actions';
-import { getIngredientsState, getMapIngredints } from '@/services/ingredients/selectors';
+import { getMapIngredints } from '@/services/ingredients/selectors';
 import { EWebsocketStatus } from '@/types/enums';
 import { useEffect, useMemo, type ReactElement } from 'react';
 
@@ -11,21 +10,19 @@ import styles from './feed-page.module.css';
 
 const FeedPage = (): ReactElement => {
   const dispatch = useAppDispatch();
-  const { ingredients, isLoading: isLoadingIngs } = useAppSelector(getIngredientsState);
   const { status, feeds, error } = useAppSelector(getFeedSlice);
   const mapIngredients = useAppSelector(getMapIngredints);
 
   const mappedIngredients = useMemo(() => new Map(mapIngredients), [mapIngredients]);
-  const isLoading = useMemo(() => status === EWebsocketStatus.CONNECTING, [status]);
+  const isLoading = useMemo(
+    () =>
+      status === EWebsocketStatus.CONNECTING ||
+      (status === EWebsocketStatus.OFFLINE && !error),
+    [status, error]
+  );
 
   useEffect(() => {
-    if (!isLoadingIngs && ingredients.length === 0) {
-      void dispatch(loadIngredients()).then(() => {
-        void dispatch(connect('wss://norma.education-services.ru/orders/all'));
-      });
-    } else {
-      void dispatch(connect('wss://norma.education-services.ru/orders/all'));
-    }
+    void dispatch(connect('wss://norma.education-services.ru/orders/all'));
 
     return (): void => void dispatch(disconnect());
   }, []);

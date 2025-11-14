@@ -3,7 +3,6 @@ import { getGlobalOrder } from '@/services/common/selectors';
 import { loadFeed } from '@/services/feed/actions';
 import { getFeedSlice } from '@/services/feed/selectors';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
-import { loadIngredients } from '@/services/ingredients/actions';
 import { useEffect, type ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -15,7 +14,6 @@ const FeedItem = (): ReactElement => {
 
   useEffect(() => {
     if (!orderByAllSlice && feedNumber) {
-      void dispatch(loadIngredients());
       void dispatch(loadFeed({ orderId: feedNumber }));
     }
   }, []);
