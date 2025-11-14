@@ -1,6 +1,7 @@
 import { getGlobalOrder } from '@/services/common/selectors';
 import { useAppSelector } from '@/services/hooks';
 import { getIngredientsState } from '@/services/ingredients/selectors';
+import { EOrderStatusTitles } from '@/types/enums';
 import { convertIdsToIngredients } from '@/utils/convert-ids-to-ingredients';
 import { convertToQniqIngredients } from '@/utils/convert-to-qniq-ingredients';
 import {
@@ -49,7 +50,7 @@ const OrderItem = ({ number, extraClass }: TOrderProps): ReactElement => {
       <div className="mb-15">
         <h1 className="text text_type_main-medium mb-3">{item.name}</h1>
         <div className={`${styles.orderStatus} text text_type_main-default`}>
-          {item.status === 'done' ? 'Выполнен' : 'В работе'}
+          {EOrderStatusTitles[item.status]}
         </div>
       </div>
 

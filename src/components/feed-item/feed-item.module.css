@@ -10,6 +10,10 @@
   }
 }
 
+.feedStatusDone {
+  color: #0cc;
+}
+
 .feedWrap {
   display: flex;
   flex-direction: column;

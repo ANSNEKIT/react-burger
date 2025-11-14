@@ -9,6 +9,7 @@ import BurgerIngredients from '@/components/burger-ingredients/burger-ingredient
 import BurgerTabs from '@/components/burger-tabs/burger-tabs';
 import FeedItem from '@/components/feed-item/feed-item';
 import FeedStats from '@/components/feed-stats/feed-stats';
+import Feed from '@/components/feed/feed';
 import Form from '@/components/form/form';
 import IngredientDetails from '@/components/ingredient-details/ingredient-details';
 import IngredientRow from '@/components/ingredient-row/ingredient-row';
@@ -40,4 +41,5 @@ export {
   IngredientRow,
   OrderItem,
   FeedStats,
+  Feed,
 };

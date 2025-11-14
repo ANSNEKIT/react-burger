@@ -1,9 +1,3 @@
-.feedPage {
-  display: flex;
-  flex-direction: column;
-  gap: 60px;
-}
-
 .feedWrap {
   display: flex;
   gap: 60px;

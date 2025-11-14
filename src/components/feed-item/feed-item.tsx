@@ -1,3 +1,4 @@
+import { EOrderStatus, EOrderStatusTitles } from '@/types/enums';
 import {
   CurrencyIcon,
   FormattedDate,
@@ -21,6 +22,8 @@ type TFeedItemProps = {
 const FeedItem = ({ ingredients, feed }: TFeedItemProps): ReactElement => {
   const { pathname } = useLocation();
 
+  const statusDone = feed.status === EOrderStatus.done ? styles.feedStatusDone : '';
+
   const feedPrice = useMemo(
     () => ingredients.reduce((acc, ing) => acc + ing.price, 0),
     [ingredients]
@@ -30,7 +33,7 @@ const FeedItem = ({ ingredients, feed }: TFeedItemProps): ReactElement => {
   };
 
   return (
-    <Link to={`/feed/${feed.number}`} state={linkState} className={styles.feed}>
+    <Link to={`${pathname}/${feed.number}`} state={linkState} className={styles.feed}>
       <div className={styles.feedWrap}>
         <div className={styles.header}>
           <h3 className="text text_type_digits-default">#{feed.number}</h3>
@@ -39,7 +42,14 @@ const FeedItem = ({ ingredients, feed }: TFeedItemProps): ReactElement => {
             date={new Date(feed.createdAt)}
           />
         </div>
-        <h2 className="text text_type_main-medium">{feed.name}</h2>
+
+        <div>
+          <h2 className="text text_type_main-medium mb-2">{feed.name}</h2>
+          <p className={`text text_type_main-default ${statusDone}`}>
+            {EOrderStatusTitles[feed.status]}
+          </p>
+        </div>
+
         <div className={styles.feedPreviewBlock}>
           <div className={styles.feedPreview}>
             <IngredientPreview ingredients={ingredients} />

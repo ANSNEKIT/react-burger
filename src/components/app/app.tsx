@@ -9,8 +9,9 @@ import {
   ProfileInfo,
   Register,
   ResetPassword,
-  Feed,
+  FeedPage,
   FeedItemPage,
+  ProfileOrders,
 } from '@/pages';
 import { useAppDispatch } from '@/services/hooks';
 import { checkAuth } from '@/services/user/actions';
@@ -63,13 +64,13 @@ export const App = (): ReactElement => {
           )}
           <Route path="/ingredients/:id" element={<IngredientPage />} />
 
-          <Route path="/feed" element={<Feed />} />
+          <Route path="/feed" element={<FeedPage />} />
           {background && background.pathname === '/feed' && background.param && (
             <Route
               path="/feed/:feedNumber"
               element={
                 <>
-                  <Feed />
+                  <FeedPage />
                   <Modal onClose={onModalClose} title={`#${background.param}`}>
                     <OrderItem number={background.param} extraClass="mt-6" />
                   </Modal>
@@ -99,12 +100,32 @@ export const App = (): ReactElement => {
           {/* Страница Профиль */}
           <Route path="profile" element={<Protected component={<Profile />} />}>
             <Route index element={<Protected component={<ProfileInfo />} />} />
-            <Route path="orders" element={<Protected component={<Feed />} />} />
-            <Route
-              path="orders/:id"
-              element={<Protected component={<FeedItemPage />} />}
-            />
+            <Route path="orders" element={<Protected component={<ProfileOrders />} />} />
+            {background &&
+              background.pathname === '/profile/orders' &&
+              background.param && (
+                <Route
+                  path="orders/:feedNumber"
+                  element={
+                    <Protected
+                      component={
+                        <>
+                          <FeedItemPage />
+                          <Modal onClose={onModalClose} title={`#${background.param}`}>
+                            <OrderItem number={background.param} extraClass="mt-6" />
+                          </Modal>
+                        </>
+                      }
+                    />
+                  }
+                />
+              )}
           </Route>
+
+          <Route
+            path="/profile/orders/:feedNumber"
+            element={<Protected component={<FeedItemPage />} />}
+          />
 
           <Route path="*" element={<NotFound />} />
         </Routes>

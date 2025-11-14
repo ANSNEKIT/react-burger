@@ -1,3 +1,4 @@
+import { EOrderStatus } from '@/types/enums';
 import { useMemo, type ReactElement } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -13,13 +14,13 @@ const FeedStats = ({ feeds }: TFeedStatsProps): ReactElement => {
   const location = useLocation();
 
   const successFeeds = useMemo(
-    () => feeds.filter((feed) => feed.status === 'done'),
+    () => feeds.filter((feed) => feed.status === EOrderStatus.done),
     [feeds]
   );
   const successFeedsOne = useMemo(() => successFeeds.slice(0, 10), [successFeeds]);
   const successFeedsTwo = useMemo(() => successFeeds.slice(10, 19), [successFeeds]);
   const waitingFeeds = useMemo(
-    () => feeds.filter((feed) => feed.status !== 'done'),
+    () => feeds.filter((feed) => feed.status !== EOrderStatus.done),
     [feeds]
   );
   const waitingFeedsOne = useMemo(() => waitingFeeds.slice(0, 10), [waitingFeeds]);

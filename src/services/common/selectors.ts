@@ -10,8 +10,7 @@ export const getGlobalOrder = (
     store.feedSlice.feeds.find((feed) => feed.number.toString() === orderNumber) ?? null;
   const feedCurrentFeed = store.feedSlice.currentFeed;
 
-  // TODO дописать как будет создан profileFeedSlice
-  const profileOrder = null; // store.profileFeedSlice.currentOrder
+  const profileCurrentOrder = store.profileOrdersSlice.currentOrder;
 
-  return backetOrder ?? feedCurrentFeed ?? feedOrderInOrders ?? profileOrder;
+  return backetOrder ?? feedCurrentFeed ?? feedOrderInOrders ?? profileCurrentOrder;
 };
