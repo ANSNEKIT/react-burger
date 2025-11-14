@@ -49,7 +49,6 @@ export const feedSlice = createSlice({
       .addCase(onClose, (state) => {
         state.status = EWebsocketStatus.OFFLINE;
         state.feeds = [];
-        state.currentFeed = null;
       })
       .addCase(onMessage, (state, action: TPayloadAction<TAllOrders>) => {
         const validFeeds = action.payload.orders.filter(Boolean);

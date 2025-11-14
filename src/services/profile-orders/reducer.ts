@@ -27,7 +27,14 @@ const initialState: TProfileOrdersState = {
 export const profileOrdersSlice = createSlice({
   name: 'profileOrders',
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentOrder(state, action: PayloadAction<string>) {
+      const feed = state.orders.find((feed) => feed.number === +action.payload);
+      if (feed) {
+        state.currentOrder = feed;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(onConnecting, (state) => {
@@ -66,5 +73,7 @@ export const profileOrdersSlice = createSlice({
       });
   },
 });
+
+export const { setCurrentOrder } = profileOrdersSlice.actions;
 
 export default profileOrdersSlice.reducer;

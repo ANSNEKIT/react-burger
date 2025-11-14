@@ -1,7 +1,10 @@
 import { getGlobalOrder } from '@/services/common/selectors';
-// import { getGlobalOrder } from '@/services/common/selectors';
-import { useAppSelector } from '@/services/hooks';
+import { loadFeed } from '@/services/feed/actions';
+import { getFeed } from '@/services/feed/selectors';
+import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { getIngredientsState } from '@/services/ingredients/selectors';
+import { loadOrder } from '@/services/profile-orders/actions';
+import { getOrder } from '@/services/profile-orders/selectors';
 import { EOrderStatusTitles } from '@/types/enums';
 import { convertIdsToIngredients } from '@/utils/convert-ids-to-ingredients';
 import { convertToQniqIngredients } from '@/utils/convert-to-qniq-ingredients';
@@ -17,39 +20,66 @@ import Loader from '../loader/loader';
 import styles from './order-item.module.css';
 
 type TOrderProps = {
+  itemNumber: string;
   extraClass?: string;
+  isOrderItem?: boolean;
 };
 
-const OrderItem = ({ extraClass }: TOrderProps): ReactElement => {
+const OrderItem = ({
+  extraClass,
+  isOrderItem,
+  itemNumber,
+}: TOrderProps): ReactElement => {
+  const dispatch = useAppDispatch();
   const { mapIngredients } = useAppSelector(getIngredientsState);
   const item = useAppSelector(getGlobalOrder);
+  const feed = useAppSelector((store) => getFeed(store, itemNumber));
+  const order = useAppSelector((store) => getOrder(store, itemNumber));
 
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  const resultItem = useMemo(() => {
     if (item) {
-      setIsLoading(false);
+      return item;
     }
-  }, [item]);
+    if (isOrderItem) {
+      return order;
+    }
+    return feed;
+  }, [item, feed, order]);
 
   const itemIngredients = useMemo(() => {
-    if (!item) {
+    if (!resultItem) {
       return [];
     }
 
     const mappedIngredients = new Map(mapIngredients);
-    const orderIngs = convertIdsToIngredients(item.ingredients, mappedIngredients);
+    const orderIngs = convertIdsToIngredients(resultItem.ingredients, mappedIngredients);
     const qniqOrderIngs = convertToQniqIngredients(orderIngs);
 
     return qniqOrderIngs;
-  }, [item, mapIngredients]);
+  }, [resultItem, mapIngredients]);
+
+  useEffect(() => {
+    if (resultItem) {
+      setIsLoading(false);
+    } else if (isOrderItem) {
+      void dispatch(loadOrder({ orderId: itemNumber })).finally(() =>
+        setIsLoading(false)
+      );
+    } else {
+      void dispatch(loadFeed({ orderId: itemNumber })).finally(() =>
+        setIsLoading(false)
+      );
+    }
+  }, [resultItem]);
 
   const ingsPrice = itemIngredients.reduce(
     (acc, ing) => (acc += ing.price * (ing?.count ?? 1)),
     0
   );
 
-  if (isLoading && !item) {
+  if (isLoading && !resultItem) {
     return (
       <div className={`${styles.feedItem} ${extraClass ?? ''}`}>
         <Loader size="large" />
@@ -57,7 +87,7 @@ const OrderItem = ({ extraClass }: TOrderProps): ReactElement => {
     );
   }
 
-  if (!item) {
+  if (!resultItem) {
     return (
       <div className={`${styles.feedItem} ${extraClass ?? ''}`}>
         <h2 className="text-center text text_type_main-medium mb-10">Не найден заказ</h2>
@@ -68,9 +98,9 @@ const OrderItem = ({ extraClass }: TOrderProps): ReactElement => {
   return (
     <div className={`${styles.feedItem} ${extraClass ?? ''}`}>
       <div className="mb-15">
-        <h1 className="text text_type_main-medium mb-3">{item.name}</h1>
+        <h1 className="text text_type_main-medium mb-3">{resultItem.name}</h1>
         <div className={`${styles.orderStatus} text text_type_main-default`}>
-          {EOrderStatusTitles[item.status]}
+          {EOrderStatusTitles[resultItem.status]}
         </div>
       </div>
 
@@ -86,7 +116,7 @@ const OrderItem = ({ extraClass }: TOrderProps): ReactElement => {
       <div className={styles.feedFooter}>
         <div className="">
           <FormattedDate
-            date={new Date(item.createdAt)}
+            date={new Date(resultItem.createdAt)}
             className="text_color_inactive"
           />
         </div>

@@ -1,3 +1,6 @@
+import { setCurrentFeed } from '@/services/feed/reducer';
+import { useAppDispatch } from '@/services/hooks';
+import { setCurrentOrder } from '@/services/profile-orders/reducer';
 import { EOrderStatus, EOrderStatusTitles } from '@/types/enums';
 import {
   CurrencyIcon,
@@ -20,20 +23,35 @@ type TFeedItemProps = {
 };
 
 const FeedItem = ({ ingredients, feed }: TFeedItemProps): ReactElement => {
+  const dispatch = useAppDispatch();
   const { pathname } = useLocation();
 
+  const isOrderItem = pathname === '/profile/orders';
   const statusDone = feed.status === EOrderStatus.done ? styles.feedStatusDone : '';
+  const linkState: TLocationState = {
+    background: { pathname, param: feed.number.toString() },
+  };
 
   const feedPrice = useMemo(
     () => ingredients.reduce((acc, ing) => acc + ing.price, 0),
     [ingredients]
   );
-  const linkState: TLocationState = {
-    background: { pathname, param: feed.number.toString() },
+
+  const onClickLink = (): void => {
+    if (!isOrderItem) {
+      void dispatch(setCurrentFeed(feed.number.toString()));
+    } else {
+      void dispatch(setCurrentOrder(feed.number.toString()));
+    }
   };
 
   return (
-    <Link to={`${pathname}/${feed.number}`} state={linkState} className={styles.feed}>
+    <Link
+      to={`${pathname}/${feed.number}`}
+      state={linkState}
+      className={styles.feed}
+      onClick={onClickLink}
+    >
       <div className={styles.feedWrap}>
         <div className={styles.header}>
           <h3 className="text text_type_digits-default">#{feed.number}</h3>

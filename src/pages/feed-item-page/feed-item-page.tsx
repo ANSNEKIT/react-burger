@@ -50,7 +50,7 @@ const FeedItem = (): ReactElement => {
           <h2 className="text-center text text_type_digits-default mb-10">
             #{feedNumber}
           </h2>
-          <OrderItem />
+          <OrderItem itemNumber={feedNumber} />
         </>
       )}
     </div>

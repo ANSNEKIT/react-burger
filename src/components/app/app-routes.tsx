@@ -50,7 +50,7 @@ const AppRoutes = ({ onModalClose }: TAppRoutesProps): ReactElement => {
                 <>
                   <FeedPage />
                   <Modal onClose={onModalClose} title={`#${background.param}`}>
-                    <OrderItem extraClass="mt-6" />
+                    <OrderItem extraClass="mt-6" itemNumber={background.param} />
                   </Modal>
                 </>
               }
@@ -60,14 +60,18 @@ const AppRoutes = ({ onModalClose }: TAppRoutesProps): ReactElement => {
           {background.param && (
             <Route path="profile" element={<Protected component={<Profile />} />}>
               <Route
-                path="/orders/:feedNumber"
+                path="orders/:feedNumber"
                 element={
                   <Protected
                     component={
                       <>
                         <ProfileOrders />
                         <Modal onClose={onModalClose} title={`#${background.param}`}>
-                          <OrderItem extraClass="mt-6" />
+                          <OrderItem
+                            extraClass="mt-6"
+                            isOrderItem
+                            itemNumber={background.param}
+                          />
                         </Modal>
                       </>
                     }

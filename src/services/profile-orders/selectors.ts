@@ -8,5 +8,8 @@ export const getProfileOrdersSlice = (store: RootState): TProfileOrdersState =>
 export const getOrders = (store: RootState): TOrderDTO[] =>
   store.profileOrdersSlice.orders;
 
+export const getOrder = (store: RootState, orderNumber: string): TOrderDTO | undefined =>
+  store.profileOrdersSlice.orders.find((o) => o.number === +orderNumber);
+
 export const getCurrentOrder = (store: RootState): TOrderDTO | null =>
   store.profileOrdersSlice.currentOrder;
