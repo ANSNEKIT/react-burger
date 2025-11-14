@@ -18,7 +18,11 @@ const Home = (): ReactElement => {
   }
 
   if (!isLoading && error) {
-    return <h2 className="text text_type_main-large">Ошибка: {error}</h2>;
+    return (
+      <div className="page pageCenter">
+        <h2 className="text text_type_main-large">Ошибка: {error}</h2>;
+      </div>
+    );
   }
 
   return (

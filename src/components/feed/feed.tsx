@@ -34,23 +34,32 @@ const feed = ({
 
   return (
     <div className={styles.feedWrap}>
-      {isLoading && <Loader size="large" />}
+      {isLoading && (
+        <div className="page pageCenter">
+          <Loader size="large" />
+        </div>
+      )}
 
       {!isLoading && error && <h2 className="text text_type_main-large">Ошибка</h2>}
 
-      <div className={styles.feeds} style={feedsStyle}>
-        {!isLoading &&
-          !error &&
-          feeds.length > 0 &&
-          feeds.map((feed, index) => (
+      {!isLoading && !error && feeds.length === 0 && (
+        <div className={styles.feeds} style={feedsStyle}>
+          <h2 className="text text_type_main-large">Нет заказов</h2>
+        </div>
+      )}
+
+      {!isLoading && !error && feeds.length > 0 && (
+        <div className={styles.feeds} style={feedsStyle}>
+          {feeds.map((feed, index) => (
             <FeedItem
               key={index}
               feed={feed}
               ingredients={convertIdsToIngredients(feed.ingredients, mapIngredients)}
             />
           ))}
-      </div>
-      {isShowStats && <FeedStats feeds={feeds} />}
+        </div>
+      )}
+      {!isLoading && !error && isShowStats && <FeedStats feeds={feeds} />}
     </div>
   );
 };
