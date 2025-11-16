@@ -29,9 +29,7 @@ const AppRoutes = ({ onModalClose }: TAppRoutesProps): ReactElement => {
 
   return (
     <>
-      <Routes location={background || location.state}>
-        <Route path="/" element={<Home />} />
-
+      <Routes location={background}>
         <Route path="/ingredients/:id" element={<IngredientPage />} />
 
         <Route path="/feed" element={<FeedPage />} />
@@ -65,6 +63,7 @@ const AppRoutes = ({ onModalClose }: TAppRoutesProps): ReactElement => {
           element={<Protected component={<FeedItemPage />} />}
         />
 
+        <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
 
