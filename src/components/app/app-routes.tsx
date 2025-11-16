@@ -90,24 +90,22 @@ const AppRoutes = ({ onModalClose }: TAppRoutesProps): ReactElement => {
           )}
 
           {background?.param && (
-            <Route path="profile" element={<Protected component={<Profile />} />}>
-              <Route
-                path="orders/:feedNumber"
-                element={
-                  <Protected
-                    component={
-                      <Modal onClose={onModalClose} title={`#${background.param}`}>
-                        <OrderItem
-                          extraClass="mt-6"
-                          isOrderItem
-                          itemNumber={background.param}
-                        />
-                      </Modal>
-                    }
-                  />
-                }
-              />
-            </Route>
+            <Route
+              path="profile/orders/:feedNumber"
+              element={
+                <Protected
+                  component={
+                    <Modal onClose={onModalClose} title={`#${background.param}`}>
+                      <OrderItem
+                        extraClass="mt-6"
+                        isOrderItem
+                        itemNumber={background.param}
+                      />
+                    </Modal>
+                  }
+                />
+              }
+            />
           )}
         </Routes>
       )}
