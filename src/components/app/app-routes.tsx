@@ -29,100 +29,87 @@ const AppRoutes = ({ onModalClose }: TAppRoutesProps): ReactElement => {
 
   return (
     <>
+      <Routes location={background || location.state}>
+        <Route path="/" element={<Home />} />
+
+        <Route path="/ingredients/:id" element={<IngredientPage />} />
+
+        <Route path="/feed" element={<FeedPage />} />
+        <Route path="/feed/:feedNumber" element={<FeedItemPage />} />
+
+        <Route
+          path="/login"
+          element={<Protected isOnlyUnAuth component={<Login />} />}
+        />
+        <Route
+          path="/register"
+          element={<Protected isOnlyUnAuth component={<Register />} />}
+        />
+        <Route
+          path="/forgot-password"
+          element={<Protected isOnlyUnAuth component={<ForgotPassword />} />}
+        />
+        <Route
+          path="/reset-password"
+          element={<Protected isOnlyUnAuth component={<ResetPassword />} />}
+        />
+
+        {/* Страница Профиль */}
+        <Route path="profile" element={<Protected component={<Profile />} />}>
+          <Route index element={<Protected component={<ProfileInfo />} />} />
+          <Route path="orders" element={<Protected component={<ProfileOrders />} />} />
+        </Route>
+
+        <Route
+          path="/profile/orders/:feedNumber"
+          element={<Protected component={<FeedItemPage />} />}
+        />
+
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+
       {background && (
         <Routes>
           <Route
             path="/ingredients/:id"
             element={
-              <>
-                <Home />
-                <Modal onClose={onModalClose} title="Детали ингредиента">
-                  <IngredientDetails />
-                </Modal>
-              </>
+              <Modal onClose={onModalClose} title="Детали ингредиента">
+                <IngredientDetails />
+              </Modal>
             }
           />
 
-          {background.param && (
+          {background?.param && (
             <Route
               path="/feed/:feedNumber"
               element={
-                <>
-                  <FeedPage />
-                  <Modal onClose={onModalClose} title={`#${background.param}`}>
-                    <OrderItem extraClass="mt-6" itemNumber={background.param} />
-                  </Modal>
-                </>
+                <Modal onClose={onModalClose} title={`#${background.param}`}>
+                  <OrderItem extraClass="mt-6" itemNumber={background.param} />
+                </Modal>
               }
             />
           )}
 
-          {background.param && (
+          {background?.param && (
             <Route path="profile" element={<Protected component={<Profile />} />}>
               <Route
                 path="orders/:feedNumber"
                 element={
                   <Protected
                     component={
-                      <>
-                        <ProfileOrders />
-                        <Modal onClose={onModalClose} title={`#${background.param}`}>
-                          <OrderItem
-                            extraClass="mt-6"
-                            isOrderItem
-                            itemNumber={background.param}
-                          />
-                        </Modal>
-                      </>
+                      <Modal onClose={onModalClose} title={`#${background.param}`}>
+                        <OrderItem
+                          extraClass="mt-6"
+                          isOrderItem
+                          itemNumber={background.param}
+                        />
+                      </Modal>
                     }
                   />
                 }
               />
             </Route>
           )}
-
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      )}
-
-      {!background && (
-        <Routes>
-          <Route path="/" element={<Home />} />
-
-          <Route path="/ingredients/:id" element={<IngredientPage />} />
-
-          <Route path="/feed" element={<FeedPage />} />
-          <Route path="/feed/:feedNumber" element={<FeedItemPage />} />
-
-          <Route
-            path="/login"
-            element={<Protected isOnlyUnAuth component={<Login />} />}
-          />
-          <Route
-            path="/register"
-            element={<Protected isOnlyUnAuth component={<Register />} />}
-          />
-          <Route
-            path="/forgot-password"
-            element={<Protected isOnlyUnAuth component={<ForgotPassword />} />}
-          />
-          <Route
-            path="/reset-password"
-            element={<Protected isOnlyUnAuth component={<ResetPassword />} />}
-          />
-
-          {/* Страница Профиль */}
-          <Route path="profile" element={<Protected component={<Profile />} />}>
-            <Route index element={<Protected component={<ProfileInfo />} />} />
-            <Route path="orders" element={<Protected component={<ProfileOrders />} />} />
-          </Route>
-
-          <Route
-            path="/profile/orders/:feedNumber"
-            element={<Protected component={<FeedItemPage />} />}
-          />
-
-          <Route path="*" element={<NotFound />} />
         </Routes>
       )}
     </>
