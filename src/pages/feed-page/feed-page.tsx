@@ -1,5 +1,5 @@
 import { Feed } from '@/components';
-import { connect, disconnect } from '@/services/feed/actions';
+import { connect, onClose, onOpen } from '@/services/feed/actions';
 import { getFeedSlice } from '@/services/feed/selectors';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { getMapIngredints } from '@/services/ingredients/selectors';
@@ -14,17 +14,18 @@ const FeedPage = (): ReactElement => {
   const mapIngredients = useAppSelector(getMapIngredints);
 
   const mappedIngredients = useMemo(() => new Map(mapIngredients), [mapIngredients]);
-  const isLoading = useMemo(
-    () =>
-      status === EWebsocketStatus.CONNECTING ||
-      (status === EWebsocketStatus.OFFLINE && !error),
-    [status, error]
-  );
+  const isLoading = useMemo(() => status === EWebsocketStatus.CONNECTING, [status]);
 
   useEffect(() => {
-    void dispatch(connect('wss://norma.education-services.ru/orders/all'));
+    if (status === EWebsocketStatus.DISCONNECT) {
+      void dispatch(connect('wss://norma.education-services.ru/orders/all'));
+    }
 
-    return (): void => void dispatch(disconnect());
+    if (status === EWebsocketStatus.OFFLINE) {
+      void dispatch(onOpen());
+    }
+
+    return (): void => void dispatch(onClose());
   }, []);
 
   return (

@@ -23,6 +23,7 @@ export enum EOrderStatusTitles {
 }
 
 export enum EWebsocketStatus {
+  DISCONNECT = 'DISCONNECT',
   CONNECTING = 'CONNECTING',
   ONLINE = 'ONLINE',
   OFFLINE = 'OFFLINE',

@@ -50,9 +50,9 @@ const feed = ({
 
       {!isLoading && !error && feeds.length > 0 && (
         <div className={styles.feeds} style={feedsStyle}>
-          {feeds.map((feed, index) => (
+          {feeds.map((feed) => (
             <FeedItem
-              key={index}
+              key={feed._id}
               feed={feed}
               ingredients={convertIdsToIngredients(feed.ingredients, mapIngredients)}
             />

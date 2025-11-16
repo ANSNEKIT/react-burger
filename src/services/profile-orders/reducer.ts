@@ -19,7 +19,7 @@ export type TProfileOrdersState = {
 const initialState: TProfileOrdersState = {
   orders: [],
   currentOrder: null,
-  status: EWebsocketStatus.OFFLINE,
+  status: EWebsocketStatus.DISCONNECT,
   error: null,
   isLoading: false,
 };
@@ -48,7 +48,6 @@ export const profileOrdersSlice = createSlice({
       })
       .addCase(onClose, (state) => {
         state.status = EWebsocketStatus.OFFLINE;
-        state.orders = [];
         state.currentOrder = null;
       })
       .addCase(onMessage, (state, action: TPayloadAction<TAllOrders>) => {

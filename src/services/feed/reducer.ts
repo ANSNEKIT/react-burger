@@ -19,7 +19,7 @@ export type TFeedState = {
 const initialState: TFeedState = {
   feeds: [],
   currentFeed: null,
-  status: EWebsocketStatus.OFFLINE,
+  status: EWebsocketStatus.DISCONNECT,
   error: null,
   isLoading: false,
 };
@@ -48,7 +48,7 @@ export const feedSlice = createSlice({
       })
       .addCase(onClose, (state) => {
         state.status = EWebsocketStatus.OFFLINE;
-        state.feeds = [];
+        state.currentFeed = null;
       })
       .addCase(onMessage, (state, action: TPayloadAction<TAllOrders>) => {
         const validFeeds = action.payload.orders.filter(Boolean);
