@@ -8,7 +8,7 @@ import { Outlet } from 'react-router-dom';
 import type { TMenuItem } from '@/types/types';
 import type { ReactElement } from 'react';
 
-import styles from './profile-dashboard.module.css';
+import styles from './profile.module.css';
 
 const Profile = (): ReactElement => {
   const isLoading = useAppSelector(getIsLoading);

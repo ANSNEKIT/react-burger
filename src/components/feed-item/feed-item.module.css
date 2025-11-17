@@ -1,0 +1,47 @@
+.feed {
+  padding: 24px;
+  color: #fff;
+  background-color: #1c1c21;
+  border-radius: 40px;
+
+  &:hover {
+    color: #fff;
+    background-color: #222;
+  }
+}
+
+.feedStatusDone {
+  color: #0cc;
+}
+
+.feedWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.price {
+  display: flex;
+  gap: 9px;
+}
+
+.createdDate {
+  color: #8585ad;
+}
+
+.feedPreviewBlock {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.feedPreview {
+  flex-grow: 1;
+}

@@ -3,8 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { login, logout, register } from './actions';
 
-import type { TUserAuth } from '@/types/types';
-import type { Action, SerializedError, PayloadAction } from '@reduxjs/toolkit';
+import type { TPayloadAction, TUserAuth } from '@/types/types';
+import type { Action, PayloadAction } from '@reduxjs/toolkit';
 
 export type TUserState = {
   user: TUserAuth | null;
@@ -12,12 +12,6 @@ export type TUserState = {
   isEmailConfirmed: boolean;
   isLoading: boolean;
   error: string | null;
-};
-
-export type TPayloadAction<T> = {
-  payload: T;
-  type: string;
-  error?: SerializedError;
 };
 
 const initialState: TUserState = {

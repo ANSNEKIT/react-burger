@@ -1,0 +1,58 @@
+import { useMemo, type ReactElement } from 'react';
+
+import type { TIngredientDTO } from '@/contracts/ingredientDTO';
+
+import styles from './ingredient-preview.module.css';
+
+type TIngredientPreviewProps = {
+  ingredients: TIngredientDTO[];
+  showLength?: number;
+};
+
+const IngredientPreview = ({
+  ingredients,
+  showLength,
+}: TIngredientPreviewProps): ReactElement => {
+  const SHOW_LENGTH = showLength ?? 5;
+  const overCount = ingredients.length - SHOW_LENGTH;
+  const previewSrc = ingredients[SHOW_LENGTH + 1]?.image_mobile ?? '';
+  const previewName = ingredients[SHOW_LENGTH + 1]?.name ?? 'Изображение ингредиента';
+
+  const previews = useMemo(() => {
+    return ingredients
+      .map((ing) => ing?.image_mobile ?? ing?.image ?? '')
+      .slice(0, SHOW_LENGTH);
+  }, [ingredients]);
+
+  return (
+    <div className={styles.previewRoot}>
+      {previews.map((ingSrc, index) => (
+        <div
+          key={index}
+          className={styles.ingredientItem}
+          style={{ zIndex: previews.length - index }}
+        >
+          <img
+            src={ingSrc}
+            className={`${styles.ingredientImage}`}
+            alt={ingredients[index].name}
+          />
+        </div>
+      ))}
+      {overCount > 0 && previewSrc && (
+        <div className={`${styles.ingredientItem} ${styles.overPreview}`}>
+          <div className={`${styles.overPreviewCount} text text_type_digits-default`}>
+            +{overCount}
+          </div>
+          <img
+            src={previewSrc}
+            className={`${styles.ingredientImage}`}
+            alt={previewName}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default IngredientPreview;

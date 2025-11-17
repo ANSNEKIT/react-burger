@@ -2,8 +2,11 @@ import type { ReactElement } from 'react';
 
 import styles from './modal-overlay.module.css';
 
-const ModalOverlay = (): ReactElement => {
-  return <div className={styles.shadow}></div>;
+type TModalOverlayProps = {
+  onClose: () => void;
+};
+const ModalOverlay = ({ onClose }: TModalOverlayProps): ReactElement => {
+  return <div className={styles.shadow} onClick={onClose}></div>;
 };
 
 export default ModalOverlay;

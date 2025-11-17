@@ -1,8 +1,12 @@
 import type { EIngredientType } from './enums';
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
+import type { SerializedError } from '@reduxjs/toolkit';
 
 export type TLocationState = {
-  background: { pathname: string };
+  background: {
+    pathname: string;
+    param?: string;
+  };
 };
 
 export type TDragItem = TIngredientDTO & {
@@ -27,3 +31,14 @@ export type TMenuItem = {
   name: string;
   to: string;
 };
+
+export type TPayloadAction<T> = {
+  payload: T;
+  type: string;
+  error?: SerializedError;
+};
+
+// export type TOrderIngredint = {
+//   id: string;
+//   ingredient: TIngredientDTO;
+// };

@@ -3,14 +3,14 @@ import doneStatusImg from '@/images/done.png';
 
 import type { ReactElement } from 'react';
 
-import styles from './order-details.module.css';
+import styles from './order-created.module.css';
 
 export type TOrderModalProps = {
   orderNumber: number | null;
   isLoading: boolean;
 };
 
-const OrderDetails = ({ orderNumber, isLoading }: TOrderModalProps): ReactElement => {
+const OrderCreated = ({ orderNumber, isLoading }: TOrderModalProps): ReactElement => {
   return (
     <div className={styles.innerWrap}>
       {isLoading && (
@@ -41,4 +41,4 @@ const OrderDetails = ({ orderNumber, isLoading }: TOrderModalProps): ReactElemen
   );
 };
 
-export default OrderDetails;
+export default OrderCreated;

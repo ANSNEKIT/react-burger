@@ -1,5 +1,5 @@
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
-import type { TOrder } from '@/services/basket/types';
+import type { TOrderDTO } from '@/contracts/orderDTO';
 import type { TUserAuth } from '@/types/types';
 
 export type TFetchMethods = 'get' | 'post' | 'put' | 'patch' | 'delete';
@@ -40,9 +40,13 @@ export type TIngredientsResponseBody = TResponseBody & {
   data: TIngredientDTO[];
 };
 
-export type TOrderResponseBody = TResponseTokenBody & {
+export type TCreateOrderResponseBody = TResponseTokenBody & {
   name: string;
-  order: TOrder;
+  order: TOrderDTO;
+};
+
+export type TOrderResponseBody = TResponseBody & {
+  orders: TOrderDTO[];
 };
 
 // =============== Fetch payload data ============
@@ -69,6 +73,10 @@ export type TTokenData = {
 
 export type TCreateOrderData = {
   ingredients: string[];
+};
+
+export type TOrderData = {
+  orderId: string;
 };
 
 export type TLoginData = Omit<TRegisterData, 'name'>;

@@ -2,6 +2,10 @@ body {
   margin: 0;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 p {
   margin: 0;
   padding: 0;
@@ -32,6 +36,14 @@ a {
   display: flex;
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
+.grow-1 {
+  flex-grow: 1;
+}
+
 .justify-center {
   justify-content: center;
 }
@@ -42,6 +54,10 @@ a {
 
 .flex-column {
   flex-direction: column;
+}
+
+.text-center {
+  text-align: center;
 }
 
 .page {

@@ -2,15 +2,15 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { createOrder } from './actions';
 
-import type { TOrder } from './types';
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
-import type { TOrderResponseBody } from '@/types/transport';
+import type { TOrderDTO } from '@/contracts/orderDTO';
+import type { TCreateOrderResponseBody } from '@/types/transport';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export type TBasketState = {
   bun: TIngredientDTO | null;
   ingredients: TIngredientDTO[];
-  order: TOrder | null;
+  order: TOrderDTO | null;
   isLoading: boolean;
 };
 
@@ -63,7 +63,7 @@ export const basketSlice = createSlice({
       })
       .addCase(
         createOrder.fulfilled,
-        (state, action: PayloadAction<TOrderResponseBody>) => {
+        (state, action: PayloadAction<TCreateOrderResponseBody>) => {
           state.order = action.payload?.order ?? null;
           state.isLoading = false;
         }
