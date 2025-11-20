@@ -13,6 +13,12 @@ import {
   getIsLoadingOrder,
 } from '@/services/basket/selectors';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
+import {
+  clearBunCount,
+  clearCounts,
+  decrementCount,
+  incrementCount,
+} from '@/services/ingredients/reducer';
 import { getUser } from '@/services/user/selectors';
 import { EIngredientType } from '@/types/enums';
 import { useMemo, useRef } from 'react';
@@ -81,20 +87,27 @@ const BurgerConstructor = (): ReactElement => {
       void navigate('/feed');
     }
     dispatch(clearBasket());
+    dispatch(clearCounts());
   };
 
   const onDeleteBasketItem = (id: string): void => {
     dispatch(removeIngredient(id));
+    dispatch(decrementCount(id));
   };
 
   const onIngredientDrop = (item: TIngredientDTO): void => {
+    const ingredientWithId = { ...item, id: crypto.randomUUID() };
     if (item.type === EIngredientType.bun) {
       if (basketBun?._id === item._id) {
         return;
       }
-      dispatch(setBun({ ...item, id: crypto.randomUUID() }));
+
+      dispatch(setBun(ingredientWithId));
+      dispatch(clearBunCount(item._id));
+      dispatch(incrementCount({ ingredientId: item._id, stepCount: 2 }));
     } else {
-      dispatch(addIngredient({ ...item, id: crypto.randomUUID() }));
+      dispatch(addIngredient(ingredientWithId));
+      dispatch(incrementCount({ ingredientId: item._id }));
     }
   };
 
