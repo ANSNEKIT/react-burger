@@ -15,7 +15,7 @@ export type TIngredientState = {
   error: string | null;
 };
 
-const initialState: TIngredientState = {
+export const ingredientState: TIngredientState = {
   ingredients: [],
   mapIngredients: [],
   currentIngredient: null,
@@ -26,7 +26,7 @@ const initialState: TIngredientState = {
 
 export const ingredientsSlice = createSlice({
   name: 'ingredients',
-  initialState,
+  initialState: ingredientState,
   reducers: {
     setActiveCatigory(state, action: PayloadAction<TIngredientType>) {
       state.activeCategory = action.payload;
