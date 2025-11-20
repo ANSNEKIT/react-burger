@@ -14,7 +14,7 @@ export type TBasketState = {
   isLoading: boolean;
 };
 
-const initialState: TBasketState = {
+export const initialState: TBasketState = {
   bun: null,
   ingredients: [],
   order: null,

@@ -1,4 +1,4 @@
-import type { EIngredientType } from './enums';
+import type { EIngredientType, EOrderStatus } from './enums';
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { SerializedError } from '@reduxjs/toolkit';
 
@@ -38,7 +38,4 @@ export type TPayloadAction<T> = {
   error?: SerializedError;
 };
 
-// export type TOrderIngredint = {
-//   id: string;
-//   ingredient: TIngredientDTO;
-// };
+export type TOrderStatus = `${EOrderStatus}`;
