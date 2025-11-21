@@ -123,7 +123,11 @@ const BurgerConstructor = (): ReactElement => {
   const burgerConstructorClasses = `${styles.burgerConstructor} ${isOver ? styles.dropTarget : ''}`;
 
   return (
-    <section ref={dropTargetRef} className={burgerConstructorClasses}>
+    <section
+      ref={dropTargetRef}
+      className={burgerConstructorClasses}
+      data-test-id="burger-constructor"
+    >
       <h2 className="visuallyHidden">Order</h2>
 
       <div className={`mb-10 ${styles.backetItems}`}>

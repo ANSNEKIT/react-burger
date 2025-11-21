@@ -38,11 +38,12 @@ const Modal = ({ title, children, onClose }: TBaseModalProps): ReactElement => {
     <div className={styles.modal}>
       <ModalOverlay onClose={onClose} />
 
-      <div id="modalContent" className={styles.content}>
+      <div id="modalContent" className={styles.content} data-test-id="modal-content">
         <div className={styles.modalHeader}>
           <h3 className={`${styles.modalTitle} text_type_main-large`}>{title}</h3>
           <button
             data-id="modalClose"
+            data-test-id="modal-close-btn"
             type="button"
             className={styles.modalClose}
             onClick={onClose}
