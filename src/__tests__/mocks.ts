@@ -1,5 +1,6 @@
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { TOrderDTO } from '@/contracts/orderDTO';
+import type { TRegisterData } from '@/types/transport';
 import type { TUserAuth } from '@/types/types';
 
 const ingredientBun: TIngredientDTO = {
@@ -94,10 +95,17 @@ const order: TOrderDTO = {
   number: 90516,
 };
 
+const registerPayload: TRegisterData = {
+  email: 'test@test.ru',
+  password: '12345678Qq',
+  name: 'testOne',
+};
+
 export default {
   ingredientBun,
   ingredientMain,
   ingredients,
   user,
   order,
+  registerPayload,
 };
