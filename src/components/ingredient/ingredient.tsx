@@ -24,7 +24,11 @@ const Ingredient = ({ ingredient }: TIngredientProps): ReactElement => {
   const ingredientClasses = `${styles.ingredient} ${isDragging ? 'styles.dragging' : ''}`;
 
   return (
-    <div ref={ingredientRef} className={ingredientClasses}>
+    <div
+      ref={ingredientRef}
+      className={ingredientClasses}
+      data-test-id={`ingredient-${ingredient._id}`}
+    >
       <picture>
         <source
           media="(max-width: 600px)"
@@ -42,7 +46,10 @@ const Ingredient = ({ ingredient }: TIngredientProps): ReactElement => {
       <div className={`mb-1 text text_type_main-medium ${styles.ingredientPrice}`}>
         {ingredient.price} <CurrencyIcon type="primary" />
       </div>
-      <div className={`text text_type_main-default ${styles.ingredientName}`}>
+      <div
+        className={`text text_type_main-default ${styles.ingredientName}`}
+        data-test-id="ingredient-name"
+      >
         {ingredient.name}
       </div>
       {ingredient?.count && ingredient.count > 0 && (

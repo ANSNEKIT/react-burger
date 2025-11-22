@@ -1,7 +1,7 @@
+import { EIngredientType } from '@/types/enums';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import { addIngredient, clearBasket, removeIngredient, setBun } from '../basket/reducer';
-import { clearBunCount, clearCounts, incrementCount, loadIngredients } from './actions';
+import { loadIngredients } from './actions';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { TIngredientType } from '@/types/types';
@@ -15,7 +15,7 @@ export type TIngredientState = {
   error: string | null;
 };
 
-const initialState: TIngredientState = {
+export const ingredientState: TIngredientState = {
   ingredients: [],
   mapIngredients: [],
   currentIngredient: null,
@@ -26,7 +26,7 @@ const initialState: TIngredientState = {
 
 export const ingredientsSlice = createSlice({
   name: 'ingredients',
-  initialState,
+  initialState: ingredientState,
   reducers: {
     setActiveCatigory(state, action: PayloadAction<TIngredientType>) {
       state.activeCategory = action.payload;
@@ -36,6 +36,41 @@ export const ingredientsSlice = createSlice({
       if (ingredient) {
         state.currentIngredient = ingredient;
       }
+    },
+    incrementCount(
+      state,
+      action: PayloadAction<{ ingredientId: string; stepCount?: number }>
+    ) {
+      const { ingredientId, stepCount = 1 } = action.payload;
+      const index = state.ingredients.findIndex((el) => el._id === ingredientId);
+      if (index !== -1) {
+        const updatedData = state.ingredients[index];
+        updatedData.count = (updatedData?.count ?? 0) + stepCount;
+        state.ingredients.splice(index, 1, updatedData);
+      }
+    },
+    decrementCount(state, action: PayloadAction<string>) {
+      const index = state.ingredients.findIndex((el) => el._id === action.payload);
+      if (index !== -1) {
+        const updatedData = state.ingredients[index];
+        const hasCount = updatedData?.count && updatedData.count !== 0;
+        updatedData.count = hasCount ? updatedData.count! - 1 : undefined;
+        state.ingredients.splice(index, 1, updatedData);
+      }
+    },
+    clearBunCount(state, action: PayloadAction<string>) {
+      state.ingredients
+        .filter((el) => el.type === EIngredientType.bun && el._id !== action.payload)
+        .map((el) => {
+          el.count = undefined;
+          return el;
+        });
+    },
+    clearCounts(state) {
+      state.ingredients.map((el) => {
+        el.count = undefined;
+        return el;
+      });
     },
   },
   extraReducers: (builder) => {
@@ -51,33 +86,20 @@ export const ingredientsSlice = createSlice({
       .addCase(loadIngredients.fulfilled, (state, action) => {
         state.isLoading = false;
         state.ingredients = action.payload.data;
-        state.mapIngredients = state.ingredients.map((ing) => [ing._id, ing]);
-      })
-      .addCase(addIngredient, (state, action) => {
-        incrementCount(state, action.payload._id);
-      })
-      .addCase(setBun, (state, action) => {
-        const stepCount = 2;
-        clearBunCount(state, action.payload._id);
-        incrementCount(state, action.payload._id, stepCount);
-      })
-      .addCase(removeIngredient, (state, action) => {
-        const index = state.ingredients.findIndex((el) => el._id === action.payload);
-        if (index !== -1) {
-          const updatedData = state.ingredients[index];
-          updatedData.count =
-            updatedData?.count && updatedData.count !== 0
-              ? updatedData.count - 1
-              : undefined;
-          state.ingredients.splice(index, 1, updatedData);
+        if (Array.isArray(state.ingredients)) {
+          state.mapIngredients = state.ingredients.map((ing) => [ing._id, ing]);
         }
-      })
-      .addCase(clearBasket, (state) => {
-        clearCounts(state);
       });
   },
 });
 
-export const { setActiveCatigory, setCurrentIngredient } = ingredientsSlice.actions;
+export const {
+  setActiveCatigory,
+  setCurrentIngredient,
+  incrementCount,
+  decrementCount,
+  clearBunCount,
+  clearCounts,
+} = ingredientsSlice.actions;
 
 export default ingredientsSlice.reducer;

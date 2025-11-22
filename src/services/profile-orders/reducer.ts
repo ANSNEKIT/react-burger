@@ -16,7 +16,7 @@ export type TProfileOrdersState = {
   isLoading: boolean;
 };
 
-const initialState: TProfileOrdersState = {
+export const profileOrdersState: TProfileOrdersState = {
   orders: [],
   currentOrder: null,
   status: EWebsocketStatus.DISCONNECT,
@@ -26,7 +26,7 @@ const initialState: TProfileOrdersState = {
 
 export const profileOrdersSlice = createSlice({
   name: 'profileOrders',
-  initialState,
+  initialState: profileOrdersState,
   reducers: {
     setCurrentOrder(state, action: PayloadAction<string>) {
       const feed = state.orders.find((feed) => feed.number === +action.payload);

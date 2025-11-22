@@ -35,7 +35,7 @@ export const resetPassword = createAsyncThunk<boolean, TResetPasswordData>(
   userApi.resetPassword
 );
 
-export const newPassword = createAsyncThunk<TResponseBody, TNewPasswordData>(
+export const newPassword = createAsyncThunk<boolean, TNewPasswordData>(
   'user/forgotPassword',
   userApi.newPassword
 );

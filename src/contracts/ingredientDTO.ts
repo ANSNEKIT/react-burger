@@ -14,4 +14,5 @@ export type TIngredientDTO = {
   image_large: string;
   image_mobile: string;
   __v: number;
-} & { count?: number };
+  count?: number;
+};

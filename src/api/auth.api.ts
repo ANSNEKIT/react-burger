@@ -10,6 +10,7 @@ import type {
   TResponseTokenBody,
   TResponseBody,
   TTokenData,
+  TFetchError,
 } from '@/types/transport';
 import type { TUserAuth } from '@/types/types';
 
@@ -24,17 +25,24 @@ const resetPassword = async (data: TResetPasswordData): Promise<boolean> => {
       localStorage.setItem('isEmailConfirmed', `${res.success}`);
     }
     return res.success;
-  } catch (_) {
-    return false;
+  } catch (error: unknown) {
+    const errorMessage = (error as TFetchError)?.message || 'Failed to reset password';
+    throw new Error(errorMessage);
   }
 };
 
-const newPassword = async (data: TNewPasswordData): Promise<TResponseBody> => {
-  return customFetch<TNewPasswordData, TResponseBody>(
-    'post',
-    '/password-reset/reset',
-    data
-  );
+const newPassword = async (data: TNewPasswordData): Promise<boolean> => {
+  try {
+    const res = await customFetch<TNewPasswordData, TResponseBody>(
+      'post',
+      '/password-reset/reset',
+      data
+    );
+    return res.success;
+  } catch (error: unknown) {
+    const errorMessage = (error as TFetchError)?.message || 'Failed to reset password';
+    throw new Error(errorMessage);
+  }
 };
 
 const register = async (data: TRegisterData): Promise<TResponseUserBody> => {

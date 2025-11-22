@@ -6,7 +6,9 @@ type TModalOverlayProps = {
   onClose: () => void;
 };
 const ModalOverlay = ({ onClose }: TModalOverlayProps): ReactElement => {
-  return <div className={styles.shadow} onClick={onClose}></div>;
+  return (
+    <div className={styles.shadow} onClick={onClose} data-test-id="modal-overlay"></div>
+  );
 };
 
 export default ModalOverlay;
