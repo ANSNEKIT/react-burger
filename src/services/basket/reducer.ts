@@ -14,7 +14,7 @@ export type TBasketState = {
   isLoading: boolean;
 };
 
-export const initialState: TBasketState = {
+export const basketState: TBasketState = {
   bun: null,
   ingredients: [],
   order: null,
@@ -23,7 +23,7 @@ export const initialState: TBasketState = {
 
 export const basketSlice = createSlice({
   name: 'basket',
-  initialState,
+  initialState: basketState,
   reducers: {
     setBun(state, action: PayloadAction<TIngredientDTO>) {
       state.bun = action.payload;

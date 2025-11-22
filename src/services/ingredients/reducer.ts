@@ -86,7 +86,9 @@ export const ingredientsSlice = createSlice({
       .addCase(loadIngredients.fulfilled, (state, action) => {
         state.isLoading = false;
         state.ingredients = action.payload.data;
-        state.mapIngredients = state.ingredients.map((ing) => [ing._id, ing]);
+        if (Array.isArray(state.ingredients)) {
+          state.mapIngredients = state.ingredients.map((ing) => [ing._id, ing]);
+        }
       });
   },
 });
