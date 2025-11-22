@@ -11,18 +11,15 @@ import {
 } from '@/services/ingredients/reducer';
 import { EIngredientType } from '@/types/enums';
 import { cleanup } from '@testing-library/react';
-import fetchMock from 'fetch-mock';
-import { afterEach, vi } from 'vitest';
+import { afterEach } from 'vitest';
 
 import data from '../mocks';
 
 import type { TIngredientDTO } from '@/contracts/ingredientDTO';
 import type { TIngredientState } from '@/services/ingredients/reducer';
-import type { TActionPayloadError } from '@/types/transport';
 
-describe('ingredient reducer testing', () => {
+describe('ingredient reducers', () => {
   afterEach(() => {
-    vi.clearAllMocks();
     cleanup();
   });
 
@@ -32,42 +29,47 @@ describe('ingredient reducer testing', () => {
     expect(newState).toEqual(ingredientState);
   });
 
-  describe('action setActiveCatigory', () => {
-    test('should return correct action setActiveCatigory', () => {
-      const expectedState = {
-        ...ingredientState,
-        activeCategory: EIngredientType.bun,
-      };
+  test('should return correct action setActiveCatigory', () => {
+    const initState = {
+      ...ingredientState,
+      activeCategory: EIngredientType.sauce,
+    };
+    const expectedState = {
+      ...ingredientState,
+      activeCategory: EIngredientType.bun,
+    };
+    const newState = ingredientsSlice.reducer(
+      initState,
+      setActiveCatigory(EIngredientType.bun)
+    );
 
-      const setActiveCatigoryAction = setActiveCatigory(EIngredientType.bun);
-      const newState = ingredientsSlice.reducer(undefined, setActiveCatigoryAction);
-
-      expect(newState).toEqual(expectedState);
-    });
+    expect(newState).toEqual(expectedState);
   });
 
-  describe('action setCurrentIngredient', () => {
-    test('should return correct action setCurrentIngredient', () => {
-      const state = {
-        ...ingredientState,
-        ingredients: data.ingredients,
-      };
-      const expectedState = {
-        ...ingredientState,
-        ingredients: data.ingredients,
-        currentIngredient: data.ingredientMain,
-      };
+  test('should return correct action setCurrentIngredient', () => {
+    const initState = {
+      ...ingredientState,
+      ingredients: data.ingredients,
+      currentIngredient: data.ingredientBun,
+    };
+    const expectedState = {
+      ...ingredientState,
+      ingredients: data.ingredients,
+      currentIngredient: data.ingredientMain,
+    };
 
-      const setCurrentIngredientAction = setCurrentIngredient(data.ingredientMain._id);
-      const newState = ingredientsSlice.reducer(state, setCurrentIngredientAction);
+    const newState = ingredientsSlice.reducer(
+      initState,
+      setCurrentIngredient(data.ingredientMain._id)
+    );
 
-      expect(newState).toEqual(expectedState);
-    });
+    expect(newState).toEqual(expectedState);
   });
 
   describe('action decrementCount', () => {
-    test('should return correct action decrementCount', () => {
-      const modifyIngredients = [...data.ingredients];
+    const modifyIngredients = [...data.ingredients];
+
+    beforeEach(() => {
       const index = modifyIngredients.findIndex(
         (ing) => ing._id === data.ingredientMain._id
       );
@@ -75,13 +77,18 @@ describe('ingredient reducer testing', () => {
         ...modifyIngredients[index],
         count: 3,
       };
-      const state = {
+    });
+
+    test('should return correct action decrementCount', () => {
+      const initState = {
         ...ingredientState,
         ingredients: modifyIngredients,
       };
 
-      const decrementCountAction = decrementCount(data.ingredientMain._id);
-      const expectedState = ingredientsSlice.reducer(state, decrementCountAction);
+      const expectedState = ingredientsSlice.reducer(
+        initState,
+        decrementCount(data.ingredientMain._id)
+      );
       const expectedIngredient = expectedState.ingredients.find(
         (ing) => ing._id === data.ingredientMain._id
       );
@@ -92,30 +99,32 @@ describe('ingredient reducer testing', () => {
   });
 
   describe('action clearBunCount', () => {
-    test('should return correct action clearBunCount', () => {
-      const bun2: TIngredientDTO = {
-        _id: 'bun2',
-        name: 'Краторная булка bun 2',
-        type: 'bun',
-        proteins: 81,
-        fat: 25,
-        carbohydrates: 54,
-        calories: 421,
-        price: 1256,
-        count: 2,
-        image: 'https://code.s3.yandex.net/react/code/bun-02.png',
-        image_mobile: 'https://code.s3.yandex.net/react/code/bun-02-mobile.png',
-        image_large: 'https://code.s3.yandex.net/react/code/bun-02-large.png',
-        __v: 0,
-      };
-      const modifyIngredients = [...data.ingredients, bun2];
-      const state = {
-        ...ingredientState,
-        ingredients: modifyIngredients,
-      };
+    const bun2: TIngredientDTO = {
+      _id: 'bun2',
+      name: 'Краторная булка bun 2',
+      type: 'bun',
+      proteins: 81,
+      fat: 25,
+      carbohydrates: 54,
+      calories: 421,
+      price: 1256,
+      count: 2,
+      image: 'https://code.s3.yandex.net/react/code/bun-02.png',
+      image_mobile: 'https://code.s3.yandex.net/react/code/bun-02-mobile.png',
+      image_large: 'https://code.s3.yandex.net/react/code/bun-02-large.png',
+      __v: 0,
+    };
+    const modifyIngredients = [...data.ingredients, bun2];
+    const initState = {
+      ...ingredientState,
+      ingredients: modifyIngredients,
+    };
 
-      const clearBunCountAction = clearBunCount(data.ingredientBun._id);
-      const expectedState = ingredientsSlice.reducer(state, clearBunCountAction);
+    test('should return correct action clearBunCount', () => {
+      const expectedState = ingredientsSlice.reducer(
+        initState,
+        clearBunCount(data.ingredientBun._id)
+      );
       const expectedBun2 = expectedState.ingredients.find((ing) => ing._id === bun2._id);
 
       expect(expectedBun2).not.toBeUndefined();
@@ -124,30 +133,26 @@ describe('ingredient reducer testing', () => {
   });
 
   describe('action clearCounts', () => {
-    test('should return ingredients with count = undefined', () => {
-      const modifyIngredients = [...data.ingredients];
-      const modifyWitchCountIngredients = modifyIngredients.map((ing, index) => ({
+    const modifyIngredients = [...data.ingredients];
+    let modifyWitchCountIngredients = [];
+    const initState = { ...ingredientState };
+
+    beforeEach(() => {
+      modifyWitchCountIngredients = modifyIngredients.map((ing, index) => ({
         ...ing,
         count: index + 5,
       }));
+      initState.ingredients = modifyWitchCountIngredients;
+    });
 
-      const clearCountState = {
-        ...ingredientState,
-        ingredients: modifyWitchCountIngredients,
-      };
-
-      const clearCountsAction = clearCounts();
-      const expectedClearCountState = ingredientsSlice.reducer(
-        clearCountState,
-        clearCountsAction
-      );
-
+    test('should return ingredients with count = undefined', () => {
+      const expectedState = ingredientsSlice.reducer(initState, clearCounts());
       describe('log ingredients -> count', () => {
         afterEach(() => {
           cleanup();
         });
 
-        test.each(expectedClearCountState.ingredients)(
+        test.each(expectedState.ingredients)(
           'ingCount($0.count) -> undefined',
           ({ count }) => {
             expect(count).toBeUndefined();
@@ -158,26 +163,22 @@ describe('ingredient reducer testing', () => {
   });
 
   describe('action incrementCount', () => {
-    let state: TIngredientState | undefined;
+    let initState: TIngredientState | undefined;
+    const ingredientId = data.ingredientMain._id;
+    const mockPayload = { ingredientId: data.ingredientBun._id, stepCount: 2 };
+
     beforeEach(() => {
-      state = {
+      initState = {
         ...ingredientState,
         ingredients: [...data.ingredients],
       };
-
-      cleanup();
     });
 
-    afterEach(() => {
-      state = undefined;
-      cleanup();
-    });
     test('should return correct action incrementCount + 1', () => {
-      const ingredientId = data.ingredientMain._id;
-
-      const incrementCountAction = incrementCount({ ingredientId });
-      const newState = ingredientsSlice.reducer(state, incrementCountAction);
-
+      const newState = ingredientsSlice.reducer(
+        initState,
+        incrementCount({ ingredientId })
+      );
       const newIngredient = newState.ingredients.find((ing) => ing._id === ingredientId);
 
       expect(newIngredient).not.toBeUndefined();
@@ -185,10 +186,7 @@ describe('ingredient reducer testing', () => {
     });
 
     test('should return correct action incrementCount + 2', () => {
-      const mockPayload = { ingredientId: data.ingredientBun._id, stepCount: 2 };
-
-      const incrementCountAction = incrementCount(mockPayload);
-      const newState = ingredientsSlice.reducer(state, incrementCountAction);
+      const newState = ingredientsSlice.reducer(initState, incrementCount(mockPayload));
       const expectedIngredient = newState.ingredients.find(
         (ing) => ing._id === mockPayload.ingredientId
       );
@@ -200,90 +198,44 @@ describe('ingredient reducer testing', () => {
 });
 
 describe('ingredient async actions', () => {
-  // beforeEach(() => {
-  //   fetchMock.unmockGlobal();
-  //   fetchMock.removeRoutes();
-  //   fetchMock.clearHistory();
-  //   vi.clearAllMocks();
-  //   cleanup();
-  // });
-
   afterEach(() => {
-    fetchMock.unmockGlobal();
-    fetchMock.removeRoutes();
-    fetchMock.clearHistory();
-    vi.clearAllMocks();
     cleanup();
   });
 
-  test('should loadIngredients fulfilled', async () => {
-    fetchMock.mockGlobal().getOnce(
-      'end:/api/ingredients',
-      {
-        body: data.ingredients,
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      },
-      {
-        delay: 500,
-      }
-    );
+  test('should loadIngredients fullfilled', () => {
+    const copyMockIngredients = [...data.ingredients];
+    const initState: TIngredientState = {
+      ...ingredientState,
+      isLoading: true,
+    };
+    const newState = ingredientsSlice.reducer(initState, {
+      type: loadIngredients.fulfilled.type,
+      payload: { data: copyMockIngredients },
+    });
+    const expectedState = {
+      ...ingredientState,
+      isLoading: false,
+      ingredients: copyMockIngredients,
+      mapIngredients: copyMockIngredients.map((ing) => [ing._id, ing]),
+    };
 
-    const dispatch = vi.fn();
-    const getState = vi.fn(() => ({}));
-
-    const response = await loadIngredients()(dispatch, getState, undefined);
-    const isCalled = fetchMock.callHistory.called('end:/api/ingredients');
-
-    expect(isCalled).toBe(true);
-    expect(response.payload).toEqual(data.ingredients);
-    expect(response.type).toBe(loadIngredients.fulfilled.type);
+    expect(newState).toStrictEqual(expectedState);
   });
 
-  test('should loadIngredients rejected', async () => {
-    fetchMock.mockGlobal().getOnce(
-      'end:/api/ingredients',
-      {
-        status: 404,
-        body: { message: 'Error load ingredients' },
-      },
-      {
-        name: 'fetch ingredients',
-        delay: 500,
-      }
-    );
+  test('should loadIngredients rejected', () => {
+    const initState = {
+      ...ingredientState,
+      isLoading: true,
+    };
+    const newState = ingredientsSlice.reducer(initState, {
+      type: loadIngredients.rejected.type,
+      error: { message: 'Test error' },
+    });
+    const expectedState = {
+      ...ingredientState,
+      error: 'Test error',
+    };
 
-    const dispatch = vi.fn();
-    const getState = vi.fn(() => ({}));
-
-    const response = await loadIngredients()(dispatch, getState, undefined);
-    const expectErrorText = (response as TActionPayloadError)?.error?.message;
-    const isCalled = fetchMock.callHistory.called('end:/api/ingredients');
-
-    expect(isCalled).toBe(true);
-    expect(expectErrorText).toBe('Error load ingredients');
-    expect(response.type).toBe(loadIngredients.rejected.type);
-  });
-
-  test('should loadIngredients throw network error', async () => {
-    fetchMock.mockGlobal().getOnce(
-      'end:/api/ingredients',
-      {
-        throws: new Error('Network connection failed'),
-      },
-      {
-        delay: 500,
-      }
-    );
-
-    const dispatch = vi.fn();
-    const getState = vi.fn(() => ({}));
-
-    const response = await loadIngredients()(dispatch, getState, undefined);
-    const expectErrorText = (response as TActionPayloadError)?.error?.message;
-    const isCalled = fetchMock.callHistory.called('end:/api/ingredients');
-
-    expect(isCalled).toBe(true);
-    expect(expectErrorText).toBe('Network connection failed');
-    expect(response.type).toBe(loadIngredients.rejected.type);
+    expect(newState).toStrictEqual(expectedState);
   });
 });

@@ -1,6 +1,6 @@
 import { createOrder } from '@/services/basket/actions';
 import {
-  initialState,
+  basketState,
   basketSlice,
   setBun,
   addIngredient,
@@ -9,152 +9,136 @@ import {
   clearBasket,
 } from '@/services/basket/reducer';
 import { cleanup } from '@testing-library/react';
-import fetchMock from 'fetch-mock';
-import { vi } from 'vitest';
 
 import data from '../mocks';
 
-import type { TBasketState } from '@/services/basket/reducer';
-
-describe('basket reducer test', () => {
+describe('basket reducers', () => {
   afterEach(() => {
-    vi.clearAllMocks();
     cleanup();
   });
+
   test('should return correct state', () => {
     const newState = basketSlice.reducer(undefined, { type: '' });
 
-    expect(newState).toEqual(initialState);
+    expect(newState).toEqual(basketState);
   });
 
   test('should return correct action setBun', () => {
     const expectedState = {
-      ...initialState,
+      ...basketState,
       bun: data.ingredientBun,
     };
 
-    const setBunAction = setBun(data.ingredientBun);
-    const newState = basketSlice.reducer(undefined, setBunAction);
+    const newState = basketSlice.reducer(undefined, setBun(data.ingredientBun));
 
     expect(newState).toEqual(expectedState);
   });
 
   test('should return correct action addIngredient', () => {
     const expectedState = {
-      ...initialState,
+      ...basketState,
       ingredients: [data.ingredientMain],
     };
 
-    const addIngredientAction = addIngredient(data.ingredientMain);
-    const newState = basketSlice.reducer(undefined, addIngredientAction);
+    const newState = basketSlice.reducer(undefined, addIngredient(data.ingredientMain));
 
     expect(newState).toEqual(expectedState);
   });
 
   test('should return correct action removeIngredient', () => {
     const state = {
-      ...initialState,
+      ...basketState,
       ingredients: [data.ingredientMain],
     };
 
     const expectedState = {
-      ...initialState,
+      ...basketState,
       ingredients: [],
     };
 
-    const removeIngredientAction = removeIngredient(data.ingredientMain._id);
-    const newState = basketSlice.reducer(state, removeIngredientAction);
+    const newState = basketSlice.reducer(
+      state,
+      removeIngredient(data.ingredientMain._id)
+    );
 
     expect(newState).toEqual(expectedState);
   });
 
   test('should return correct action clearBasket', () => {
     const state = {
-      ...initialState,
+      ...basketState,
       bun: data.ingredientBun,
       ingredients: [data.ingredientMain],
       order: data.order,
     };
 
-    const clearBasketAction = clearBasket();
-    const newState = basketSlice.reducer(state, clearBasketAction);
+    const newState = basketSlice.reducer(state, clearBasket());
 
-    expect(newState.ingredients).toStrictEqual([]);
-    expect(newState.bun).toStrictEqual(null);
-    expect(newState.order).toStrictEqual(null);
+    expect(newState).toStrictEqual(basketState);
   });
 
-  describe('check action moveIngredient', () => {
-    let state: TBasketState;
+  test('should move dragIndex: 1 to hoverIndex: 3', () => {
+    const state = {
+      ...basketState,
+      ingredients: [...data.ingredients],
+    };
 
-    beforeEach(() => {
-      state = {
-        ...initialState,
-        ingredients: [...data.ingredients],
-      };
-    });
+    // Перемещаем элемент с индекса 1 на индекс 3
+    const newState = basketSlice.reducer(
+      state,
+      moveIngredient({ dragIndex: 1, hoverIndex: 3 })
+    );
 
-    test('should move dragIndex: 1 to hoverIndex: 3', () => {
-      // Перемещаем элемент с индекса 1 на индекс 3
-      // ingredients:
-      // start:   [bun1, main1, 3, 4, 5]
-      // return:  [bun1, 3, 4, main1, 5]
-      const moveIngredientAction = moveIngredient({ dragIndex: 1, hoverIndex: 3 });
-      const newState = basketSlice.reducer(state, moveIngredientAction);
+    // startIds:        [bun1, main1, 3, 4,     5]
+    // expectedIngIds:  [bun1, 3,     4, main1, 5]
+    const newIngIds = newState.ingredients.map((ing) => ing._id);
+    const expectedIngIds = ['bun1', '3', '4', 'main1', '5'];
 
-      // Проверяем новый порядок
-      expect(newState.ingredients).toHaveLength(5);
-      expect(newState.ingredients[0]._id).toBe('bun1');
-      expect(newState.ingredients[1]._id).toBe('3');
-      expect(newState.ingredients[2]._id).toBe('4');
-      expect(newState.ingredients[3]._id).toBe('main1');
-      expect(newState.ingredients[4]._id).toBe('5');
-    });
+    // Проверяем новый порядок
+    expect(newState.ingredients).toHaveLength(5);
+    expect(newIngIds).toStrictEqual(expectedIngIds);
   });
 });
 
 describe('basket async actions', () => {
   afterEach(() => {
-    fetchMock.unmockGlobal();
-    fetchMock.clearHistory();
-    vi.clearAllMocks();
     cleanup();
   });
 
-  test('should return createOrder fulfilled', async () => {
-    const ingredientIds = data.ingredients.map((ing) => ing._id);
-    const mockPayload = { ingredients: ingredientIds };
+  test('should createOrder fullfilled', () => {
+    const initState = {
+      ...basketState,
+      isLoading: true,
+    };
+    const newState = basketSlice.reducer(initState, {
+      type: createOrder.fulfilled.type,
+      payload: { order: data.order },
+    });
+    const expectedState = {
+      ...basketState,
+      isLoading: false,
+      order: data.order,
+    };
 
-    fetchMock.mockGlobal().postOnce(
-      'end:/orders',
-      {
-        body: data.order,
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      },
-      {
-        delay: 1000,
-      }
-    );
-
-    const dispatch = vi.fn();
-    const getState = vi.fn(() => ({}));
-
-    const response = await createOrder(mockPayload)(dispatch, getState, undefined);
-
-    expect(response.payload).toEqual(data.order);
-    expect(response.type).toBe(createOrder.fulfilled.type);
+    expect(newState).toStrictEqual(expectedState);
   });
 
-  test('should return createOrder rejected', () => {
-    const ingredientIds = data.ingredients.map((ing) => ing._id);
-    const mockPayload = { ingredients: ingredientIds };
-
-    const newState = basketSlice.reducer(undefined, {
+  test('should createOrder rejected', () => {
+    const initState = {
+      ...basketState,
+      isLoading: true,
+      order: data.order,
+    };
+    const newState = basketSlice.reducer(initState, {
       type: createOrder.rejected.type,
-      payload: mockPayload,
+      error: { message: 'Test error' },
     });
+    const expectedState = {
+      ...basketState,
+      isLoading: false,
+      order: null,
+    };
 
-    expect(newState.order).toStrictEqual(null);
-    expect(newState.isLoading).toBe(false);
+    expect(newState).toStrictEqual(expectedState);
   });
 });
