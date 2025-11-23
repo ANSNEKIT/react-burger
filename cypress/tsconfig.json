@@ -16,5 +16,5 @@
 			"@pages/*": ["src/pages/*"]
 		}
 	},
-	"include": ["**/*.ts"]
+	"include": ["**/*.ts", "support/commands.ts"]
 }

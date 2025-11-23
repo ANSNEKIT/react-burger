@@ -1,37 +1,40 @@
 /// <reference types="cypress" />
-// ***********************************************
-// This example commands.ts shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      checkIngredient(ingredientId: string, title: string): Chainable<void>;
+      dragAndDropIngredient(ingredientId: string): Chainable<void>;
+      openModal(): Chainable<void>;
+      hasClosedModal(): Chainable<void>;
+    }
+  }
+}
+
+Cypress.Commands.add('checkIngredient', (ingredientId: string, title: string) => {
+cy.get(`[data-test-id=${ingredientId}]`).as('ing').get('[data-test-id=ingredient-name]').contains(title).should('exist');
+});
+
+Cypress.Commands.add('dragAndDropIngredient', (ingredientId: string) => {
+  cy.get(`[data-test-id=${ingredientId}]`).as('ing');
+  cy.get("[data-test-id=burger-constructor]").as('constructor');
+
+  cy.get("@ing")
+    .trigger('mousedown', { which: 1, button: 0 })
+    .trigger('dragstart');
+  cy.get("@constructor").trigger('drop');
+
+  cy.get("@constructor").get('@ing').should('exist');
+});
+
+Cypress.Commands.add('openModal', () => {
+    cy.get('[data-test-id=ingredient-0]').as('bun1').click();
+    cy.get("[data-test-id=modal-content]").as('modal').should('be.visible');
+    cy.get("[data-test-id=modal-overlay]").as('overlay').should('exist');
+});
+
+Cypress.Commands.add('hasClosedModal', () => {
+  cy.get('@modal').should('not.exist');
+  cy.get('@overlay').should('not.exist');
+})
