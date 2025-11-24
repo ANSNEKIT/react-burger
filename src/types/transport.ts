@@ -8,6 +8,12 @@ export type TFetchError = Error & {
   message: string;
 };
 
+export type TActionPayloadError = {
+  error?: {
+    message?: string;
+  };
+};
+
 // ============== Fertch Response ============
 
 export type TCustomResponse<T> = Body & {

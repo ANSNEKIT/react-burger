@@ -1,10 +1,10 @@
-import type { EOrderStatus } from '@/types/enums';
+import type { TOrderStatus } from '@/types/types';
 
 export type TOrderDTO = {
   ingredients: string[];
   _id: string;
   name: string;
-  status: EOrderStatus;
+  status: TOrderStatus;
   number: number;
   createdAt: string;
   updatedAt: string;

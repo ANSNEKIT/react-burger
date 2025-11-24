@@ -5,8 +5,12 @@ import readableClassnames from 'vite-plugin-readable-classnames';
 import checker from 'vite-plugin-checker';
 import sassDts from 'vite-plugin-sass-dts';
 
+
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({mode}) => {
+  const isProduction = mode === 'production';
+
+  return {
   plugins: [
     checker({
       typescript: true,
@@ -18,7 +22,7 @@ export default defineConfig({
       esmExport: true,
     }),
   ],
-  base: '',
+  base: isProduction ? '/react-burger' : '',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -32,8 +36,12 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./vitest-setup.ts'],
+    restoreMocks: true,
+    clearMocks: true,
+    mockReset: true,
   },
   server: {
     open: true,
   },
+}
 });

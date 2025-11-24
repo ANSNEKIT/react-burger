@@ -16,7 +16,7 @@ export type TFeedState = {
   isLoading: boolean;
 };
 
-const initialState: TFeedState = {
+export const feedState: TFeedState = {
   feeds: [],
   currentFeed: null,
   status: EWebsocketStatus.DISCONNECT,
@@ -26,7 +26,7 @@ const initialState: TFeedState = {
 
 export const feedSlice = createSlice({
   name: 'feed',
-  initialState,
+  initialState: feedState,
   reducers: {
     setCurrentFeed(state, action: PayloadAction<string>) {
       const feed = state.feeds.find((feed) => feed.number.toString() === action.payload);

@@ -14,7 +14,7 @@ export type TUserState = {
   error: string | null;
 };
 
-const initialState: TUserState = {
+export const userState: TUserState = {
   user: null,
   isAuthChecked: false,
   isEmailConfirmed: false,
@@ -24,7 +24,7 @@ const initialState: TUserState = {
 
 export const userSlice = createSlice({
   name: 'user',
-  initialState,
+  initialState: userState,
   reducers: {
     setUser(state, action: PayloadAction<TUserAuth>) {
       state.user = action.payload;

@@ -1,0 +1,74 @@
+{
+  "data": [
+    {
+      "_id": "0",
+      "name": "Булка бигмак для теста",
+      "type": "bun",
+      "proteins": 100,
+      "fat": 101,
+      "carbohydrates": 102,
+      "calories": 103,
+      "price": 104,
+      "image": "https://code.s3.yandex.net/react/code/bun-02.png",
+      "image_mobile": "https://code.s3.yandex.net/react/code/bun-02-mobile.png",
+      "image_large": "https://code.s3.yandex.net/react/code/bun-02-large.png",
+      "__v": 0
+    },
+    {
+      "_id": "1",
+      "name": "Булка бигтейсти для теста",
+      "type": "bun",
+      "proteins": 200,
+      "fat": 201,
+      "carbohydrates": 202,
+      "calories": 203,
+      "price": 204,
+      "image": "https://code.s3.yandex.net/react/code/bun-01.png",
+      "image_mobile": "https://code.s3.yandex.net/react/code/bun-01-mobile.png",
+      "image_large": "https://code.s3.yandex.net/react/code/bun-01-large.png",
+      "__v": 0
+    },
+    {
+      "_id": "2",
+      "name": "Бигмак для теста",
+      "type": "main",
+      "proteins": 400,
+      "fat": 111,
+      "carbohydrates": 222,
+      "calories": 4444,
+      "price": 555,
+      "image": "https://code.s3.yandex.net/react/code/meat-01.png",
+      "image_mobile": "https://code.s3.yandex.net/react/code/meat-01-mobile.png",
+      "image_large": "https://code.s3.yandex.net/react/code/meat-01-large.png",
+      "__v": 0
+    },
+    {
+      "_id": "3",
+      "name": "Бигтейсти для теста",
+      "type": "main",
+      "proteins": 500,
+      "fat": 123,
+      "carbohydrates": 234,
+      "calories": 5555,
+      "price": 777,
+      "image": "https://code.s3.yandex.net/react/code/meat-02.png",
+      "image_mobile": "https://code.s3.yandex.net/react/code/meat-02-mobile.png",
+      "image_large": "https://code.s3.yandex.net/react/code/meat-03-large.png",
+      "__v": 0
+    },
+    {
+      "_id": "4",
+      "name": "Макчикен для теста",
+      "type": "main",
+      "proteins": 300,
+      "fat": 234,
+      "carbohydrates": 345,
+      "calories": 6666,
+      "price": 765,
+      "image": "https://code.s3.yandex.net/react/code/meat-03.png",
+      "image_mobile": "https://code.s3.yandex.net/react/code/meat-03-mobile.png",
+      "image_large": "https://code.s3.yandex.net/react/code/meat-03-large.png",
+      "__v": 0
+    }
+  ]
+}
